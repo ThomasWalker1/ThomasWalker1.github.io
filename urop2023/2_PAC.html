@@ -413,7 +413,7 @@ $$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^*)=\frac{1}{4}.$$
 Hence, $\psi(u)\leq\frac{u^2}{8}$ which implies that
 $$\log\left(\mathbb{E}\left(\exp(sV_i)\right)\right)\leq\frac{u^2}{8}=\frac{s^2(b-a)^2}{8}.$$
 Therefore,
-$$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\\&;=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\\&;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\\\&;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
+$$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\\&;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\\\&;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
 which completes the proof. $\square$</p>
 </details>
 <p>Recall that we have our random sample $S={(x_i,y_i)}_{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i=l(h_{\mathbf{w}}(x_i),y_i)$. We can apply Lemma 1 with $U_i=\mathbb{E}(l_i(\mathbf{w})-l_i(\mathbf{w}))$ to get that
