@@ -380,8 +380,8 @@ code {
 <h1 id="pac">PAC</h1>
 <h2 id="21-introducing-pac-bounds">2.1 Introducing PAC Bounds</h2>
 <h3 id="211-notation">2.1.1 Notation</h3>
-<p>We will first introduce some basic notation that is for the most part consistent with (Alquier, 2023) and will remain constant throughout the report. Along the way, we will need to introduce some more specialized notation for the different sections. The problems we will encounter will mainly be supervised classification tasks. Informally this means, we have a feature space $\mathcal{X}$ and a label space $\mathcal{Y}$ which combine to form the data space $\mathcal{Z}=\mathcal{X}\times\mathcal{Y}$ for which some unknown $\mathcal{D}$ is defined on. The challenge now is to learn a classifier $h:\mathcal{X}\to\mathcal{Y}$ that correctly labels samples from $\mathcal{X}$ according to $\mathcal{D}$. Formally, $\mathcal{X}$ and $\mathcal{Y}$ come associated with $\sigma$-algebras $\mathcal{S}<em>x$ and $\mathcal{S}<em>y$ respectively. Then $\mathcal{D}$ is a probability distribution defined on the space $(\mathcal{X}\times\mathcal{Y},\mathcal{S}<em>x\otimes\mathcal{S}<em>y)$. The training data $S_m={(x_i,y_i)}</em>{i=1}^m$ consists of $m$ $\mathrm{i.i.d}$ samples from $\mathcal{D}$. As we are considering neural networks, a classifier will be parameterised by a weight vector $\mathbf{w}$ which we will denote $h</em>{\mathbf{w}}$. Let $\mathcal{W}$ denote the set of possible weights for a classifier and the set of all possible classifiers $\mathcal{H}$ will sometimes be referred to as the hypothesis set. To assess the quality of a classifier we define a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to[0,\infty)$ called the loss function and we will assume that $0\leq l\leq C$. As our training data is just a sample from the underlying (unknown) distribution $\mathcal{D}$ there is the possibility that our classifier performs well on the training data, but performs poorly on the true distribution. Let the risk of our classifier be defined as
-$$R(h</em>{\mathbf{w}})=\mathbb{E}</em>{(x,y)\sim\mathcal{D}}\left(l(h(x),y)\right).$$
+<p>We will first introduce some basic notation that is for the most part consistent with (Alquier, 2023) and will remain constant throughout the report. Along the way, we will need to introduce some more specialized notation for the different sections. The problems we will encounter will mainly be supervised classification tasks. Informally this means, we have a feature space $\mathcal{X}$ and a label space $\mathcal{Y}$ which combine to form the data space $\mathcal{Z}=\mathcal{X}\times\mathcal{Y}$ for which some unknown $\mathcal{D}$ is defined on. The challenge now is to learn a classifier $h:\mathcal{X}\to\mathcal{Y}$ that correctly lrabels samples from $\mathcal{X}$ according to $\mathcal{D}$. Formally, $\mathcal{X}$ and $\mathcal{Y}$ come associated with $\sigma$-algebras $\mathcal{S}_x$ and $\mathcal{S}_y$ respectively. Then $\mathcal{D}$ is a probability distribution defined on the space $(\mathcal{X}\times\mathcal{Y},\mathcal{S}_x\otimes\mathcal{S}_y)$. The training data $S_m={(x_i,y_i)}_{i=1}^m$ consists of $m$ $\mathrm{i.i.d}$ samples from $\mathcal{D}$. As we are considering neural networks, a classifier will be parameterised by a weight vector $\mathbf{w}$ which we will denote $h_{\mathbf{w}}$. Let $\mathcal{W}$ denote the set of possible weights for a classifier and the set of all possible classifiers $\mathcal{H}$ will sometimes be referred to as the hypothesis set. To assess the quality of a classifier we define a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to[0,\infty)$ called the loss function and we will assume that $0\leq l\leq C$. As our training data is just a sample from the underlying (unknown) distribution $\mathcal{D}$ there is the possibility that our classifier performs well on the training data, but performs poorly on the true distribution. Let the risk of our classifier be defined as
+$$R(h_{\mathbf{w}})=\mathbb{E}_{(x,y)\sim\mathcal{D}}\left(l(h(x),y)\right).$$
 As our classifier is parameterised $\mathbf{w}$ we will instead just write $R(\mathbf{w})$ for the risk of our classifier. Similarly, we define the empirical risk of our classifier to be
 $$\hat{R}(\mathbf{w})=\frac{1}{m}\sum_{i=1}^ml(h_{\mathbf{w}}(x_i),y_i).$$
 Note that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$.</p>
@@ -408,57 +408,57 @@ As
 $$\psi^\prime(u)=(p-1)+1-\frac{p}{p+(1-p)e^u}$$
 we have that $\psi(0)=0$ and $\psi^\prime(0)=0$. Furthermore, as
 $$\psi^{\prime\prime}(u)=\frac{p(1-p)e^u}{(p+(1-p)e^u)^2},\text{ and }\psi^{(3)}(u)=\frac{p(1-p)e^u(p+(1-p)e^u)(p-(1-p)e^u)}{(p+(1-p)e^u)^2}$$
-we see that $\psi^{\prime\prime}(u)$ has a stationary point at $u^<em>=\log\left(\frac{p}{p-1}\right)$. For $u$ slightly less than $u^</em>$ we have $\psi^{(3)}(u)&gt;0$ and for $u$ slightly larger than $u^<em>$ we have $\psi^{(3)}(u)&lt;0$. Therefore, $u^</em>$ is a maximum point and so
-$$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^<em>)=\frac{1}{4}.$$
+we see that $\psi^{\prime\prime}(u)$ has a stationary point at $u^*=\log\left(\frac{p}{p-1}\right)$. For $u$ slightly less than $u^*$ we have $\psi^{(3)}(u)&gt;0$ and for $u$ slightly larger than $u^*$ we have $\psi^{(3)}(u)&lt;0$. Therefore, $u^*$ is a maximum point and so
+$$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^*)=\frac{1}{4}.$$
 Hence, $\psi(u)\leq\frac{u^2}{8}$ which implies that
 $$\log\left(\mathbb{E}\left(\exp(sV_i)\right)\right)\leq\frac{u^2}{8}=\frac{s^2(b-a)^2}{8}.$$
 Therefore,
-$$\begin{align</em>}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&amp;=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\&amp;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\&amp;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
+$$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&amp;=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\&amp;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\&amp;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
 which completes the proof. $\square$</p>
 </details>
-<p>Recall that we have our random sample $S={(x_i,y_i)}<em>{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i=l(h</em>{\mathbf{w}}(x_i),y_i)$. We can apply Lemma 1 with $U_i=\mathbb{E}(l_i(\mathbf{w})-l_i(\mathbf{w}))$ to get that
-$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$
+<p>Recall that we have our random sample $S={(x_i,y_i)}_{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i=l(h_{\mathbf{w}}(x_i),y_i)$. We can apply Lemma 1 with $U_i=\mathbb{E}(l_i(\mathbf{w})-l_i(\mathbf{w}))$ to get that
+$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$
 Therefore, for any $s&gt;0$ we can apply Markov's Inequality to get that
-$$\begin{align*}\mathbb{P}</em>{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right)&amp;=\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)&gt;\exp(mts)\right)\&amp;\leq\frac{\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\&amp;\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$
+$$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right)&amp;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)&gt;\exp(mts)\right)\&amp;\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\&amp;\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$
 This bound is minimized for $t=\frac{4s}{C^2}$ so that
 $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\leq\exp\left(-\frac{2ms^2}{C^2}\right).$$</p>
 <p>The above bound holds for fixed $\mathbf{w}\in\mathcal{W}$ so develop a uniform bound we consider the following.
-$$\begin{align*}\mathbb{P}<em>{\mathcal{S}\sim\mathcal{D}^m}\left(\sup</em>{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;s\right)&amp;=\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\bigcup</em>{\mathbf{w}\in\mathcal{W}}\left{R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right}\right)\&amp;\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\&amp;\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$
+$$\begin{align*}\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;s\right)&amp;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\bigcup_{\mathbf{w}\in\mathcal{W}}\left{R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right}\right)\&amp;\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\&amp;\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$
 Now taking $\delta=M\exp\left(-\frac{2ms^2}{C^2}\right)$ we get that
-$$\mathbb{P}</em>{S\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\leq\delta$$
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\leq\delta$$
 which upon taking complements completes the proof of the theorem. $\square$</p>
 </details>
 <p>Theorem 2.1 says that with arbitrarily high probability we can bound the performance of our trained classifier on the unknown distribution $\mathcal{D}$. However, there is nothing to guarantee that the bound is useful in practice. Note that requiring bounds to hold for greater precision involves sending $\epsilon$ to $0$ which increases the bound. If the bound exceeds $C$ then it is no longer useful as we know already that $R(\mathbf{w})\leq C$. It is important to note at this stage that are two ways in which PAC bounds can hold. One set of bounds holds in expectation whilst the other hold in probability. Risk is a concept that will develop bounds in expectation. In Section 2.3 we will introduce definitions that will let us work with bounds that hold in probability. There are two general forms of PAC bounds, we have uniform convergence bounds and algorithmic-dependent bounds (Viallard, 2021). Uniform convergence bounds have the general form
-$$\mathbb{P}<em>{\mathcal{S}\sim\mathcal{D}^m}\left(\sup</em>{\mathbf{w}\in\mathcal{W}}\left\vert R(\mathbf{w})-\hat{R}(\mathbf{w})\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},\mathcal{W}\right)\right)\geq 1-\delta.$$
+$$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left\vert R(\mathbf{w})-\hat{R}(\mathbf{w})\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},\mathcal{W}\right)\right)\geq 1-\delta.$$
 This can be considered as a worst-case analysis of hypothesis generalization, and so in practice will lead to non-vacuous bounds. Algorithmic-dependent bounds involve the details of a learning algorithm $A$ and take the form
 $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\left\vert R\left(A(S)\right)-\hat{R}\left(A(S)\right)\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},A\right)\right)\geq1-\delta.$$
 These bounds can be seen as a refinement of the uniform convergence bounds as they are only required to hold for the output of the learning algorithm. It will be the subject of Section 5.1 to explore such bounds further.</p>
 <h3 id="213-occam-bounds">2.1.3 Occam Bounds</h3>
 <p>Occam bounds are derived under the assumption that $\mathcal{H}$ is countable and that we have some bias $\pi$ defined on the hypothesis space. Note that in our setup this does not necessarily mean that $\mathcal{W}$ is countable, as multiple weights may correspond to the same classifier. However, as the Occam bounds hold true for all $h\in\mathcal{H}$ it must also be the case that they hold for all classifiers corresponding to the weight $\mathbf{w}\in\mathcal{W}$. Using this we will instead assume that $\pi$ is defined over $\mathcal{W}$.</p>
-<p><strong>Theorem 2.2</strong> (McAllester, 2013) Simultaneously for all $\mathbf{w}\in\mathcal{W}$ and $\delta\in(0,1)$ the following holds, $$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\inf</em>{\lambda&gt;\frac{1}{2}}\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{w})+\frac{\lambda C}{m}\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$</p>
+<p><strong>Theorem 2.2</strong> (McAllester, 2013) Simultaneously for all $\mathbf{w}\in\mathcal{W}$ and $\delta\in(0,1)$ the following holds, $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\inf_{\lambda&gt;\frac{1}{2}}\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{w})+\frac{\lambda C}{m}\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$</p>
 <details>
 <summary>Proof</summary>
 <br>
 <p>For the proof we consider the case when $C=1$, with the more general case following by rescaling the loss function. For $\mathbf{w}\in\mathcal{W}$ let
 $$\epsilon(\mathbf{w})=\sqrt{\frac{2R(\mathbf{w})\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}}.$$
 Then the relative Chernoff bound states that
-$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\leq R(\mathbf{w})-\epsilon(\mathbf{w})\right)\leq\exp\left(-\frac{m\epsilon(\mathbf{w})^2}{2R(\mathbf{w})}\right)=\delta\pi(\mathbf{w}).$$
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\leq R(\mathbf{w})-\epsilon(\mathbf{w})\right)\leq\exp\left(-\frac{m\epsilon(\mathbf{w})^2}{2R(\mathbf{w})}\right)=\delta\pi(\mathbf{w}).$$
 Summing over all $\mathbf{w}$ and applying the union bound we conclude that the probability that a $\mathbf{w}$ exists with the property that $R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+\epsilon(\mathbf{w})$ is $\delta$. Therefore, for all $\mathbf{w}$
-$$\mathbb{P}</em>{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\sqrt{R(\mathbf{w})\left(\frac{2\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)}\right)\geq1-\delta.$$
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\sqrt{R(\mathbf{w})\left(\frac{2\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)}\right)\geq1-\delta.$$
 Using $\sqrt{ab}=\inf_{\lambda&gt;0}\left(\frac{a}{2\lambda}+\frac{\lambda b}{2}\right)$ we get that
 $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\frac{R(\mathbf{w})}{2\lambda}+\frac{\lambda\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)\geq1-\delta,$$
 which upon rearrangement completes the proof. $\square$</p>
 </details>
 <h2 id="22-expected-risk-minimization">2.2 Expected Risk Minimization</h2>
-<p>In light of Theorem 2.1 it may seem reasonable to want to identify the parameter value $\hat{\mathbf{w}}<em>{\mathrm{ERM}}$ that minimizes $\hat{R}(\cdot)$. This optimization process is known as Empirical Risk Minimization (ERM) and is formally defined as
-$$\hat{\mathbf{w}}</em>{\mathrm{ERM}}=\inf_{\mathbf{W}\in\mathcal{W}}\hat{R}(\mathbf{w}).$$</p>
+<p>In light of Theorem 2.1 it may seem reasonable to want to identify the parameter value $\hat{\mathbf{w}}_{\mathrm{ERM}}$ that minimizes $\hat{R}(\cdot)$. This optimization process is known as Empirical Risk Minimization (ERM) and is formally defined as
+$$\hat{\mathbf{w}}_{\mathrm{ERM}}=\inf_{\mathbf{W}\in\mathcal{W}}\hat{R}(\mathbf{w}).$$</p>
 <h2 id="23-compression">2.3 Compression</h2>
 <p>We now show how PAC bounds can be used to bound the performance of a compressed neural network. In classical statistical theory only as many parameters as training samples are required to overfit. So in practice, neural networks would be able to overfit the training data as they have many more parameters than training samples. Although overfitting to the training sample will yield a low empirical risk, in practice neural networks do not overfit to the data. This suggests that there is some capacity of the network that is redundant in expressing the learned function. In (Arora, 2018) compression frameworks are constructed that aim to reduce the effective number of parameters required to express the function of a trained network whilst maintaining its performance. To do this (Arora, 2018) capitalize on how a neural network responds to noise added to its weights. We first introduce the compression techniques for linear classifiers and then proceed to work with fully connected ReLU neural networks.</p>
 <h3 id="231-establishing-the-notion-of-compression">2.3.1 Establishing the Notion of Compression</h3>
 <p>We are in a scenario where we have a learned classifier $h$ that achieves low empirical loss but is complex. In this case, we are considering $\mathcal{Y}=\mathbb{R}^k$ so that the output of $h$ in the $i^\text{th}$ can be thought of as a relative probability that the input belongs to class $i$. With this, we define the classification margin loss for $\gamma&gt;0$ to be
-$$L_{\gamma}(h)=\mathbb{P}<em>{(x,y)\sim\mathcal{D}}\left(h(x)[y]\leq\gamma+\max</em>{i\neq y}f(x)[i]\right).$$
+$$L_{\gamma}(h)=\mathbb{P}_{(x,y)\sim\mathcal{D}}\left(h(x)[y]\leq\gamma+\max_{i\neq y}f(x)[i]\right).$$
 Similarly, we have the empirical classification margin loss defined as
-$$\hat{L}<em>{\gamma}(h)=\frac{1}{m}\left\vert\left{f(x_i)[y_i]\leq\gamma+\max</em>{i\neq y_i}f(x_i)[i]\right}\right\vert.$$
+$$\hat{L}_{\gamma}(h)=\frac{1}{m}\left\vert\left{f(x_i)[y_i]\leq\gamma+\max_{i\neq y_i}f(x_i)[i]\right}\right\vert.$$
 Suppose that our neural network has $d$ fully connected layers and let $x^i$ be the vector before the activation at layer $i=0,\dots,d$ and as $x^0$ is the input denote it $x$. Let $A^i$ be the weight matrix of layer $i$ and let layer $i$ have $n_i$ hidden layers with $n=\max_{i=1}^dn_i$. The classifier calculated by the network will be denoted $h_\mathbf{w}(x)$, where $\mathbf{w}$ can be thought of as a vector containing the weights of the network. For layers $i\leq j$ the operator for the composition of the layers will be denoted $M^{i,j}$, the Jacobian of the input $x$ will be denoted $J_x^{i,j}$ and $\phi(\cdot)$ will denote the component-wise ReLU. With these the following hold,
 $$x^i=A^i\phi\left(x^{i-1}\right),;x^j=M^{i,j}\left(x^i\right),\text{ and }M^{i,j}\left(x^i\right)=J_{x^i}^{i,j}x^i.$$
 For a matrix $B$, $\Vert B\Vert_F$ will be its Frobenius norm, $\Vert B\Vert_2$ its spectral norm and $\frac{\Vert B\Vert_F^2}{\Vert B\Vert_2^2}$ its stable rank.</p>
@@ -469,16 +469,16 @@ over the training set.</p>
 <details>
 <summary>Proof</summary>
 <br>
-<p>For $\mathbf{w}\in\mathcal{W}$, the empirical classification margin $\hat{L}<em>0(g</em>{\mathbf{w}})$ is the average of $m$ $\mathrm{i.i.d}$ Bernoulli random variables with parameter $L_0(g_{\mathbf{w}})$. Therefore, by Chernoff bound
-$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(L_0(g</em>{\mathbf{w}})-\hat{L}<em>0(g</em>{\mathbf{w}})\geq\tau\right)\leq\exp\left(-2\tau^2m\right).$$
+<p>For $\mathbf{w}\in\mathcal{W}$, the empirical classification margin $\hat{L}_0(g_{\mathbf{w}})$ is the average of $m$ $\mathrm{i.i.d}$ Bernoulli random variables with parameter $L_0(g_{\mathbf{w}})$. Therefore, by Chernoff bound
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})-\hat{L}_0(g_{\mathbf{w}})\geq\tau\right)\leq\exp\left(-2\tau^2m\right).$$
 Therefore, with $\tau=\sqrt{\frac{q\log(r)}{m}}$ we have that
-$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(L_0(g</em>{\mathbf{w}})\leq\hat{L}<em>0(g</em>{\mathbf{w}})+\tau\right)\geq1-\exp(-2q\log(r)).$$
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\tau\right)\geq1-\exp(-2q\log(r)).$$
 As there are only $r^q$ different $\mathbf{w}$, we can apply a union bound arguements to conclude that for all $\mathbf{w}\in\mathcal{W}$ we have that
-$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(L_0(g</em>{\mathbf{w}})\leq\hat{L}<em>0(g</em>{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp(-q\log(r)).$$
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp(-q\log(r)).$$
 As $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W},S}$ then there exists a $\mathbf{w}\in\mathcal{W}$ such that for any $x\in\mathcal{X}$ and any $y$ we have
 $$\vert h(x)[y]-g_{\mathbf{w}}(x)[y]\vert\leq\gamma.$$
 Therefore, as long as $h$ has a margin at least $\gamma$ the classifier $g_{\mathbf{w}}$ classifies the examples correctly so that
-$$\hat{L}<em>0(g</em>{\mathbf{w}})\leq\hat{L}_{\gamma}(h).$$
+$$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h).$$
 Combining this with the previous observations completes the proof of the theorem. $\square$</p>
 </details>
 <p><strong>Remark 2.6</strong> Theorem 2.5 only gives a bound for $g_{\mathbf{w}}$ which is the compression of $h$. However, there are no requirements of a hypothesis class, assumptions are only made on $h$ and its properties on a finite training set.</p>
@@ -487,7 +487,7 @@ Combining this with the previous observations completes the proof of the theorem
 <summary>Proof</summary>
 <br>
 <p>The proof this corollary proceeds in exactly the same ways as the proof of Theorem 2.5, however, in the last step we can use the upper-bound
-$$\hat{L}<em>0(g</em>{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\xi.$$
+$$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\xi.$$
 Which arises as for the fraction of the training sample where the compression doesn't work we assume that the loss is maximized, which was assumed to be $1$.</p>
 </details>
 <h3 id="232-compression-of-a-linear-classifier">2.3.2 Compression of a Linear Classifier</h3>
@@ -519,9 +519,9 @@ Then for any fixed $u$ with probability at least $1-\eta$, $\left\vert\hat{\math
 <strong>Ensure</strong> vector $\hat{\mathbf{w}}$ such that for any fixed vector $\Vert u\Vert\leq 1$, with probability at least $1-\eta$, $\vert \mathbf{w}^\top\mathbf{u}-\hat{\mathbf{w}}^\top\mathbf{u}\vert\leq\gamma$.<br>
 Let $k=\frac{16\log\left(\frac{1}{\eta}\right)}{\gamma^2}$.<br>
 Sample the random vectors $\mathbf{v}_1,\dots,\mathbf{v}_k\sim\mathcal{N}(0,I)$.<br>
-Let $z_i=\langle\mathbf{v}<em>i,\mathbf{w}\rangle$.<br>
+Let $z_i=\langle\mathbf{v}_i,\mathbf{w}\rangle$.<br>
 (In Discrete Case) Round $z_i$ to closes multiple of $\frac{\gamma}{2\sqrt{dk}}$.<br>
-<strong>return</strong> $\hat{\mathbf{w}}=\frac{1}{k}\sum</em>{i=1}^kz_i\mathbf{v}_i$</p>
+<strong>return</strong> $\hat{\mathbf{w}}=\frac{1}{k}\sum_{i=1}^kz_i\mathbf{v}_i$</p>
 </blockquote>
 <p><strong>Remark</strong> The vectors $\mathbf{v}_i$ of Algorithm 2 form the helper string.</p>
 <p><strong>Lemma</strong> For any fixed vector $u$, Algorithm 2 $(\gamma, \mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that with probability at least $1-\eta$, we have $\left\vert\hat{\mathbf{w}}^\top\mathbf{u}-\mathbf{w}^\top\mathbf{u}\right\vert\leq\gamma$.</p>
@@ -548,7 +548,7 @@ for any $x\in\mathcal{X}$. Furthermore, let $\mu_{i\to}=\min_{i\leq j\leq d}\mu_
 <p><strong>Definition 2.18</strong> The activation contraction $c$ is defined as the smallest number such that for any layer $i$ $$\left\Vert\phi\left(x^i\right)\right\Vert\geq\frac{\left\Vert x^i\right\Vert}{c}$$ for any $x\in\mathcal{X}$.</p>
 <p><strong>Definition 2.19</strong> Let $\eta$ be the noise generated as a result of applying Algorithm 3 to some of the layers before layer $i$. Define the inter-layer smoothness $\rho_{\delta}$ to be the smallest number such that with probability $1-\delta$ we have that for layers $i&lt;j$ $$\left\Vert M^{i,j}\left(x^i+\eta\right)-J_{x^i}^{i,j}\left(x^i+\eta\right)\right\Vert\leq\frac{\Vert\eta\Vert\left\Vert x^j\right\Vert}{\rho_{\delta}\left\Vert x^i\right\Vert}$$ for any $x\in\mathcal{X}$.</p>
 <p><strong>Remark 2.20</strong> For a neural network let $x$ be the input, $A$ be the layer matrix and $U$ the Jacobian of the network output with respect to the layer input. Then the network output before compression is given by $UAx$ and after compression the output is given by $U\hat{A}x$.</p>
-<p><strong>Theorem 2.21</strong> For any fully connected network $h_{{\mathbf{w}}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that with probability $1-\delta$ over the training set, $$L_0(h_{\tilde{{\mathbf{w}}}})\leq\hat{L}<em>{\gamma}(h</em>{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right).$$</p>
+<p><strong>Theorem 2.21</strong> For any fully connected network $h_{{\mathbf{w}}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that with probability $1-\delta$ over the training set, $$L_0(h_{\tilde{{\mathbf{w}}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right).$$</p>
 <details>
 <summary>Proof</summary>
 <br>
@@ -556,7 +556,7 @@ for any $x\in\mathcal{X}$. Furthermore, let $\mu_{i\to}=\min_{i\leq j\leq d}\mu_
 <p>Use Lemma \ref{Lemma-Error Bound on Set} to prove the following.</p>
 <p><strong>Lemma</strong> For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any $0&lt;\epsilon\leq 1$, Algorithm 3 can generate weights $\tilde{\mathbf{w}}$ for a network with $$\frac{72c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\epsilon^2}\cdot\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}$$ total parameters such that with probability $1-\frac{\delta}{2}$ over the generated weights $\tilde{w}$, for any $x\in\mathcal{X}$ $$\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{w}}(x)\right\Vert\leq\epsilon\Vert h_{\mathbf{w}}(x)\Vert,$$ where $\mu_i,\mu_{i\to},c$ and $\rho_{\delta}$ are the layer cushion, inter-layer cushion, activation contraction and inter-layer smoother for the network.</p>
 <p>Subsequently, the following result holds.</p>
-<p><strong>Lemma</strong> For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma&gt;0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}<em>0(h</em>{\hat{\mathbf{w}}})\leq\hat{L}<em>{\gamma}(h</em>\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$</p>
+<p><strong>Lemma</strong> For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma&gt;0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}_0(h_{\hat{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$</p>
 <p><strong>Lemma</strong> Let $h_{\mathbf{w}}$ be a $d$-layer network with weights $A=\left{A^1,\dots,A^d\right}$. Then for any input $x$, weights $A$ and $\hat{A}$, if for any layer $i$, $\left\Vert A^i-\hat{A}^i\right\Vert\leq\frac{1}{d}\Vert A^i\Vert$, then $$\Vert h_\mathbf{w}(x)-h_{\hat{\mathbf{w}}}(x)\Vert\leq e\Vert x\Vert\left(\prod_{i=1}^d\left\Vert A^i\right\Vert_2\right)\sum_{i=1}^d\frac{\left\Vert A^i-\hat{A}^i\right\Vert_2}{\Vert A^i\Vert_2}$$</p>
 <p>Using Lemmas \ref{Lemma-Probabilistic Bound with Parameter Count},\ref{Lemma-Compression FC Parameter Bound} and \ref{Lemma-Error FC Bound} it can be shown that Algorithm 3 provides a generalization bound for suitable fully connected neural networks.</p>
 </detials>
