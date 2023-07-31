@@ -413,17 +413,17 @@ $$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^*)=\frac{1}{4}.$$
 Hence, $\psi(u)\leq\frac{u^2}{8}$ which implies that
 $$\log\left(\mathbb{E}\left(\exp(sV_i)\right)\right)\leq\frac{u^2}{8}=\frac{s^2(b-a)^2}{8}.$$
 Therefore,
-$$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&amp;=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\&amp;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\&amp;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
+$$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\\&;=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\\&;\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\\\&;\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$
 which completes the proof. $\square$</p>
 </details>
 <p>Recall that we have our random sample $S={(x_i,y_i)}_{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i=l(h_{\mathbf{w}}(x_i),y_i)$. We can apply Lemma 1 with $U_i=\mathbb{E}(l_i(\mathbf{w})-l_i(\mathbf{w}))$ to get that
 $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$
 Therefore, for any $s&gt;0$ we can apply Markov's Inequality to get that
-$$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right)&amp;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)&gt;\exp(mts)\right)\&amp;\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\&amp;\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$
+$$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right)\\&;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)&gt;\exp(mts)\right)\\\&;\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\\\&;\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$
 This bound is minimized for $t=\frac{4s}{C^2}$ so that
 $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\leq\exp\left(-\frac{2ms^2}{C^2}\right).$$</p>
 <p>The above bound holds for fixed $\mathbf{w}\in\mathcal{W}$ so develop a uniform bound we consider the following.
-$$\begin{align*}\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;s\right)&amp;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\bigcup_{\mathbf{w}\in\mathcal{W}}\left{R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right}\right)\&amp;\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\&amp;\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$
+$$\begin{align*}\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;s\right)\\&;=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\bigcup_{\mathbf{w}\in\mathcal{W}}\left{R(\mathbf{w})-\hat{R}(\mathbf{w})&gt;s\right}\right)\\\&;\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})&gt;\hat{R}(\mathbf{w})+s\right)\\\&;\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$
 Now taking $\delta=M\exp\left(-\frac{2ms^2}{C^2}\right)$ we get that
 $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)&gt;C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\leq\delta$$
 which upon taking complements completes the proof of the theorem. $\square$</p>
@@ -509,7 +509,7 @@ Which arises as for the fraction of the training sample where the compression do
 <p><strong>Lemma</strong> \label{Lemma-Continuous Vector Compression} Algorithm 1 $(\gamma,\mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that for any fixed $\mathbf{u}$, with probability $1-\eta$, $\left\vert\hat{\mathbf{w}}^\top\mathbf{u}-\mathbf{w}^\top \mathbf{u}\right\vert\leq\gamma$. The vector $\hat{\mathbf{w}}$ has at most $O\left(\frac{\log d}{\eta\gamma^2}\right)$ non-zero entries with high probability.</p>
 <p>In the discrete case, a similar result holds.</p>
 <p><strong>Lemma</strong> Let Algorithm 1 $\left(\frac{\gamma}{2},\mathbf{w}\right)$ return vector $\tilde{\mathbf{w}}$. Let,
-$$\hat{w}_i=\begin{cases}0&amp;\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{h}\\text{rounding to nearest multiple of }\frac{\gamma}{2\sqrt{h}}&amp;\text{Otherwise.}\end{cases}$$
+$$\hat{w}_i=\begin{cases}0\\&;\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{h}\\text{rounding to nearest multiple of }\frac{\gamma}{2\sqrt{h}}\\&;\text{Otherwise.}\end{cases}$$
 Then for any fixed $u$ with probability at least $1-\eta$, $\left\vert\hat{\mathbf{w}}^\top\mathbf{u}-\mathbf{w}^\top \mathbf{u}\right\vert\leq\gamma.$</p>
 </details>
 <p><strong>Remark</strong> The rate is not optimal as it depends on $m^{1/3}$ and not $\sqrt{m}$. To resolve this employ helper strings.</p>
