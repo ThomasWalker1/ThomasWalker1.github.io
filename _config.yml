@@ -1,3 +1,6 @@
-remote_theme: moonwalk
+plugins:
+  - jekyll-remote-theme
+
+remote_theme: ngzhio/jekyll-theme-hamilton
 title: Thomas Walker
 description: 
