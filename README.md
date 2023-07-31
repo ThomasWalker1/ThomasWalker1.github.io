@@ -1,3 +1,3 @@
 # Home Page
 
-[Projects](./projects.html)
+[Projects](/urop2023/intro.html)
