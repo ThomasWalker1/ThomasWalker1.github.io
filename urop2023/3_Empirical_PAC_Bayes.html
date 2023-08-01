@@ -454,7 +454,7 @@ This is distribution is known as the Gibbs posterior.</p>
 <p>The beginning of this proof proceeds in the same way as that of Theorem 3.4 up to the point where we conclude that
 $$\mathbb{E}_{\mathbf{w}\sim\pi}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
 For any non-negative function $h$ we have that
-$$\begin{align*}\mathbb{E}_{\mathbf{w}\sim\pi}(h(\mathbf{w}))&amp;=\int_{\mathcal{W}}h(\mathbf{w})\pi(d\mathbf{w})\&amp;=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\pi(d\mathbf{w})\&amp;=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\frac{d\pi}{d\tilde{\rho}}(\mathbf{w})\tilde{\rho}(d\mathbf{w})\&amp;=\mathbb{E}_{\mathbf{w}\sim\tilde{\rho}}\left(h(\mathbf{w})\exp\left(-\log\left(\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})\right)\right)\right)\end{align*}$$
+$$\begin{align*}\mathbb{E}_{\mathbf{w}\sim\pi}(h(\mathbf{w}))&=\int_{\mathcal{W}}h(\mathbf{w})\pi(d\mathbf{w})\\&=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\pi(d\mathbf{w})\\&=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\frac{d\pi}{d\tilde{\rho}}(\mathbf{w})\tilde{\rho}(d\mathbf{w})\\&=\mathbb{E}_{\mathbf{w}\sim\tilde{\rho}}\left(h(\mathbf{w})\exp\left(-\log\left(\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})\right)\right)\right)\end{align*}$$
 which means that
 $$\mathbb{E}_{\mathbf{w}\sim\pi}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)-\log\left(\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
 Now in a similar to the previous proofs we apply the Chernoff, set $\delta$ and then re-arrange the terms to complete the proof. $\square$</p>
@@ -566,7 +566,7 @@ $B(\mathbf{w},\mathbf{s},\lambda,\mathbf{w}^\prime)=\tilde{R}(\mathbf{w})+\sqrt{
 <strong>for</strong> $t=1\to T$ <strong>do</strong><br>
 ----Sample $\xi\sim\mathcal{N}(0,I_d)$<br>
 ----$\mathbf{w}^\prime(\mathbf{w},\zeta)=\mathbf{w}+\xi\odot\sqrt{\mathbf{s}(\zeta)}$<br>
-----$\begin{pmatrix}\mathbf{w}\\zeta\\rho\end{pmatrix}=-\tau\begin{pmatrix}\nabla_{\mathbf{w}}B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\nabla_\zeta B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\nabla_\rho B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\end{pmatrix}$<br>
+----$\begin{pmatrix}\mathbf{w}\\zeta\\rho\end{pmatrix}=-\tau\begin{pmatrix}\nabla_{\mathbf{w}}B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\\nabla_\zeta B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\\nabla_\rho B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\end{pmatrix}$<br>
 <strong>end for</strong><br>
 <strong>return</strong> $\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho)$</p>
 </blockquote>
