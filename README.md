@@ -1,6 +1,8 @@
 # Home Page
 
-## About
+[About](/about/about.html)
+
+
 
 ## Projects
 
