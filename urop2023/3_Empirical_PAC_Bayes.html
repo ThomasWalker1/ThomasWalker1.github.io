@@ -400,14 +400,14 @@ $$\mathrm{kl}^{-1}(q, c):=\sup{p\in[0,1]:\mathrm{kl}(q, p)\leq c}.$$</p>
 $$\mathbb{E}_{\mathbf{w}\sim Q}(R(\mathbf{w}))=R(Q)\text{ and }\mathbb{E}_{\mathbf{w}\sim Q}\left(\hat{R}(\mathbf{w})\right)=\hat{R}(Q)$$
 for convenience. The first PAC-Bayes bounds we will encounter is known as Catoni's bound. Recall, that under the Bayesian framework, we first fix a prior distribution, $\pi\in\mathcal{M}(\mathcal{W})$.</p>
 <p><strong>Theorem 3.4</strong> (Alquier, 2023) For all $\lambda&gt;0$, for all $\rho\in\mathcal{M}(\mathcal{W})$, and $\delta\in(0,1)$ it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\leq\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta.$$</p>
-<details style="border:rgb(59, 62, 62); border-width:3px; border-style:solid;">
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>We first recall Jensen's Inequality. Which says that for a convex function $f(x)$ and a random variable $X$ defined on sample space $\mathcal{X}$, if $\mathbb{E}(f(X))$ and $f(\mathbb{E}(X))$ are finite then
 $$\mathbb{E}(f(X))\geq f(\mathbb{E}(X)).$$
 Where equality only holds if and only if $f$ is a linear function on some convex set $A$ such that $\mathbb{P}(X\in A)=1$. If $f$ doesn't have this property then equality holds if and only if the random variable is constant.</p>
 <p><strong>Proposition 1</strong> For any probability measures $Q$ and $P$ it follows that $\mathrm{KL}(Q,P)\geq0$ with equality if and only if $Q$ and $P$ are the same probability distribution.</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>If $Q$ and $P$ are the same probability distribution on the sample space $\mathcal{X}$ then,
@@ -418,7 +418,7 @@ Therefore, equality must hold for Jensen's inequality which implies that $\frac{
 </details>
 <p><strong>Lemma 2</strong> For any measurable, bounded function $f:\mathcal{W}\to\mathbb{R}$ we have, $$\log\left(\mathbb{E}_{\mathbf{w}\sim\pi}\left(e^{f(\mathbf{w})}\right)\right)=\sup_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(f(\mathbf{w})\right)-\mathrm{KL}(\rho,\pi)\right).$$ Moreover, the supremum with respect to $\rho$ is achieved for the Gibbs measure $\pi_f$ defined by its density with respect to $\pi$
 $$\frac{d\pi_f(\mathbf{w})}{d\pi_f(\mathbf{w})}=\frac{e^{f(\mathbf{w})}}{\mathbb{E}_{\mathbf{w}\sim\pi_f}\left(e^{f(\mathbf{w})}\right)}.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>From the definition of $\pi_f(\mathbf{w})$ we have that
@@ -448,7 +448,7 @@ This is distribution is known as the Gibbs posterior.</p>
 <p><strong>Corollary 3.6</strong> For all $\lambda&gt;0$, and $\delta\in(0,1)$ it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
 <p>For a learning algorithm, we noted that there are different methodologies for how the learned classifier is sampled from the posterior. In the case where consider a single random realisation of the posterior distribution, we have the following result.</p>
 <p><strong>Theorem 3.7</strong> (Alquier, 2023) For all $\lambda&gt;0$, $\delta\in(0,1)$, and data-dependent probability measure $\tilde{\rho}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\mathbb{P}_{\tilde{\mathbf{w}}\sim\tilde{\rho}}\left(R\left(\tilde{\mathbf{w}}\right)\leq\hat{R}\left(\tilde{\mathbf{w}}\right)+\frac{\lambda C^2}{8m}+\frac{\log\left(\frac{d\rho\left(\tilde{\mathbf{w}}\right)}{d\pi\left(\tilde{\mathbf{w}}\right)}\right)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>The beginning of this proof proceeds in the same way as that of Theorem 3.4 up to the point where we conclude that
@@ -461,7 +461,7 @@ Now in a similar to the previous proofs we apply the Chernoff, set $\delta$ and 
 </details>
 <p>Note that Theorem 3.4 is a bound in probability. We now state an equivalent bound that holds in expectation.</p>
 <p><strong>Theorem 3.8</strong> (Alquier, 2023) For all $\lambda&gt;0$, and data-dependent probability measure $\tilde{\rho}$, we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}(R(\tilde{\rho}))\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\tilde{\rho})+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\tilde{\rho},\pi)}{\lambda}\right).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Once again we proceed in the same way as Theorem 3.4 to the point where we deduce that
@@ -477,20 +477,20 @@ and so using the linearity of expectation and rearranging completes the proof. $
 <p><strong>Corollary 3.9</strong> For $\tilde{\rho}=\hat{\rho}_{\lambda}$, the following holds $$\mathbb{E}_{S\sim\mathcal{D}^m}(R(\tilde{\rho}))\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)\right)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$</p>
 <p>In the results that follow we will consider the $0$-$1$ loss. This is a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to{0,1}$ defined by $l(y,y^\prime)=\mathbf{1}(y\neq y^\prime)$.</p>
 <p><strong>Theorem 3.10</strong> (McAllester, 1999) For all $\rho\in\mathcal{M}(\mathcal{W})$ and $\delta&gt;0$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\hat{R}(\rho)+\sqrt{\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)+\frac{5}{2}\log(m)+8}{2m-1}}\right)\geq1-\delta.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Refer to (McAllester, 1999) for the proof of this theorem.</p>
 </details>
 <p><strong>Theorem 3.11</strong> (Catoni, 2007) For $a&gt;0$ and $p\in(0,1)$ let $$\Phi_{a}(p)=\frac{-\log\left(1-p(1-\exp(-a))\right)}{a}.$$
 Then for any $\lambda&gt;0$, $\delta&gt;0$ and $\rho\in\mathcal{M}(\mathcal{W})$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Phi^{-1}_{\frac{\lambda}{m}}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Refer to (Catoni, 2007) for the proof of this theorem.</p>
 </details>
 <p><strong>Theorem 3.12</strong> (Maurer, 2004) For any $\delta&gt;0$ and $\rho\in\mathcal{M}(\mathcal{W})$ then we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\mathrm{kl}^{-1}\left(\hat{R}(\rho),\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right)\right)\geq1-\delta.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>For $X_1,\dots,X_n$ $\mathrm{i.i.d}$ random variables in $[0,1]$ and with $\mathbb{E}(X_i)=\mu$ let $\mathbf{X}=(X_1,\dots,X_n)$ and $$M(\mathbf{X})=\frac{1}{n}\sum_{i=1}^nX_i.$$ For any random variable $X$ in $[0,1]$ let $X^\prime$ denote the Bernoulli random variables with parameter $\mathbb{E}(X)$. Similarly, let $\mathbf{X}^\prime=(X_1^\prime,\dots,X_n^\prime)$.</p>
@@ -531,7 +531,7 @@ Utilizing the bound $\mathrm{kl}^{-1}(q,c)\leq q+\sqrt{\frac{c}{2}}$ in Equation
 $$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+}\tilde{R}\left(\mathcal{N}_{\mathbf{w},\mathbf{s}}\right)+\sqrt{\frac{\mathrm{KL}(\mathcal{N}_{\mathbf{w},\mathbf{s}},\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{2m}}.\end{equation}$$
 We now suppose our prior $\pi$ is of the form $\mathcal{N}(\mathbf{w}_0,\lambda I)$. As we will see the choice of $\mathbf{w}_0$ is not too impactful, as long as it is not $\mathbf{0}$. However, to efficiently choose a judicious value for $\lambda$ we discretize the problem, with the side-effect of expanding the eventual generalization bound. We let $\lambda$ have the for $c\exp\left(-\frac{j}{b}\right)$ for $j\in\mathbb{N}$, so that $c$ is an upper bound and $b$ controls precision. By ensuring that Theorem 3.12 holds with probability $1-\frac{6\delta}{\pi^2j^2}$ for each $j\in\mathbb{N}$ then we can apply a union bound argument to ensure that we get results that hold for probability $1-\delta$. A union bound argument refers to applying Theorem 3.15.</p>
 <p><strong>Theorem 3.15</strong> (Dziugaite, 2017) Let $E_1,E_2,\dots$ be events. Then $\mathbb{P}\left(\bigcup_nE_n\right)\leq\sum_n\mathbb{P}(E_n).$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>This can be proved by induction on $n$. When $n=1$ the result holds clearly. Now suppose that for events $E_1,\dots, E_k$ we have that $\mathbb{P}\left(\cup_{l=1}^kE_l\right)\leq\sum_{l=1}^k\mathbb{P}(E_l)$. Then for events $E_1,\dots,E_k,E_{k+1}$ it follows that
