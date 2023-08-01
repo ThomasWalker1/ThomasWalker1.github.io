@@ -2,8 +2,6 @@
 
 [About](/about/about.html)
 
-
-
 ## Projects
 
 [UROP 2022 - Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates](/urop2022/intro.html)
