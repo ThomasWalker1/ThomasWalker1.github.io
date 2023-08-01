@@ -442,7 +442,7 @@ $$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}&\left(\sup_{\rho\in\mathcal{M}(\
 Setting $s=\log\left(\frac{1}{\delta}\right)$ and rearranging completes the proof. $\square$</p>
 </details>
 <p>Theorem 3.4 motivates the study of the data-dependent probability measure
-$$\begin{equation}\hat{\rho}_{\lambda}=\mathrm{argmin}_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).\end{equation}$$</p>
+$$\begin{equation}\hat{\rho}_{\lambda}=\mathrm{argmin}_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).\quad (1)\end{equation}$$</p>
 <p><strong>Definition 3.5</strong>  The optimization problem defined by Equation $(1)$ has the solution $\hat{\rho}_{\lambda}=\pi_{-\lambda\hat{R}}$ given by $$\hat{\rho}_{\lambda}(d\mathbf{w})=\frac{\exp\left(-\lambda\hat{R}(\mathbf{w})\right)\pi(d\mathbf{w})}{\exp\left(-\lambda\hat{R}(\pi)\right)}.$$
 This is distribution is known as the Gibbs posterior.</p>
 <p><strong>Corollary 3.6</strong> For all $\lambda&gt;0$, and $\delta\in(0,1)$ it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
@@ -522,13 +522,13 @@ Recall, that this definition implicitly depends on the training sample $S_m$. We
 <li>Fix a $\delta&gt;0$ and a distribution $\pi$ on $\mathcal{W}$,</li>
 <li>Collect an $\mathrm{i.i.d}$ sample $S_m$ of size $m$,</li>
 <li>Compute the optimal distribution $\rho$ on $\mathcal{W}$ that minimizes
-$$\begin{equation}\mathrm{kl}^{-1}\left(\hat{R}(\rho),\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right),\end{equation}$$</li>
+$$\begin{equation}\mathrm{kl}^{-1}\left(\hat{R}(\rho),\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right),\end{equation}\quad (2)$$</li>
 <li>Then return the randomized classifier given by $\rho$.</li>
 </ol>
 <p>Implementing such an algorithm in this general form is intractable in practice. Recall, that we are considering neural networks and so $\mathbf{w}$ represents the weights and biased of our neural network. To make the algorithm more practical we therefore consider
 $$\mathcal{M}(\mathcal{W})=\left{\mathcal{N}_{\mathbf{w},\mathbf{s}}=\mathcal{N}(\mathbf{w},\mathrm{diag}(\mathbf{s})):\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}_+^d\right}.$$
 Utilizing the bound $\mathrm{kl}^{-1}(q,c)\leq q+\sqrt{\frac{c}{2}}$ in Equation $(2)$ and replacing the loss with the convex surrogate loss we obtain the updated optimization problem
-$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+}\tilde{R}\left(\mathcal{N}_{\mathbf{w},\mathbf{s}}\right)+\sqrt{\frac{\mathrm{KL}(\mathcal{N}_{\mathbf{w},\mathbf{s}},\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{2m}}.\end{equation}$$
+$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+}\tilde{R}\left(\mathcal{N}_{\mathbf{w},\mathbf{s}}\right)+\sqrt{\frac{\mathrm{KL}(\mathcal{N}_{\mathbf{w},\mathbf{s}},\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{2m}}.\quad(3)\end{equation}$$
 We now suppose our prior $\pi$ is of the form $\mathcal{N}(\mathbf{w}_0,\lambda I)$. As we will see the choice of $\mathbf{w}_0$ is not too impactful, as long as it is not $\mathbf{0}$. However, to efficiently choose a judicious value for $\lambda$ we discretize the problem, with the side-effect of expanding the eventual generalization bound. We let $\lambda$ have the for $c\exp\left(-\frac{j}{b}\right)$ for $j\in\mathbb{N}$, so that $c$ is an upper bound and $b$ controls precision. By ensuring that Theorem 3.12 holds with probability $1-\frac{6\delta}{\pi^2j^2}$ for each $j\in\mathbb{N}$ then we can apply a union bound argument to ensure that we get results that hold for probability $1-\delta$. A union bound argument refers to applying Theorem 3.15.</p>
 <p><strong>Theorem 3.15</strong> (Dziugaite, 2017) Let $E_1,E_2,\dots$ be events. Then $\mathbb{P}\left(\bigcup_nE_n\right)\leq\sum_n\mathbb{P}(E_n).$</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
@@ -539,7 +539,7 @@ $$\begin{align*}\mathbb{P}\left(\bigcup_{l=1}^{k+1}E_l\right)&amp;=\mathbb{P}\le
 Therefore, by induction the result holds for all $n\in\mathbb{N}$ which completes the proof. $\square$</p>
 </details>
 <p>Treating $\lambda$ as continuous during the optimization process and then discretizing at the point of evaluating the bound yields the updated optimization problem
-$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+,\lambda\in(0,c)}\tilde{R}(\mathcal{N}_{\mathbf{w},\mathbf{s}})+\sqrt{\frac{1}{2}B_{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)}
+$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+,\lambda\in(0,c)}\tilde{R}(\mathcal{N}_{\mathbf{w},\mathbf{s}})+\sqrt{\frac{1}{2}B_{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)}\quad(4)
 \end{equation}$$</p>
 <p>where</p>
 <p>$$B_{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)=\frac{\mathrm{KL}(\mathcal{N}_{w,s},\mathcal{N}(\mathbf{w}_0,\lambda I))+2\log\left(b\log\left(\frac{c}{\lambda}\right)\right)+\log\left(\frac{\pi^2\sqrt{m}}{3\delta}\right)}{m}.$$</p>
