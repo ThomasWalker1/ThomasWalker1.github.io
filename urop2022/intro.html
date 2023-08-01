@@ -385,6 +385,14 @@ code {
 <h2 id="Abstract">Abstract</h2>
 <p>When one is conducting research involving computer simulations, often, a random function is used at some point within the code. These ‘random’ functions can be taken for granted and used without knowing exactly how it is ‘random’. Let’s consider the example of generating uniform random values in the interval [0,1); If one was to set the random generators in Python, R or C++ to have the same seed we get different sequences of randomly generated observations. This can be particularly frustrating for someone who wants to reproduce another’s research within a different programming language, or for collaborators who have different programming language preferences. In this research we explore why these differences occur, and what we can do to allow for reproducible research to occur across the languages. We focus our attention to the generation of random uniform values in the interval [0,1) as they form the basis of most other random functions, allowing the results of this investigation to be utilised in aligning other random functions. A classic example would be generating observations from non-uniform distributions, where a popular method for doing so involves passing uniform observations through the inverse-CDF of these distributions to generate the desired variates. Interestingly the default pseudo-random number generator used in these languages is the same, the Mersenne Twister. The discrepancy in the randomly generated sequences therefore arise in how the initial state of the generator is set and how we process the output to produce our random observations. Knowing this we can construct functions to reproduce results seen in R or C++ within a Python environment.</p>
 
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="/urop2022/prng.html">Chapter 1 - Introduction to PRNGs in Programming Languages</a></li>
+<li><a href="/urop2022/expo_norm_variates.html">Chapter 2 - Exponential and Normal Variates</a></li>
+<li><a href="/urop2022/shuffle.html">Chapter 3 - Shuffle</a></li>
+<li><a href="/urop2022/python_normal_variates.html">Notes on Variates</a></li>
+</ul>
+
 
 <h2 id="Introduction">Introduction</h2>
 <p>As part of an Undergraduate Research Project I investigated pseudo random number generators (PRNG) in Python, R and C++. The aim of the investigation was to understand how the languages go about generating random numbers, how they then go onto generate samples from a uniform distribution, with the intention at the end to provide frameworks to allows to align the generation of uniform variates across the languages.</p>
@@ -413,12 +421,4 @@ int main()
     }
 }</code></pre>
 <p>As a result of the investigations I was able to create a repository of functions to replicate observations obtained in R and C++ withing a Python environment. Given that we know the integer seed (let suppose it is $1$ for the examples below) provided in either of these languages (R or C++) we can run the complementary functions, found within this repository, in Python in order to reproduce the observations.</p>
-
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="/urop2022/prng.html">Chapter 1 - Theory</a></li>
-<li><a href="/urop2022/expo_norm_variates.html">Chapter 2 - Exponential and Normal Variates</a></li>
-<li><a href="/urop2022/shuffle.html">Chapter 3 - Shuffle</a></li>
-<li><a href="/urop2022/python_normal_variates.html">Notes on Variates</a></li>
-</ul>
 </html>
