@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>3_Empirical_PAC_Bayes.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="empirical-pac-bayes-bounds">Empirical PAC-Bayes Bounds</h1>
+<h2 id="31-introduction-to-pac-bayes-theory">3.1 Introduction to PAC-Bayes Theory</h2>
+<h3 id="311-bayesian-machine-learning">3.1.1 Bayesian Machine Learning</h3>
+<p>Here we will outline an introduction to Bayesian learning given by (Guedj, 2019). This will provide some context to the framework under which PAC-Bayes bounds are derived. As before we suppose that our training data $S_m={(x_i,y_i)}<em>{i=1}^m$ consists of samples from the distribution $\mathcal{D}$ defined on $\mathcal{Z}$. Bayesian machine learning is used to find a parameter $\hat{\mathbf{w}}$ that corresponds to a hypothesis $h</em>{\hat{\mathbf{w}}}$ with the property that $h_{\hat{\mathbf{w}}}(x)\approx y$. To do this a learning algorithm is employed, which is simply a map from the data space to the parameter space, $\mathcal{W}$. The learning algorithm requires some prior distribution, $\pi$, to be defined on $\mathcal{W}$. Then using the training data the posterior distribution, $\rho$, is formed from the prior distribution. From the posterior distribution, there are many methodologies to then determine the parameter $\hat{\mathbf{w}}$. For example, one could take $\hat{\mathbf{w}}$ to be the mean, median or a random realisation of $\rho$.</p>
+<h3 id="312-introducing-pac-bayes-bounds">3.1.2 Introducing PAC-Bayes Bounds</h3>
+<p>Bayesian machine learning is a way to manage randomness and uncertainty in the learning task. PAC-Bayes are PAC bounds that operate under this framework.</p>
+<p><strong>Definition 3.1</strong> Let $\mathcal{M}(\mathcal{W})$ be a set of probability distributions defined over $\mathcal{W}$. A data-dependent probability measure is a function $$\hat{\rho}:\bigcup_{n=1}^{\infty}(\mathcal{X}\times\mathcal{Y})^n\to\mathcal{M}(\mathcal{W}).$$</p>
+<p>For ease of notation we will simple write $\hat{\rho}$ to mean $\hat{\rho}((X_1,Y_1),\dots,(X_n,Y_n))$. The Kullback-Liebler (KL) divergence is a measure of similarity between probability measures defined on the same measurable space.</p>
+<p><strong>Definition 3.2</strong> Given two probability measures $Q$ and $P$ defined on some sample space $\mathcal{X}$, the KL divergence between $Q$ and $P$ is $$\mathrm{KL}(Q,P)=\int\log\left(\frac{dQ(x)}{dP(x)}\right)Q(dx)$$
+when $Q$ is absolutely continuous with respect to $P$. Otherwise, $\mathrm{KL}(Q,P)=\infty$.</p>
+<p><strong>Remark 3.3</strong> When $Q, P$ are probability measures on Euclidean space $\mathbb{R}^d$ with densities $q,p$ respectively. The KL divergence is $$\mathrm{KL}(Q, P):=\int\log\left(\frac{q(x)}{p(x)}\right)q(x)dx.$$
+Note that KL divergence can take values in the range $[0,\infty]$. Also, note the asymmetry in the definition.</p>
+<p>For the multivariate normal distributions $N_{q}\sim\mathcal{N}(\mu_{q},\Sigma_{q})$ and $N_{p}\sim\mathcal{N}(\mu_{p},\Sigma_{p})$ defined on $\mathbb{R}^d$ we have that,
+$$\mathrm{KL}(N_q, N_p)=\frac{1}{2}\left(\mathrm{tr}\left(\Sigma_p^{-1}\Sigma_q\right)-d+(\mu_p-\mu_q)^\top\Sigma_p^{-1}(\mu_p-\mu_q)+\log\left(\frac{\det\Sigma_p}{\det\Sigma_q}\right)\right).$$
+Similarly, for Bernoulli distributions $\mathcal{B}(q)\sim\mathrm{Bern}(q)$ and $\mathcal{B}(p)\sim\mathrm{Bern}(p)$ it follows that
+$$\mathrm{kl}(q, p):=\mathrm{KL}(\mathcal{B}(q),\mathcal{B}(p))=q\log\left(\frac{q}{p}\right)+(1-q)\log\left(\frac{1-q}{1-p}\right),$$
+For $p^<em>\in[0,1]$ bounds of the form $\mathrm{kl}(q, p^</em>)\leq c$ for some $q\in[0,1]$ and $c\geq0$ are of interest. Hence, we introduce the notation
+$$\mathrm{kl}^{-1}(q, c):=\sup{p\in[0,1]:\mathrm{kl}(q, p)\leq c}.$$</p>
+<h3 id="313-pac-bayes-bounds">3.1.3 PAC-Bayes Bounds</h3>
+<p>For a distribution $Q$ defined on $\mathcal{W}$ we will use the notation
+$$\mathbb{E}<em>{\mathbf{w}\sim Q}(R(\mathbf{w}))=R(Q)\text{ and }\mathbb{E}</em>{\mathbf{w}\sim Q}\left(\hat{R}(\mathbf{w})\right)=\hat{R}(Q)$$
+for convenience. The first PAC-Bayes bounds we will encounter is known as Catoni's bound. Recall, that under the Bayesian framework, we first fix a prior distribution, $\pi\in\mathcal{M}(\mathcal{W})$.</p>
+<p><strong>Theorem 3.4</strong> (Alquier, 2023) For all $\lambda&gt;0$, for all $\rho\in\mathcal{M}(\mathcal{W})$, and $\delta\in(0,1)$ it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\leq\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>We first recall Jensen's Inequality. Which says that for a convex function $f(x)$ and a random variable $X$ defined on sample space $\mathcal{X}$, if $\mathbb{E}(f(X))$ and $f(\mathbb{E}(X))$ are finite then
+$$\mathbb{E}(f(X))\geq f(\mathbb{E}(X)).$$
+Where equality only holds if and only if $f$ is a linear function on some convex set $A$ such that $\mathbb{P}(X\in A)=1$. If $f$ doesn't have this property then equality holds if and only if the random variable is constant.</p>
+<p><strong>Proposition 1</strong> For any probability measures $Q$ and $P$ it follows that $\mathrm{KL}(Q,P)\geq0$ with equality if and only if $Q$ and $P$ are the same probability distribution.</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>If $Q$ and $P$ are the same probability distribution on the sample space $\mathcal{X}$ then,
+$$\mathrm{KL}(Q,P)=\int_{\mathcal{X}}\log\left(\frac{q(x)}{p(x)}\right)q(x)dx=\int_{\mathcal{X}}\log(1)q(x)dx=0.$$
+On the other hand, if $\mathrm{KL}(Q,P)=0$ then
+$$\begin{align*}0=\mathrm{KL}(Q,P)&amp;=\int_{\mathcal{X}}\log\left(\frac{q(x)}{p(x)}\right)q(x)dx\&amp;=-\int_{\mathcal{X}}\log\left(\frac{p(x)}{q(x)}\right)q(x)dx\&amp;=-\mathbb{E}_{Q}\left(\log\left(\frac{p(x)}{q(x)}\right)\right)\&amp;\leq\log\left(\mathbb{E}<em>Q\left(\frac{p(x)}{q(x)}\right)\right)\&amp;=\log\left(\int</em>{\mathcal{X}}p(x)dx\right)\&amp;=\log(1)=0.\end{align*}$$
+Therefore, equality must hold for Jensen's inequality which implies that $\frac{q(x)}{p(x)}=1$ which implies that $Q$ and $P$ are the same probability distribution.</p>
+</details>
+<p><strong>Lemma 2</strong> For any measurable, bounded function $f:\mathcal{W}\to\mathbb{R}$ we have, $$\log\left(\mathbb{E}<em>{\mathbf{w}\sim\pi}\left(e^{f(\mathbf{w})}\right)\right)=\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}<em>{\mathbf{w}\sim\rho}\left(f(\mathbf{w})\right)-\mathrm{KL}(\rho,\pi)\right).$$ Moreover, the supremum with respect to $\rho$ is achieved for the Gibbs measure $\pi_f$ defined by its density with respect to $\pi$
+$$\frac{d\pi_f(\mathbf{w})}{d\pi_f(\mathbf{w})}=\frac{e^{f(\mathbf{w})}}{\mathbb{E}</em>{\mathbf{w}\sim\pi_f}\left(e^{f(\mathbf{w})}\right)}.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>From the definition of $\pi_f(\mathbf{w})$ we have that
+$$\pi_f(\mathbf{w})=\frac{e^{f(\mathbf{w})}}{\mathbb{E}<em>{\mathbf{w}\sim\pi_f}\left(e^{f(\mathbf{w})}\right)}\pi_f(\mathbf{w}).$$
+Therefore,
+$$\begin{align*}\mathrm{KL}\left(\rho,\pi_f\right)&amp;=\int</em>{\mathcal{W}}\log\left(\frac{\rho(\mathbf{w})}{\pi_f(\mathbf{w})}\right)\rho(\mathbf{w})d\mathbf{w}\&amp;=\int_{\mathcal{W}}\log(\rho(\mathbf{w}))\rho(\mathbf{w})d\mathbf{w}-\int_{\mathcal{W}}\log\left(\frac{e^{h(\mathbf{w})}\pi_f(\mathbf{w})}{\mathbb{E}<em>{\pi_f}\left(e^{f(\mathbf{w})}\right)}\right)\rho(\mathbf{w})d\mathbf{w}\&amp;=\int</em>{\mathcal{W}}\log\left(\frac{\rho(\mathbf{w})}{\pi_f(\mathbf{w})}\right)\rho(\mathbf{w})d\mathbf{w}-\int_{\mathcal{W}}h(\mathbf{w})\rho(\mathbf{w})d\mathbf{w}+\log\left(\mathbb{E}<em>{\pi_f}\left(e^{f(\mathbf{w})}\right)\right)\&amp;=\mathrm{KL}(\rho,\pi_f)-\mathbb{E}</em>{\rho}(f(\mathbf{w}))+\log\left(\mathbb{E}_{\pi_f}\left(e^{f(\mathbf{w})}\right)\right).\end{align*}$$
+By Proposition 1 the left hand side is non-negative and equal to $0$ only when $\rho=\pi_f$, which completes the proof. $\square$</p>
+</details>
+<p>Recall, from the proof of Theorem 2.1 that for any $t&gt;0$ we have that
+$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$
+Letting $t=\frac{\lambda}{m}$ we deduce that
+$$\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
+Integrating this with respect to $\pi$ gives
+$$\mathbb{E}<em>{\mathbf{w}\sim\pi}\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
+To which we can apply Fubini's theorem to interchange the order of integration
+$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\exp\left(\lambda\left(R(\pi)-\hat{R}(\pi)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right),$$
+to which we apply Lemma 2 to get
+$$\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(\sup_{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)-\frac{\lambda^2C^2}{8m}\right)\right)\leq 1.$$
+Now fix $s&gt;0$ and apply Chernoff bound to get that
+$$\begin{align*}\mathbb{P}<em>{S\sim\mathcal{D}^m}&amp;\left(\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)-\frac{\lambda^2C^2}{8m}&gt;s\right)\&amp;\leq\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\exp\left(\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)\right)\right)e^{-s}\&amp;\leq e^{-s}.\end{align*}$$
+Setting $s=\log\left(\frac{1}{\delta}\right)$ and rearranging completes the proof. $\square$</p>
+</details>
+<p>Theorem 3.4 motivates the study of the data-dependent probability measure
+$$\begin{equation}\hat{\rho}<em>{\lambda}=\mathrm{argmin}</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).\end{equation}$$</p>
+<p><strong>Definition 3.5</strong>  The optimization problem defined by Equation \ref{Equation-Minimizer of Catoni Bound} has the solution $\hat{\rho}<em>{\lambda}=\pi</em>{-\lambda\hat{R}}$ given by $$\hat{\rho}_{\lambda}(d\mathbf{w})=\frac{\exp\left(-\lambda\hat{R}(\mathbf{w})\right)\pi(d\mathbf{w})}{\exp\left(-\lambda\hat{R}(\pi)\right)}.$$
+This is distribution is known as the Gibbs posterior.</p>
+<p><strong>Corollary 3.6</strong> For all $\lambda&gt;0$, and $\delta\in(0,1)$ it follows that $$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\hat{\rho}</em>{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
+<p>For a learning algorithm, we noted that there are different methodologies for how the learned classifier is sampled from the posterior. In the case where consider a single random realisation of the posterior distribution, we have the following result.</p>
+<p><strong>Theorem 3.7</strong> (Alquier, 2023) For all $\lambda&gt;0$, $\delta\in(0,1)$, and data-dependent probability measure $\tilde{\rho}$ we have that $$\mathbb{P}<em>{S\sim\mathcal{D}^m}\mathbb{P}</em>{\tilde{\mathbf{w}}\sim\tilde{\rho}}\left(R\left(\tilde{\mathbf{w}}\right)\leq\hat{R}\left(\tilde{\mathbf{w}}\right)+\frac{\lambda C^2}{8m}+\frac{\log\left(\frac{d\rho\left(\tilde{\mathbf{w}}\right)}{d\pi\left(\tilde{\mathbf{w}}\right)}\right)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>The beginning of this proof proceeds in the same way as that of Theorem 3.4 up to the point where we conclude that
+$$\mathbb{E}<em>{\mathbf{w}\sim\pi}\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
+For any non-negative function $h$ we have that
+$$\begin{align*}\mathbb{E}<em>{\mathbf{w}\sim\pi}(h(\mathbf{w}))&amp;=\int</em>{\mathcal{W}}h(\mathbf{w})\pi(d\mathbf{w})\&amp;=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\pi(d\mathbf{w})\&amp;=\int_{\left{\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})&gt;0\right}}h(\mathbf{w})\frac{d\pi}{d\tilde{\rho}}(\mathbf{w})\tilde{\rho}(d\mathbf{w})\&amp;=\mathbb{E}<em>{\mathbf{w}\sim\tilde{\rho}}\left(h(\mathbf{w})\exp\left(-\log\left(\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})\right)\right)\right)\end{align*}$$
+which means that
+$$\mathbb{E}</em>{\mathbf{w}\sim\pi}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)-\log\left(\frac{d\tilde{\rho}}{d\pi}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{\lambda^2C^2}{8m}\right).$$
+Now in a similar to the previous proofs we apply the Chernoff, set $\delta$ and then re-arrange the terms to complete the proof. $\square$</p>
+</details>
+<p>Note that Theorem 3.4 is a bound in probability. We now state an equivalent bound that holds in expectation.</p>
+<p><strong>Theorem 3.8</strong> (Alquier, 2023) For all $\lambda&gt;0$, and data-dependent probability measure $\tilde{\rho}$, we have that $$\mathbb{E}<em>{S\sim\mathcal{D}^m}(R(\tilde{\rho}))\leq\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\hat{R}(\tilde{\rho})+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\tilde{\rho},\pi)}{\lambda}\right).$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>Once again we proceed in the same way as Theorem 3.4 to the point where we deduce that
+$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\exp\left(\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)-\frac{\lambda^2C^2}{8m}\right)\right)\leq 1.$$
+Now we apply Jensen's inequality to get that
+$$\exp\left(\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)-\frac{\lambda^2C^2}{8m}\right)\right)\leq 1,$$
+which implies that
+$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\sup</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\lambda\left(R(\rho)-\hat{R}(\rho)\right)\right)-\mathrm{KL}(\rho,\pi)-\frac{\lambda^2C^2}{8m}\right)\leq0.$$
+In particular this holds for our data-dependent probability measure $\tilde{\rho}$. Therefore,
+$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\lambda\left(R(\tilde{\rho})-\hat{R}(\tilde{\rho})\right)-\mathrm{KL}(\tilde{\rho},\pi)-\frac{\lambda^2C^2}{8m}\right)\leq0,$$
+and so using the linearity of expectation and rearranging completes the proof. $\square$</p>
+</details>
+<p><strong>Corollary 3.9</strong> For $\tilde{\rho}=\hat{\rho}<em>{\lambda}$, the following holds $$\mathbb{E}</em>{S\sim\mathcal{D}^m}(R(\tilde{\rho}))\leq\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\inf</em>{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)\right)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$</p>
+<p>In the results that follow we will consider the $0$-$1$ loss. This is a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to{0,1}$ defined by $l(y,y^\prime)=\mathbf{1}(y\neq y^\prime)$.</p>
+<p><strong>Theorem 3.10</strong> (McAllester, 1999) For all $\rho\in\mathcal{M}(\mathcal{W})$ and $\delta&gt;0$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\hat{R}(\rho)+\sqrt{\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)+\frac{5}{2}\log(m)+8}{2m-1}}\right)\geq1-\delta.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>Refer to (McAllester, 1999) for the proof of this theorem.</p>
+</details>
+<p><strong>Theorem 3.11</strong> (Catoni, 2007) For $a&gt;0$ and $p\in(0,1)$ let $$\Phi_{a}(p)=\frac{-\log\left(1-p(1-\exp(-a))\right)}{a}.$$
+Then for any $\lambda&gt;0$, $\delta&gt;0$ and $\rho\in\mathcal{M}(\mathcal{W})$ we have that $$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Phi^{-1}</em>{\frac{\lambda}{m}}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>Refer to (Catoni, 2007) for the proof of this theorem.</p>
+</details>
+<p><strong>Theorem 3.12</strong> (Maurer, 2004) For any $\delta&gt;0$ and $\rho\in\mathcal{M}(\mathcal{W})$ then we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\mathrm{kl}^{-1}\left(\hat{R}(\rho),\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right)\right)\geq1-\delta.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>For $X_1,\dots,X_n$ $\mathrm{i.i.d}$ random variables in $[0,1]$ and with $\mathbb{E}(X_i)=\mu$ let $\mathbf{X}=(X_1,\dots,X_n)$ and $$M(\mathbf{X})=\frac{1}{n}\sum_{i=1}^nX_i.$$ For any random variable $X$ in $[0,1]$ let $X^\prime$ denote the Bernoulli random variables with parameter $\mathbb{E}(X)$. Similarly, let $\mathbf{X}^\prime=(X_1^\prime,\dots,X_n^\prime)$.</p>
+<p><strong>Theorem 1</strong> For $n\geq2$ with the notation as above we have that $$\mathbb{E}\left(\exp\left(n\mathrm{kl}(M(\mathbf{X}),\mu)\right)\right)\leq\exp\left(\frac{1}{12n}\right)\sqrt{\frac{\pi n}{2}}+2.$$</p>
+<p><strong>Corollary 2</strong> For $n\geq2$ we have that $$\mathbb{E}\left(\exp\left(n\mathrm{kl}(M(\mathbf{X}),\mu)\right)\right)\leq2\sqrt{n}.$$</p>
+<p>Recall, that
+$$\hat{R}(\mathbf{w})=\frac{1}{m}\sum_{i=1}^ml(h_{\mathbf{w}}(x_i),y_i)$$
+and $R({\mathbf{w}})=\mathbb{E}<em>{(x,y)\sim\mathcal{D}}\left(l(h(x),y)\right)$. As we are considering a loss function bounded to the interval $[0,1]$ we can consider each of the $l(h</em>{\mathbf{w}}(x_i),y_i)$ as $\mathrm{i.i.d}$ random variables with mean $R(\mathbf{w})$. Therefore, for any $\mathbf{w}\in\mathcal{W}$ we can apply Corollary 2 to deduce that
+$$\mathbb{E}\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\leq2\sqrt{m}.$$
+Now applying Jensen's Inequality to the convexity of $\mathrm{kl}$ divergence and the exponential function we have that
+$$\begin{align*}\mathbb{E}-{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\rho),R(\rho)\right)-\mathrm{kl}\left(\rho,\pi\right)\right)\right)&amp;\leq\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\exp\left(\mathbb{E}</em>{\mathbf{w}\sim\rho}\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)-\log\left(\frac{d\rho(\mathbf{w})}{d\pi(\mathbf{w})}\right)\right)\right)\right)\&amp;\leq\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\mathbb{E}</em>{\mathbf{w}\sim\rho}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)-\log\left(\frac{d\rho(\mathbf{w})}{d\pi(\mathbf{w})}\right)\right)\right)\right)\&amp;=\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\mathbb{E}</em>{\mathbf{w}\sim\pi}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\left(\frac{d\rho}{d\pi}\right)^{-1}\frac{d\rho}{d\pi}\right)\right)\&amp;\leq\mathbb{E}<em>{\mathbf{w}\sim\rho}\left(\mathbb{E}</em>{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\right)\&amp;\leq2\sqrt{m}.\end{align*}$$
+Applying Markov's Inequality we conclude that
+$$\begin{align*}\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)&gt;\frac{\mathrm{kl}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right)&amp;=\mathbb{P}</em>{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)-\mathrm{kl}(\rho,\pi)\right)&gt;\frac{2\sqrt{m}}{\delta}\right)\&amp;\leq\delta.\end{align*}$$
+Taking the complement of this completes the proof. $\square$</p>
+</details>
+<h2 id="32-optimizing-pac-bayes-bounds-via-sgd">3.2 Optimizing PAC-Bayes Bounds via SGD</h2>
+<p>In practice, it is often the case that these bounds are not useful. Despite providing insight into how generalization relates to each of the components of the learning process they do not have much utility in providing non-vacuous bounds on the performance of neural networks on the underlying distribution. The significance of the KL divergence between the posterior and the prior can be noted in each of the bounds of Section 3.1.2. This motivated the work of (Dziugaite, 2017) who successfully minimized this term to provide non-vacuous results in practice. They considered a restricted problem that lends itself to efficient optimization. They use stochastic gradient descent to refine the prior, which is effective as SGD is known to find flat minima. This is important as around flat minima such as $\mathbf{w}^<em>$ we have that $\hat{R}(\mathbf{w})\approx\hat{R}(\mathbf{w}^</em>)$ (Alquier, 2023). The setup considered by (Dziugaite, 2017) is the same as the one we have considered throughout this report. With $\mathcal{X}\subset\mathbb{R}^k$ and labels being $\pm 1$. That is, we are considering binary classification based on a set of features. We explicitly state our hypothesis set as
+$$\mathcal{H}=\left{h_{\mathbf{w}}:\mathbb{R}^k\to\mathbb{R}:\mathbf{w}\in\mathbb{R}^d\right}.$$
+We are still considering the $0$-$1$, however, because our classifiers output real numbers we modify the loss slightly to account for this. That is, we let $l:\mathbb{R}\to{\pm1}$ be defined as $l(y,y^\prime)=\mathbf{1}(\mathrm{sgn}(y^\prime)=y)$.
+For optimization purposes we use the convex surrogate loss function $\tilde{l}:\mathbb{R}\times{\pm1}\to\mathbb{R}<em>+$
+$$\tilde{l}(y,\hat{y})=\frac{\log\left(1+\exp\left(-\hat{y}y\right)\right)}{\log(2)}.$$
+For the empirical risk under the convex surrogate loss we write
+$$\tilde{R}(\mathbf{w})=\frac{1}{m}\sum</em>{i=1}^m\tilde{l}(h_{\mathbf{w}}(x_i),y_i).$$
+Recall, that this definition implicitly depends on the training sample $S_m$. We will use these definitions throughout the remaining sections of this report as well. As noted previously the work (Dziugaite, 2017) looks to minimize the KL divergence between the prior and the posterior to achieve non-vacuous bounds. To do this they work under a restricted setting and construct a process to find the posterior $\rho$ that minimizes the divergence. To being (Dziugaite, 2017) utilize the following bound.</p>
+<p><strong>Theorem 3.13</strong> (Dziugaite, 2017) For every $\delta&gt;0$,$m\in\mathbb{N}$, distribution $\mathcal{D}$ on $\mathbb{R}^k\times{\pm 1}$, distribution $\pi$ on $\mathcal{W}$ and distribution $\rho\in\mathcal{M}(\mathcal{W})$, we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathrm{kl}\left(\hat{R}(\rho), R(\rho)\right)\leq\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{m}{\delta}\right)}{m-1}\right)\geq1-\delta.$$</p>
+<p><strong>Remark 3.14</strong>  Note how this is a slightly weaker statement than Theorem 3.12. This is because (Dziugaite, 2017) cited this Theorem from (Seeger, 2001), however, since then (Maurer, 2004) was able to tighten the result by providing Theorem 3.12. In the following we will update the work of (Dziugaite, 2020) and use the tightened result provided by 3.12.</p>
+<p>This motivates the following PAC-Bayes learning algorithm.</p>
+<ol>
+<li>Fix a $\delta&gt;0$ and a distribution $\pi$ on $\mathcal{W}$,</li>
+<li>Collect an $\mathrm{i.i.d}$ sample $S_m$ of size $m$,</li>
+<li>Compute the optimal distribution $\rho$ on $\mathcal{W}$ that minimizes
+$$\begin{equation}\mathrm{kl}^{-1}\left(\hat{R}(\rho),\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{m}\right),\end{equation}$$</li>
+<li>Then return the randomized classifier given by $\rho$.</li>
+</ol>
+<p>Implementing such an algorithm in this general form is intractable in practice. Recall, that we are considering neural networks and so $\mathbf{w}$ represents the weights and biased of our neural network. To make the algorithm more practical we therefore consider
+$$\mathcal{M}(\mathcal{W})=\left{\mathcal{N}<em>{\mathbf{w},\mathbf{s}}=\mathcal{N}(\mathbf{w},\mathrm{diag}(\mathbf{s})):\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}</em>+^d\right}.$$
+Utilizing the bound $\mathrm{kl}^{-1}(q,c)\leq q+\sqrt{\frac{c}{2}}$ in Equation $(2)$ and replacing the loss with the convex surrogate loss we obtain the updated optimization problem
+$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+}\tilde{R}\left(\mathcal{N}<em>{\mathbf{w},\mathbf{s}}\right)+\sqrt{\frac{\mathrm{KL}(\mathcal{N}</em>{\mathbf{w},\mathbf{s}},\pi)+\log\left(\frac{2\sqrt{m}}{\delta}\right)}{2m}}.\end{equation}$$
+We now suppose our prior $\pi$ is of the form $\mathcal{N}(\mathbf{w}_0,\lambda I)$. As we will see the choice of $\mathbf{w}_0$ is not too impactful, as long as it is not $\mathbf{0}$. However, to efficiently choose a judicious value for $\lambda$ we discretize the problem, with the side-effect of expanding the eventual generalization bound. We let $\lambda$ have the for $c\exp\left(-\frac{j}{b}\right)$ for $j\in\mathbb{N}$, so that $c$ is an upper bound and $b$ controls precision. By ensuring that Theorem 3.12 holds with probability $1-\frac{6\delta}{\pi^2j^2}$ for each $j\in\mathbb{N}$ then we can apply a union bound argument to ensure that we get results that hold for probability $1-\delta$. A union bound argument refers to applying Theorem 3.15.</p>
+<p><strong>Theorem 3.15</strong> (Dziugaite, 2017) Let $E_1,E_2,\dots$ be events. Then $\mathbb{P}\left(\bigcup_nE_n\right)\leq\sum_n\mathbb{P}(E_n).$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>This can be proved by induction on $n$. When $n=1$ the result holds clearly. Now suppose that for events $E_1,\dots, E_k$ we have that $\mathbb{P}\left(\cup_{l=1}^kE_l\right)\leq\sum_{l=1}^k\mathbb{P}(E_l)$. Then for events $E_1,\dots,E_k,E_{k+1}$ it follows that
+$$\begin{align*}\mathbb{P}\left(\bigcup_{l=1}^{k+1}E_l\right)&amp;=\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)-\mathbb{P}\left(\left(\bigcup_{l=1}^kE_l\right)\cap E_{k+1}\right)\&amp;\leq\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)\&amp;\leq\sum_{l=1}^k\mathbb{P}\left(E_l\right)+\mathbb{P}\left(E_{k+1}\right)\&amp;=\sum_{l=1}^{k+1}\mathbb{P}\left(E_l\right).\end{align*}$$
+Therefore, by induction the result holds for all $n\in\mathbb{N}$ which completes the proof. $\square$</p>
+</details>
+<p>Treating $\lambda$ as continuous during the optimization process and then discretizing at the point of evaluating the bound yields the updated optimization problem
+$$\begin{equation}\min_{\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d_+,\lambda\in(0,c)}\tilde{R}(\mathcal{N}<em>{\mathbf{w},\mathbf{s}})+\sqrt{\frac{1}{2}B</em>{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)}
+\end{equation}$$</p>
+<p>where</p>
+<p>$$B_{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)=\frac{\mathrm{KL}(\mathcal{N}_{w,s},\mathcal{N}(\mathbf{w}_0,\lambda I))+2\log\left(b\log\left(\frac{c}{\lambda}\right)\right)+\log\left(\frac{\pi^2\sqrt{m}}{3\delta}\right)}{m}.$$</p>
+<p>To optimize Equation $(4)$ we would like to compute its gradient and apply SGD. However, this is not feasible in practice for $\tilde{R}(\mathcal{N}<em>{\mathbf{w},\mathbf{s}})$. Instead we compute the gradient of $\tilde{R}\left(\mathbf{w}+\xi\odot\sqrt{\mathbf{s}}\right)$ where $\xi\sim\mathcal{N}</em>{0,\mathbf{1}<em>d}$.  Once good candidates for this optimization problem are found we return to $(2)$ to calculate the final error bound. With the choice of $\lambda$ it follows that with probability $1-\delta$, uniformly over all $\mathbf{w}\in\mathbb{R}^d,\mathbf{s}\in\mathbb{R}^d</em>+$ and $\lambda$ (of the discrete form) the expected risk of $\rho=\mathcal{N}_{\mathbf{w},\mathbf{s}}$ is bounded by</p>
+<p>$$\mathrm{kl}^{-1}\left(\hat{R}(\rho), B_{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)\right).$$</p>
+<p>However, it is often not possible to compute $\hat{R}(\rho)$ due to the intractability of $\rho$. So instead an unbiased estimate is obtained by estimating $\rho$ using a Monte Carlo approximation. Given $n$ $\mathrm{i.i.d}$ samples $\mathbf{w}<em>1,\dots,\mathbf{w}<em>n$ from $\rho$ we use the Monte Carlo approximation $\hat{\rho}<em>n=\sum</em>{i=1}^n\delta</em>{\mathbf{w}<em>i}$, to get the bound
+$$\hat{R}(\rho)\leq\overline{\hat{R}</em>{n,\delta^\prime}}(\rho):=\mathrm{kl}^{-1}\left(\hat{R}\left(\hat{\rho}<em>n\right),\frac{1}{n}\log\left(\frac{2}{\delta^\prime}\right)\right),$$
+which holds with probability $1-\delta^\prime$. Finally, by Theorem 3.15
+$$R(\rho)\leq\mathrm{kl}^{-1}\left(\overline{\hat{R}</em>{n,\delta^\prime}}(\rho), B</em>{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda;\delta)\right),$$
+holds with probability $1-\delta-\delta^\prime.$ Now all that is left is to do is to determine optimal values for $\mathbf{w}$ and $\mathbf{s}$. To do this first train a neural network via SGD to get a value of $\mathbf{w}$. Then instantiate a stochastic neural network with the multivariate normal distribution $\rho=\mathcal{N}_{\mathbf{w},\mathbf{s}}$ over the weights, with $\mathbf{s}=\vert\mathbf{w}\vert$. Next apply Algorithm 4 to deduce values of $\mathbf{w},\mathbf{s}$ and $\lambda$ that give a tighter bound.</p>
+<p><font size="3"> <strong>Algorithm 4</strong> Optimizing the PAC Bounds</font></p>
+<blockquote>
+<p><strong>Require:</strong><br>
+$\mathbf{w}<em>0\in\mathbb{R}^d$, the network parameters at initialization.<br>
+$\mathbf{w}\in\mathbb{R}^d$, the network parameters after SGD.<br>
+$S_m$, training examples.<br>
+$\delta\in(0,1)$, confidence parameter.<br>
+$b\in\mathbb{N},c\in(0,1)$, precision and bound for $\lambda$.<br>
+$\tau\in(0,1), T$, learning rate.<br>
+<strong>Ensure:</strong> Optimal $\mathbf{w},\mathbf{s},\lambda$.<br>
+$\zeta=\vert\mathbf{w}\vert$\Comment{$\mathbf{s}(\zeta)=e^{2\zeta}$}<br>
+$\rho=-3$\Comment{$\lambda(\rho)=e^{2\rho}$}<br>
+$B(\mathbf{w},\mathbf{s},\lambda,\mathbf{w}^\prime)=\tilde{R}(\mathbf{w})+\sqrt{\frac{1}{2}B</em>{\mathrm{RE}}(\mathbf{w},\mathbf{s},\lambda)}$<br>
+<strong>for</strong> $t=1\to T$ <strong>do</strong><br>
+----Sample $\xi\sim\mathcal{N}(0,I_d)$<br>
+----$\mathbf{w}^\prime(\mathbf{w},\zeta)=\mathbf{w}+\xi\odot\sqrt{\mathbf{s}(\zeta)}$<br>
+----$\begin{pmatrix}\mathbf{w}\\zeta\\rho\end{pmatrix}=-\tau\begin{pmatrix}\nabla_{\mathbf{w}}B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\nabla_\zeta B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\\nabla_\rho B(\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho),\mathbf{w}^\prime(\mathbf{w},\zeta))\end{pmatrix}$<br>
+<strong>end for</strong><br>
+<strong>return</strong> $\mathbf{w},\mathbf{s}(\zeta),\lambda(\rho)$</p>
+</blockquote>
+<p>Once the values of $\mathbf{w},\mathbf{s}$ and $\lambda$ are found we then need to compute $\overline{\hat{R}<em>{n,\delta^\prime}}(\rho):=\mathrm{kl}^{-1}\left(\hat{R}\left(\hat{\rho}<em>n\right),\frac{1}{n}\log\left(\frac{2}{\delta^\prime}\right)\right)$ to get our bound. We note that
+$$\hat{R}(\hat{\rho}<em>n)=\sum</em>{i=1}^n\delta</em>{\mathbf{w}<em>i}\left(\frac{1}{m}\sum</em>{j=1}^ml(h</em>{\mathbf{w}_i}(x_j),y_j)\right).$$
+Then to invert the kl divergence we employ Newton's method, in the form of Algorithm 5, to get an approximation for our bound.</p>
+<p><font size="3"> <strong>Algorithm 5</strong> Newton's Method for Inverting kl Divergence</font></p>
+<blockquote>
+<p><strong>Require:</strong> $q,c$, initial estimate $p_0$ and $N\in\mathbb{N}$<br>
+<strong>Ensure:</strong> $p$ such that $p\approx\mathrm{kl}^{-1}(q,c)$<br>
+<strong>for</strong> $n=1\to N$ <strong>do</strong><br>
+----<strong>if</strong> $p\geq1$ <strong>then</strong><br>
+--------<strong>return</strong> $1$<br>
+----<strong>else</strong><br>
+--------$p_0=p_0-\frac{q\log\left(\frac{q}{c}\right)+(1-q)\log\left(\frac{1-q}{1-c}\right)-c}{\frac{1-q}{1-p}-\frac{q}{p}}$<br>
+----<strong>end if</strong><br>
+<strong>end for</strong><br>
+<strong>return</strong> $p_0$</p>
+</blockquote>
+
+</body>
+</html>
