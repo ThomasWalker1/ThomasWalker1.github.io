@@ -14774,8 +14774,10 @@ MT19937 period parameters:</p>
 <p>As stated above, we must provide an initial key and a starting position to allow us to start generating pseudo random integers.</p>
 <h2 id="Python">Python</h2>
 <p>In python we can do this directly by using <code>numpy.set_state()</code>, which takes as input the type of generator we are using (in our case it is 'MT19937', however, numpy does offer the ability to use other generators), the key (taken to be a list of $624$ $32$-bit integers) and the position to sample the key. Or we can use <code>numpy.seed()</code> which simply takes an integer as an input. From this integer it will generate a list of $624$ and set the initial position to be at the end of the list. This is so that when we want to generate our first output the key is updated according to the linear recurrence and we take our sample to be the first word in this new key.</p>
-<h2 id="R">R<a class="anchor-link" href="#R">&#182;</a></h2><p>Similarly, in R we set the state directly by defining <code>.Random.seed</code>. We do so by supplying a list with the following format, [type of generator (10403 in our case), position to sample at, key]. Or we can simply supply <code>set.seed()</code> with an integer and the key is the generated from this integer, and again the position is set to the end of this key.</p>
-<h2 id="C++">C++<a class="anchor-link" href="#C++">&#182;</a></h2><p>In C++ we set the seed when we define the generator. If we are working with the standard random functions we would include the random header, <code>#include &lt;random&gt;</code>, and then define the generator, <code>std::mt19937 gen(seed)</code>. If we were to use the boost library we would again have to import the 'boost/random' header, <code>#include &lt;boost/random.hpp&gt;</code>, and then define the generator, <code>boost::random::mt19937 gen{seed}</code>.</p>
+<h2 id="R">R</h2>
+<p>Similarly, in R we set the state directly by defining <code>.Random.seed</code>. We do so by supplying a list with the following format, [type of generator (10403 in our case), position to sample at, key]. Or we can simply supply <code>set.seed()</code> with an integer and the key is the generated from this integer, and again the position is set to the end of this key.</p>
+<h2 id="C++">C++</h2>
+<p>In C++ we set the seed when we define the generator. If we are working with the standard random functions we would include the random header, <code>#include &lt;random&gt;</code>, and then define the generator, <code>std::mt19937 gen(seed)</code>. If we were to use the boost library we would again have to import the 'boost/random' header, <code>#include &lt;boost/random.hpp&gt;</code>, and then define the generator, <code>boost::random::mt19937 gen{seed}</code>.</p>
 <h2 id="Code-Implementation">Code Implementation</h2>
 <p>We can replicate each of these methods of instantiation re-writing their underlying algorithms as as python functions.</p>
 
@@ -14819,13 +14821,9 @@ MT19937 period parameters:</p>
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Remarks">Remarks<a class="anchor-link" href="#Remarks">&#182;</a></h2><p>There are a few points we should note about these particular functions and methodologies to setting up the generator.</p>
+
+<h2 id="Remarks">Remarks</h2>
+<p>There are a few points we should note about these particular functions and methodologies to setting up the generator.</p>
 <ol>
 <li>Python and C++ generate their initial $624$ words in the same way, meaning that given an initial integer seed the MT19937 generator will be set to the same state.</li>
 <li>R uses a different algorithm to generate its state from an initial integer seed.<ol>
@@ -14834,30 +14832,22 @@ MT19937 period parameters:</p>
 </li>
 </ol>
 
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Generating-Uniform-Variates">Generating Uniform Variates<a class="anchor-link" href="#Generating-Uniform-Variates">&#182;</a></h1><p>We have seen how each language generates a $32$-bit word, and analyzed some of the difference in the methodologies they adopt for doing this. Now we will move onto seeing how each language takes those $32$-bit words to generate a uniform variate.</p>
-<h2 id="Python">Python<a class="anchor-link" href="#Python">&#182;</a></h2><p>We will consider the function <code>numpy.random.uniform()</code>, which according to the documentation it samples uniformly over the half open interval [low, high), where by default <code>low=0</code> and <code>high=1</code>.</p>
-<h2 id="R">R<a class="anchor-link" href="#R">&#182;</a></h2><p>For R we will look at the standard <code>runif()</code> function which, differing to python, will sample from the interval (min, max), where by default <code>min=0</code> and <code>max=1</code>.</p>
-<h2 id="C++">C++<a class="anchor-link" href="#C++">&#182;</a></h2><p>Finally, for C++ we will investigate multiple methods for generating uniform variates. From the standard library we will look into <code>generate_canonical</code> which produces variates from the interval $[0,1)$. Then we will look at <code>uniform_real_distribution</code> from the boost library which samples from the interval [min, max), with <code>min=0</code> and <code>max=1</code>.</p>
-<h2 id="Code-Implementation">Code Implementation<a class="anchor-link" href="#Code-Implementation">&#182;</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+
+<h1 id="Generating-Uniform-Variates">Generating Uniform Variates</h1>
+<p>We have seen how each language generates a $32$-bit word, and analyzed some of the difference in the methodologies they adopt for doing this. Now we will move onto seeing how each language takes those $32$-bit words to generate a uniform variate.</p>
+<h2 id="Python">Python</h2>
+<p>We will consider the function <code>numpy.random.uniform()</code>, which according to the documentation it samples uniformly over the half open interval [low, high), where by default <code>low=0</code> and <code>high=1</code>.</p>
+<h2 id="R">R</h2>
+<p>For R we will look at the standard <code>runif()</code> function which, differing to python, will sample from the interval (min, max), where by default <code>min=0</code> and <code>max=1</code>.</p>
+<h2 id="C++">C++</h2>
+<p>Finally, for C++ we will investigate multiple methods for generating uniform variates. From the standard library we will look into <code>generate_canonical</code> which produces variates from the interval $[0,1)$. Then we will look at <code>uniform_real_distribution</code> from the boost library which samples from the interval [min, max), with <code>min=0</code> and <code>max=1</code>.</p>
+<h2 id="Code-Implementation">Code Implementation</h2>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">python_random_uniform</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -14904,13 +14894,9 @@ MT19937 period parameters:</p>
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Remarks">Remarks<a class="anchor-link" href="#Remarks">&#182;</a></h2><ul>
+
+<h2 id="Remarks">Remarks</h2>
+<ul>
 <li>The combination implemented by python and C++ ay seem arbitrary at first glance, however, it is used to help solve a prominent issue in floating point operations. Due to how we store floating point numbers, when we divide our integer output the effects of rounding will cause some bits to be over represented and others to not be present at all in the final output space. Therefore, to try and increase the uniformity of the distribution of bits amongst the output space, Python and C++ use two outputs from the generator to generate a larger $53$-bit integer which is then divided to get our variate<ul>
 <li>I will only explain Python's process for forming this larger integer as C++'s method is <em>almost</em> identical. We draw two $32$-bit words from our generator. We apply a bitshift of 5 to the first (effectively dividing it by $2^5$) making it a $27$-bit integer. Then it is multiplied by $67108864=2^26$, making it a $53$-bit integer. However, in binary this new integer will have $26$ zeros at the right, this is where we use our second integer. We take our second integer and perform a bitshift of $6$, which forms a new $26$-bit integer. We take this and add it to the $53$-bit integer so that we populate the its remaining bits. We can now divide by $2^53$ to get our variate between $[0,1)$</li>
 </ul>
@@ -14929,24 +14915,13 @@ MT19937 period parameters:</p>
 </li>
 </ul>
 
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Aligning-PRNG-Across-Languages">Aligning PRNG Across Languages<a class="anchor-link" href="#Aligning-PRNG-Across-Languages">&#182;</a></h1><p>It would be beneficial if we had methods to align the generation of pseudo random numbers across the language such that we can replicate any random simulations or models across the languages. There are multiple ways we could go about doing this which I will explore now. 
+<h1 id="Aligning-PRNG-Across-Languages">Aligning PRNG Across Languages</h1>
+<p>It would be beneficial if we had methods to align the generation of pseudo random numbers across the language such that we can replicate any random simulations or models across the languages. There are multiple ways we could go about doing this which I will explore now. 
 For convenience I will aim to align C++ and R to python, as this will then provide capabilities to align C++ and R if desired.</p>
-<h2 id="Aligning-R-and-Python">Aligning R and Python<a class="anchor-link" href="#Aligning-R-and-Python">&#182;</a></h2><p>There is one simple solution to this, which is to run R code in Python. This can be done by simply downloading the 'rpy2' library and using its 'robjects' module.</p>
+<h2 id="Aligning-R-and-Python">Aligning R and Python</h2>
+<p>There is one simple solution to this, which is to run R code in Python. This can be done by simply downloading the 'rpy2' library and using its 'robjects' module.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -15027,18 +15002,10 @@ For convenience I will aim to align C++ and R to python, as this will then provi
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+
 <p>Or we can use the functions we defined above to reproduce random variates generated in R in Python.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -15077,18 +15044,11 @@ For convenience I will aim to align C++ and R to python, as this will then provi
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Aligning-C++-and-Python">Aligning C++ and Python<a class="anchor-link" href="#Aligning-C++-and-Python">&#182;</a></h2><p>Similarly, we can use the functions we defined above to reproduce random variates generated in C++ in Python.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<h2 id="Aligning-C++-and-Python">Aligning C++ and Python</h2>
+<p>Similarly, we can use the functions we defined above to reproduce random variates generated in C++ in Python.</p>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -15165,13 +15125,9 @@ For convenience I will aim to align C++ and R to python, as this will then provi
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="References">References<a class="anchor-link" href="#References">&#182;</a></h1><p>Matsumoto M &amp; Nishimura T (1998) Mersenne Twister: A 623-dimensionally equidistributed uniform pseudorandom number generator</p>
+
+<h1 id="References">References</h1>
+<p>Matsumoto M &amp; Nishimura T (1998) Mersenne Twister: A 623-dimensionally equidistributed uniform pseudorandom number generator</p>
 <p>Goualard, F. (2020). Generating Random Floating-Point Numbers by Dividing Integers: A Case Study.</p>
 <p><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.uniform.html">https://numpy.org/doc/stable/reference/random/generated/numpy.random.uniform.html</a></p>
 <p><a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/Uniform">https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/Uniform</a></p>
@@ -15179,10 +15135,7 @@ For convenience I will aim to align C++ and R to python, as this will then provi
 <p><a href="https://cplusplus.com/reference/random/uniform_real_distribution/">https://cplusplus.com/reference/random/uniform_real_distribution/</a></p>
 <p><a href="https://www.boost.org/doc/libs/1_36_0/libs/random/random-distributions.html">https://www.boost.org/doc/libs/1_36_0/libs/random/random-distributions.html</a></p>
 
-</div>
-</div>
-</div>
-</div>
+
 </body>
 
 
