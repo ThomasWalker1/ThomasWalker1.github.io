@@ -384,7 +384,7 @@ $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\mathbf{w}}\right)\leq\inf_{\
 Where $r_m(\delta)$ is a remainder term that tends to $0$ as $m$ tends to $\infty$. Although this bound cannot be computed in practice it is illustrative of the behaviour of the bound. Just like empirical bounds, there exist oracle bounds that hold in expectation and in probability.</p>
 <h3 id="411-oracle-pac-bayes-bounds-in-expectation">4.1.1 Oracle PAC-Bayes Bounds in Expectation</h3>
 <p><strong>Theorem 4.1</strong> For $\lambda&gt;0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>We proceed from Corollary 3.9 to deduce that
@@ -393,7 +393,7 @@ where Fubini's theorem has been applied in the last inequality. Recalling that $
 </details>
 <h3 id="412-oracle-pac-bayes-bounds-in-probability">4.1.2 Oracle PAC-Bayes Bounds in Probability</h3>
 <p><strong>Theorem 4.2</strong> For any $\lambda&gt;0$, and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{4m}+\frac{2\mathrm{KL}(\rho,\pi)+\log\left(\frac{2}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Recall the proof of Theorem 3.4 and the subsequent application to the Gibbs posterior that yielded Corollary 3.6.</p>
@@ -409,7 +409,7 @@ We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof
 <h3 id="bernsteins-assumption">Bernstein's Assumption</h3>
 <p><strong>Definition 4.3</strong> Let $\mathbf{w}^*$ denote a minimizer of $R$ when it exists, $$R(\mathbf{w}^*)=\min_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w}).$$ When $\mathbf{w}^*$ exists and there is a constant $K$ such that for any $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\left(l(h_{\mathbf{w}}(x_i),y_i)-l(h_{\mathbf{w}^*}(x_i),y_i)\right)^2\right)\leq K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)$$ we say that Bernstein's assumption is satisfied with constant $K$.</p>
 <p><strong>Theorem 4.4</strong> Assume Bernstein's assumption is satisfied with some constant $K&gt;0$. Take $\lambda=\frac{m}{\max(2K,C)}$ then we have $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})-R\left(\mathbf{w}^*\right)\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)-R\left(\mathbf{w}^*\right)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p><strong>Lemma 1</strong></p>
@@ -417,7 +417,7 @@ We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof
 $$g(x)=\begin{cases}1&x=0\\frac{e^x-1-x}{x^2}&x\neq0.\end{cases}$$
 Let $U_1,\dots,U_n$ be $\mathrm{i.i.d}$ random variables such that $\mathbb{E}(U_i)$ is finite and $U_i-\mathbb{E}(U_i)\leq C$ almost surely for some $C\in\mathbb{R}$. Then,
 $$\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\leq\exp\left(g(Ct)nt^2\mathrm{Var}(U_i)\right).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof (Habib, 1998)</summary>
 <br>
 <p>We first show that function $g$ is increasing. For $x\neq0$ we have that
@@ -457,7 +457,7 @@ which completes the proof.$\square$</p>
 <h2 id="42-data-driven-pac-bayes-bounds">4.2 Data Driven PAC-Bayes Bounds</h2>
 <p>A lot of work to obtain non-vacuous PAC-Bayes bounds is to develop priors that reduce the size of the KL divergence between the prior and the posterior. The idea behind the work of (Dziugaite, 2020) is to hold out some of the training data to obtain data-inspired priors. For this section, we use a PAC-Bayes bound that can be thought of as the Bayesian equivalent of Theorem \ref{Theorem-Occam Bound}, however, now we are dealing with potentially uncountable hypothesis sets.</p>
 <p><strong>Theorem 4.5</strong> (McAllester, 2013) For $\lambda&gt;\frac{1}{2}$ selected before drawing our training sample, then for all $\rho\in\mathcal{M}(\mathcal{W})$ and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{\rho})+\frac{\lambda C}{m}\left(\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>For the proof we define the following notation,
@@ -465,7 +465,7 @@ $$\mathrm{kl}_{\gamma}(q,p)=\gamma q-\log\left(1-p+pe^{\gamma}\right),$$
 for $p,q\in[0,1]$ and $\gamma\in\mathbb{R}$. One can show that
 $$\mathrm{kl}(q,p)=\sup_{\gamma}\left(\mathrm{kl}_{\gamma}(q,p)\right).$$</p>
 <p><strong>Lemma 1</strong> For $\lambda&gt;\frac{1}{2}$, if $\mathrm{kl}_{-\frac{1}{\gamma}}(q,p)\leq c$ then $$p\leq\frac{1}{1-\frac{1}{2\lambda}}(q+\lambda c).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Let $\gamma=-\frac{1}{\lambda}$ for convenience, which means that $\gamma\in(-2,0)$. Re-arranging the assumption we get that
@@ -475,7 +475,7 @@ $$p\leq\frac{q-\frac{c}{\gamma}}{1+\frac{1}{2}\gamma},$$
 which when we substitute $\lambda$ back in completes the proof of the lemma. $\square$</p>
 </details>
 <p><strong>Lemma 2</strong> Let $x_1,\dots,x_n$ be realizations of a random variable $X$ with range $[0,1]$ and mean $\mu$. Let $\hat{\mu}=\frac{1}{n}\sum_{i=1}^nx_i$. Then for any fixed $\gamma$ we have that $$\mathbb{E}\left(\exp\left(n\mathrm{kl}_{\gamma}(\hat{\mu},\mu)\right)\right)\leq1.$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>Note that $\mathbb{E}\left(\exp(n\gamma\hat{\mu})\right)=\left(\mathbb{E}(\exp(\gamma X))\right)^n$ and that by the convexity of $\exp(\cdot)$ we have that
@@ -487,7 +487,7 @@ $$\mathbb{E}\left(\exp\left(n\left(\gamma\hat{\mu}-\log\left(1-\mu+\mu e^{\gamma
 which completes the proof of the lemma. $\square$</p>
 </details>
 <p><strong>Lemma 3</strong> For probability distributions defined on the sample space $\mathcal{X}$ and a measurable function $f$ we have that $$\mathbb{E}_{x\in Q}(f(x))\leq\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).$$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>$$\begin{align}\mathbb{E}_{x\in Q}\left(f(x)\right)&=\mathbb{E}_{x\in Q}\left(\log\left(\exp(f(x))\right)\right)\\&=\mathbb{E}_{x\in Q}\left(\log\left(\frac{P(x)}{Q(x)}\right)e^{f(x)}+\log\left(\frac{Q(x)}{P(x)}\right)\right)\\&\leq\log\left(\mathbb{E}_{x\in Q}\left(\frac{P(x)}{Q(x)}e^{f(x)}\right)\right)+\mathrm{KL}(Q,P)\\&=\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).\end{align}$$</p>
@@ -506,7 +506,7 @@ $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathb
 Therefore, by re-arranging and applying Lemma 1 the proof of the theorem is complete. $\square$.</p>
 </details>
 <p><strong>Corollary 4.6</strong> (Dziugaite, 2020) Let $\beta,\delta\in(0,1)$, $\mathcal{D}$ a probability distribution over $\mathcal{Z}$, and $\pi\in\mathcal{M}(\mathcal{W})$. Then for all $\rho\in\mathcal{M}(\mathcal{W})$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Psi_{\beta,\delta}(\rho,\pi;S)\right)\geq1-\delta,$$ where $\Psi_{\beta,\delta}(\rho,\pi;S)=\frac{1}{\beta}\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{2\beta(1-\beta)m}.$</p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>This is the result of the previous Theorem 4.5 with $\lambda=\frac{1}{2(1-\beta)}$ and $C=1$.</p>
