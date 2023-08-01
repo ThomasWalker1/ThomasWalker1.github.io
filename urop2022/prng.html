@@ -14587,13 +14587,9 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
     <!-- End of mathjax configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 
-<h1 id="Introduction">Introduction</h1><p>In this notebook I will outline the main method used to generate pseudo random numbers in programming languages. Leading on from this we will then explore how the programming languages use these number to generate uniform variates. As a consequence we will be able to construct methods such that we can align pseudo random number generation across the programming languages. This research only concerns itself with Python, R and C++. For python we will consider the random functions within the numpy library, for R we will only concern ourselves with the standard random functions its employs, and for C++ we will look into both its standard random functions and those facilitated by the boost library.</p>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="Introduction">Introduction</h1>
+<p>In this notebook I will outline the main method used to generate pseudo random numbers in programming languages. Leading on from this we will then explore how the programming languages use these number to generate uniform variates. As a consequence we will be able to construct methods such that we can align pseudo random number generation across the programming languages. This research only concerns itself with Python, R and C++. For python we will consider the random functions within the numpy library, for R we will only concern ourselves with the standard random functions its employs, and for C++ we will look into both its standard random functions and those facilitated by the boost library.</p>
+
 <h1 id="The-Mersenne-Twister">The Mersenne Twister<a class="anchor-link" href="#The-Mersenne-Twister">&#182;</a></h1><p>This is a very popular pseudo random number generator (PRNG) used by programming languages. Although many offer the option to use other PRNG, often the default is an instance of The Mersenne Twister. The reason for its popularity is its large period (which we will discuss in due course, as its dependent on the particular instance of The Mersenne Twister algorithm we implement) and the strong result it provides for the $k$-distribution test.</p>
 <h2 id="$k$-distribution-test">$k$-distribution test<a class="anchor-link" href="#$k$-distribution-test">&#182;</a></h2><p>This is a test that attempts to provide an indication whether a PRNG is 'random'. The general outline of the test is as follows:</p>
 <ul>
@@ -14661,74 +14657,7 @@ MT19937 period parameters:</p>
 </ol>
 <p>Throughout this report the 'state' will refer to the tuple (position, key), where position gives the index at which we are sampling the key at.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>numpy
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rpy2
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Requirement already satisfied: numpy in c:\anaconda\lib\site-packages (1.24.3)
-Requirement already satisfied: rpy2 in c:\anaconda\lib\site-packages (3.5.4)
-Requirement already satisfied: cffi&gt;=1.10.0 in c:\anaconda\lib\site-packages (from rpy2) (1.15.1)
-Requirement already satisfied: jinja2 in c:\anaconda\lib\site-packages (from rpy2) (3.1.2)
-Requirement already satisfied: pytz in c:\anaconda\lib\site-packages (from rpy2) (2022.7)
-Requirement already satisfied: tzlocal in c:\anaconda\lib\site-packages (from rpy2) (4.2)
-Requirement already satisfied: packaging in c:\anaconda\lib\site-packages (from rpy2) (23.0)
-Requirement already satisfied: pycparser in c:\anaconda\lib\site-packages (from cffi&gt;=1.10.0-&gt;rpy2) (2.21)
-Requirement already satisfied: MarkupSafe&gt;=2.0 in c:\anaconda\lib\site-packages (from jinja2-&gt;rpy2) (2.1.1)
-Requirement already satisfied: pytz-deprecation-shim in c:\anaconda\lib\site-packages (from tzlocal-&gt;rpy2) (0.1.0.post0)
-Requirement already satisfied: tzdata in c:\anaconda\lib\site-packages (from tzlocal-&gt;rpy2) (2022.2)
-Requirement already satisfied: backports.zoneinfo in c:\anaconda\lib\site-packages (from tzlocal-&gt;rpy2) (0.2.1)
-Requirement already satisfied: matplotlib in c:\anaconda\lib\site-packages (3.7.1)
-Requirement already satisfied: contourpy&gt;=1.0.1 in c:\anaconda\lib\site-packages (from matplotlib) (1.0.5)
-Requirement already satisfied: cycler&gt;=0.10 in c:\anaconda\lib\site-packages (from matplotlib) (0.11.0)
-Requirement already satisfied: fonttools&gt;=4.22.0 in c:\anaconda\lib\site-packages (from matplotlib) (4.25.0)
-Requirement already satisfied: kiwisolver&gt;=1.0.1 in c:\anaconda\lib\site-packages (from matplotlib) (1.4.4)
-Requirement already satisfied: numpy&gt;=1.20 in c:\anaconda\lib\site-packages (from matplotlib) (1.24.3)
-Requirement already satisfied: packaging&gt;=20.0 in c:\anaconda\lib\site-packages (from matplotlib) (23.0)
-Requirement already satisfied: pillow&gt;=6.2.0 in c:\anaconda\lib\site-packages (from matplotlib) (9.4.0)
-Requirement already satisfied: pyparsing&gt;=2.3.1 in c:\anaconda\lib\site-packages (from matplotlib) (3.0.9)
-Requirement already satisfied: python-dateutil&gt;=2.7 in c:\anaconda\lib\site-packages (from matplotlib) (2.8.2)
-Requirement already satisfied: importlib-resources&gt;=3.2.0 in c:\anaconda\lib\site-packages (from matplotlib) (5.2.0)
-Requirement already satisfied: zipp&gt;=3.1.0 in c:\anaconda\lib\site-packages (from importlib-resources&gt;=3.2.0-&gt;matplotlib) (3.11.0)
-Requirement already satisfied: six&gt;=1.5 in c:\anaconda\lib\site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib) (1.16.0)
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -14840,22 +14769,17 @@ Requirement already satisfied: six&gt;=1.5 in c:\anaconda\lib\site-packages (fro
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Setting-the-Generator">Setting the Generator<a class="anchor-link" href="#Setting-the-Generator">&#182;</a></h1><p>As stated above, we must provide an initial key and a starting position to allow us to start generating pseudo random integers.</p>
-<h2 id="Python">Python<a class="anchor-link" href="#Python">&#182;</a></h2><p>In python we can do this directly by using <code>numpy.set_state()</code>, which takes as input the type of generator we are using (in our case it is 'MT19937', however, numpy does offer the ability to use other generators), the key (taken to be a list of $624$ $32$-bit integers) and the position to sample the key. Or we can use <code>numpy.seed()</code> which simply takes an integer as an input. From this integer it will generate a list of $624$ and set the initial position to be at the end of the list. This is so that when we want to generate our first output the key is updated according to the linear recurrence and we take our sample to be the first word in this new key.</p>
+
+<h1 id="Setting-the-Generator">Setting the Generator</h1>
+<p>As stated above, we must provide an initial key and a starting position to allow us to start generating pseudo random integers.</p>
+<h2 id="Python">Python</h2>
+<p>In python we can do this directly by using <code>numpy.set_state()</code>, which takes as input the type of generator we are using (in our case it is 'MT19937', however, numpy does offer the ability to use other generators), the key (taken to be a list of $624$ $32$-bit integers) and the position to sample the key. Or we can use <code>numpy.seed()</code> which simply takes an integer as an input. From this integer it will generate a list of $624$ and set the initial position to be at the end of the list. This is so that when we want to generate our first output the key is updated according to the linear recurrence and we take our sample to be the first word in this new key.</p>
 <h2 id="R">R<a class="anchor-link" href="#R">&#182;</a></h2><p>Similarly, in R we set the state directly by defining <code>.Random.seed</code>. We do so by supplying a list with the following format, [type of generator (10403 in our case), position to sample at, key]. Or we can simply supply <code>set.seed()</code> with an integer and the key is the generated from this integer, and again the position is set to the end of this key.</p>
 <h2 id="C++">C++<a class="anchor-link" href="#C++">&#182;</a></h2><p>In C++ we set the seed when we define the generator. If we are working with the standard random functions we would include the random header, <code>#include &lt;random&gt;</code>, and then define the generator, <code>std::mt19937 gen(seed)</code>. If we were to use the boost library we would again have to import the 'boost/random' header, <code>#include &lt;boost/random.hpp&gt;</code>, and then define the generator, <code>boost::random::mt19937 gen{seed}</code>.</p>
-<h2 id="Code-Implementation">Code Implementation<a class="anchor-link" href="#Code-Implementation">&#182;</a></h2><p>We can replicate each of these methods of instantiation re-writing their underlying algorithms as as python functions.</p>
+<h2 id="Code-Implementation">Code Implementation</h2>
+<p>We can replicate each of these methods of instantiation re-writing their underlying algorithms as as python functions.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
