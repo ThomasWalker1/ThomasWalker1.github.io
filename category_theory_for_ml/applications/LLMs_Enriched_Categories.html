@@ -394,7 +394,7 @@ As we saw from Enriched Copresheaves, $\hat{\mathcal{C}}$ is also a category.</p
 <p><strong>Definition</strong>
 Let $\mathcal{L}$ be the syntax category. The semantic category $\hat{\mathcal{L}}:=[0,1]^{\mathcal{L}}$ is the $[0,1]$-category of $[0,1]$-enriched presheaves on the $[0,1]$-category $\mathcal{L}$
 For each object $x$ in $\mathcal{L}$, $h^x:=\mathcal{L}(x,-)$ is given by
-$$c\mapsto h^x(c):=\begin{cases}\pi(c\vert x)&amp;\text{if }x\leq c\0&amp;\text{otherwise}\end{cases}$$
+$$c\mapsto h^x(c):=\begin{cases}\pi(c\vert x)&amp;\text{if }x\leq c\\0&amp;\text{otherwise}\end{cases}$$
 where $x\leq c\iff$ &quot;$x$ is contained as a subtext of $c$&quot;.
 The proposition is that $h^x$ encodes the meaning of the expression $x$.  $h^x$ has a support that only contains texts including $x$. The varying intensities of $h^x$ in relation to the texts that contain it encodes the meaning of $x$. Intuitively, if you know that a piece of text $x$, is more greatly associated to words of a particular context, demonstrated by $h^x$ having a high intensity for texts within this context, then you can extract some meaning in regarding the piece of text $x$.</p>
 <p>Suppose $y$ extends the text $x$ and $\mathcal{L}(x,y)=\pi(y\vert x)=a\neq 0$.
