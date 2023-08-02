@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>5_Extensions_PAC_Bayes.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="5-extension-of-pac-bayes-bounds">5 Extension of PAC-Bayes Bounds</h1>
+<h2 id="51-disintegrated-pac-bayes-bounds">5.1 Disintegrated PAC-Bayes Bounds</h2>
+<p>The majority of the PAC-Bayes bounds we have discussed so far have been derived to hold for all posterior distributions. The intention of disintegrated PAC-Bayes bounds is to refine these results by only requiring them to hold for a single posterior distribution. We now study the work of (Viallard, 2021) that sets out a general framework for deriving such bounds. The setup is the same as the one we have considered so far, with the added assumption that $C=1$ and the additional consideration of a deterministic learning algorithm $A:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$ that is applied to the training sample $S$.</p>
+<p><strong>Definition 5.1</strong> (Viallard, 2021) <em>The two distributions $P$ and $Q$ defined on the some sample space $\mathcal{X}$, then for any $\alpha&gt;1$ their Renyi divergence is defined to be $$D_{\alpha}(Q,P)=\frac{1}{\alpha-1}\log\left(\mathbb{E}_{x\sim P}\left(\frac{Q(x)}{P(x)}\right)^{\alpha}\right).$$</em></p>
+<p><strong>Theorem 5.2</strong> (Viallard, 2021) <em>For any distribution $\mathcal{D}$ on $\mathcal{Z}$, for any parameter space $\mathcal{W}$, for any prior distribution $\pi$ on $\mathcal{W}$, for any $\phi:\mathcal{W}\times\mathcal{Z}^m\to\mathbb{R}^+$, for any $\alpha&gt;1$, for any $\delta&gt;0$ and for any deterministic learning algorithm $A:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$ the following holds $$\mathbb{P}<em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\frac{\alpha}{\alpha-1}\log\left(\phi(\mathbf{w},S)\right)\leq\frac{2\alpha-1}{\alpha-1}\log\left(\frac{2}{\delta}\right)+D</em>{\alpha}(\rho_{S},\pi)+\log\left(\mathbb{E}<em>{S^\prime\sim\mathcal{D}^m}\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S^\prime)^{\frac{\alpha}{\alpha-1}}\right)\right)\geq1-\delta,$$ where $\mathcal{\rho}_S:=A(S)$.</em></p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>First note that $\phi(\mathbf{w},S)$ is a non-negative random variable. Therefore, by Markov's inequality
+$$\mathbb{P}<em>{\mathbf{w}\sim\rho_S}\left(\phi(\mathbf{w},S)\leq\frac{2}{\delta}\mathbb{E}</em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\geq1-\frac{\delta}{2},$$
+which is equivalent to
+$$\mathbb{E}<em>{\mathbf{w}\sim\rho_S}\left(\phi(\mathbf{w},S)\leq\frac{2}{\delta}\mathbb{E}</em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\geq1-\frac{\delta}{2}.$$
+Taking the expectations over $S\sim\mathcal{D}^m$ to both we obtain the equivalent statements
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\phi(\mathbf{w},S)\leq\frac{2}{\delta}\mathbb{E}</em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\geq1-\frac{\delta}{2},$$
+and
+$$\mathbb{E}<em>{S\sim\mathcal{D}^m}\left(\mathbb{E}</em>{\mathbf{w}\sim\rho_S}\left(\phi(\mathbf{w},S)\leq\frac{2}{\delta}\mathbb{E}<em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\right)\geq1-\frac{\delta}{2}.$$
+Taking the $\log$ of the first of these and then multiplying by $\frac{\alpha}{\alpha-1}$ gives
+$$\mathbb{P}</em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\frac{\alpha}{\alpha-1}\log\left(\phi(\mathbf{w},S)\right)\leq\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\mathbb{E}<em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\right)\geq1-\frac{\delta}{2}.$$
+Focusing on the right hand side we see that
+$$\begin{align*}\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\mathbb{E}</em>{\mathbf{w}^\prime\sim\rho_S}\left(\phi\left(\mathbf{w}^\prime,S\right)\right)\right)&amp;=\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\mathbb{E}<em>{\mathbf{w}^\prime\sim\rho_S}\left(\frac{\rho_S(\mathbf{w}^\prime)\pi(\mathbf{w}^\prime)}{\pi(\mathbf{w}^\prime)\rho_S(\mathbf{w}^\prime)}\phi(\mathbf{w}^\prime,S)\right)\right)\end{align*}$$
+for all $\pi\in\mathcal{M}(\mathcal{W})$. As $\frac{1}{\alpha}+\frac{1}{\frac{\alpha}{\alpha-1}}=1$ we can apply Holder's inequality to get that
+$$\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\left(\frac{\rho_S(\mathbf{w}^\prime)}{\pi(\mathbf{w}^\prime)}\phi\left(\mathbf{w}^\prime,S\right)\right)\leq\left(\mathbb{E}<em>{\mathbf{w}^\prime\sim\pi}\left(\frac{\rho_S(\mathbf{w}^\prime)}{\pi(\mathbf{w}^\prime)}\right)^{\alpha}\right)^{\frac{1}{\alpha}}\left(\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\left(\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\right)\right)^{\frac{\alpha-1}{a}}.$$
+Therefore,
+$$\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\mathbb{E}<em>{\mathbf{w}^\prime\sim\pi}\left(\frac{\rho_S(\mathbf{w}^\prime)}{\pi(\mathbf{w}^\prime)}\phi\left(\mathbf{w}^\prime,S\right)\right)\right)\leq D</em>{\alpha}(\rho_S,\pi)+\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\right)+\log\left(\mathbb{E}<em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\right).$$
+From which we deduce that
+$$\mathbb{P}</em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\frac{\alpha}{\alpha-1}\log\left(\phi(\mathbf{w},S)\right)\leq D_{\alpha}(\rho_S,\pi)+\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\right)+\log\left(\mathbb{E}<em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\right)\right)\geq1-\frac{\delta}{2}.\quad(\star)$$
+As $\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}$ is also a non-negative random variables we can apply Markov's inequality again to get
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\leq\frac{\delta}{2}\mathbb{E}<em>{S^\prime\mathcal{D}^m}\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S^\prime)^{\frac{\alpha}{\alpha-1}}\right)\geq1-\frac{\delta}{2}.$$
+As the left hand side is not dependent of $\mathbf{w}\sim\rho_S$ we have that
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\leq\frac{\delta}{2}\mathbb{E}<em>{S^\prime\mathcal{D}^m}\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S^\prime)^{\frac{\alpha}{\alpha-1}}\right)=\mathbb{P}<em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\leq\frac{\delta}{2}\mathbb{E}<em>{S^\prime\mathcal{D}^m}\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S^\prime)^{\frac{\alpha}{\alpha-1}}\right).$$
+Therefore,
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\frac{\alpha}{\alpha-1}\log\left(\frac{2}{\delta}\right)+\log\left(\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S)^{\frac{\alpha}{\alpha-1}}\right)\leq\frac{2\alpha-1}{\alpha-1}\log\left(\frac{2}{\delta}\right)+\log\left(\frac{\delta}{2}\mathbb{E}<em>{S^\prime\mathcal{D}^m}\mathbb{E}</em>{\mathbf{w}^\prime\sim\pi}\phi(\mathbf{w}^\prime,S^\prime)^{\frac{\alpha}{\alpha-1}}\right)\right).$$
+Combining with $(\star)$ using a union bound completes the proof. $\square$</p>
+</details>
+<h3 id="511-application-to-neural-network-classifiers">5.1.1 Application to Neural Network Classifiers</h3>
+<p>We can contextualize this bound to over-parameterized neural networks. Suppose that $\mathbf{w}\in\mathbb{R}^d$ is a weight vector of a neural network, with $d\gg m$. Assume that the network is trained for $T$ epochs and that these epochs are used to generate $T$ priors $\mathbf{P}={\pi_t}_{t=1}^T$. Let the priors be of the form $\pi_t=\mathcal{N}\left(\mathbf{w}_t,\sigma^2\mathbf{I}<em>d\right)$ where $\mathbf{w}<em>t$ is the weight vector obtained after the $t^\text{th}$ epoch. We assume that the priors are obtained from the learning algorithm being applied to the sample $S</em>{\mathrm{prior}}$ where $S</em>{\mathrm{prior}}\cap S=\emptyset$.</p>
+<p><strong>Corollary 5.3</strong> <em>For any distribution $\mathcal{D}$ on $\mathcal{Z}$, for any set $\mathcal{W}$, for any set $\mathbf{P}$ of $T$ priors on $\mathcal{W}$, for any learning algorithm $A:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$, for any loss $l:\mathcal{W}\times\mathcal{Z}\to[0,1]$ and for any $\delta&gt;0$ then for any $\pi_t\in\mathbf{P}$ we have that $$\mathbb{P}<em>{\mathcal{S}\sim\mathcal{D}^m,\mathbf{w}\sim\rho</em>{S}}\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{\Vert\mathbf{w}-\mathbf{w}_t\Vert_2^2}{\sigma^2}+\log\left(\frac{16T\sqrt{m}}{\delta^3}\right)\right)\right)\geq1-\delta.$$</em></p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>We can apply Theorem 5.2 with $\phi(\mathbf{w},S)=\exp\left(\frac{\alpha-1}{\alpha}m\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)$ and $\alpha=2$. To deduce that for all $\pi_t\in\mathbf{P}$ we have
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(D_2(\rho_S,\pi_t)+\log\left(\frac{8T}{\delta^3}\mathbb{E}</em>{S^\prime\sim\mathcal{D}^m}\mathbb{E}<em>{\mathbf{w}^\prime\sim\pi_t}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}^\prime),R(\mathbf{w})\right)\right)\right)\right)\right)\right)\geq1-\delta.$$
+Note that the empirical risk in the exponential is with respect to the distribution $S^\prime$ where as the empirical risk on the left hand side of the inequality is with respect to $S$. Recall, the upper bound we determined in the proof of Theorem 3.12,
+$$\mathbb{E}</em>{S^\prime\sim\mathcal{D}^m}\mathbb{E}_{\mathbf{w}^\prime\sim\pi_t}\left(\exp\left(m\mathrm{kl}\left(\hat{R}(\mathbf{w}^\prime),R(\mathbf{w})\right)\right)\right)\leq2\sqrt{m}.$$
+Furthermore, it is known that for $\rho_S=\mathcal{N}(\mathbf{w},\sigma^2I_d)$ and $\pi_t=\mathcal{N}(\mathbf{v}_t,\sigma^2I_d)$ that
+$$D_2(\rho_S,\pi_t)=\frac{\Vert\mathbf{w}-\mathbf{v}_t\Vert_2^2}{\sigma^2}.$$
+Putting this and our bound into our deductions from Theorem 5.2 completes the proof of the corollary. $\square$</p>
+</details>
+<p><strong>Corollary 5.4</strong> <em>Under the assumptions of Corollary 5.3 with $\delta\in(0,1)$ and for all $\pi_t\in\mathbf{P}$ we have that $$\begin{align</em>}\mathbb{P}_{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}&amp;\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}<em>t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{2T\sqrt{m}}{\delta}\right)\right)\right),\\mathbb{P}</em>{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}&amp;\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{m+1}{m}\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}_t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{T(m+1)}{\delta}\right)\right)\right),\end{align*}$$ and for all $c\in\mathbf{C}$ $$R(\mathbf{w})\leq\frac{1-\exp\left(-c\hat{R}(\mathbf{w})-\frac{1}{m}\left(\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}_t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{T\vert\mathbf{C}\vert}{\delta}\right)\right)\right)}{1-\exp(-c)}.$$ Where $\mathbf{\epsilon}\sim\mathcal{N}\left(\mathbf{0},\sigma^2\mathbf{I}_d\right)$ is Gaussian noise such that $\mathbf{w}+\mathbf{\epsilon}$ acts as the weights sampled from $\mathcal{N}(\mathbf{w},\sigma^2\mathbf{I}_d)$, and $\mathbf{C}$ is a set of hyper-parameters fixed a priori.*</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>The proof of these individual statements follow the same structure. We will only prove the last of these by applying the theorem proven below. The first two can be proven in a similar way by applying Theorem 1 $(i)$ from (Rivasplata, 2020) and Proposition 3.1 from (Blanchard, 2007) respectively.</p>
+<p><strong>Lemma 1</strong>
+For $\rho_S=\mathcal{N}\left(\mathbf{w},\sigma^2I_d\right)$ and $\pi=\mathcal{N}\left(\mathbf{v},\sigma^2I_d\right)$, we have that
+$$\log\left(\frac{\rho_S(\mathbf{w+\epsilon})}{\pi(\mathbf{w+\epsilon})}\right)=\frac{1}{2\sigma^2}\left(\Vert\mathbf{w+\epsilon-v}\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2\right),$$
+where $\mathbf{\epsilon}\sim\mathcal{N}\left(\mathbf{0},\sigma^2I_d\right)$ such that $\mathbf{w+\epsilon}$ acts as the weights sampled from $\mathcal{N}(\mathbf{w},\sigma^2\mathbf{I}_d)$.</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>This follows from simple computations after recalling that
+$$\rho_S(\mathbf{w+\epsilon})=\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^d\exp\left(-\frac{1}{2\sigma^2}\Vert\mathbf{\epsilon}\Vert_2^2\right),\text{ and }\pi(\mathbf{w+\epsilon})=\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^d\exp\left(-\frac{1}{2\sigma^2}\Vert\mathbf{w+\epsilon-v}\Vert_2^2\right).$$
+So this completes the proof of the lemma. $\square$</p>
+</details>
+<p><strong>Lemma 2</strong>
+For any positive $\lambda$ and $\mathbf{w}\in\mathcal{W}$, with $\delta\in(0,1)$ we have that
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\Phi</em>{\frac{\lambda}{m}}(R(\mathbf{w}))+\frac{\log(\delta)}{\lambda}\leq\hat{R}(\mathbf{w})\right)\leq1-\delta$$</p>
+<p><strong>Theorem 3</strong>
+For any positive $\lambda$, any posterior distribution $\rho\in\mathcal{M}(\mathcal{W})$, then
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Phi^{-1}</em>{\frac{\lambda}{m}}\left(\hat{R}(\rho)+\frac{1}{\lambda}\log\left(\frac{1}{\delta}\frac{d\rho}{d\pi}\right)\right)\right)\geq1-\delta.$$</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>To prove this we start from Lemma 2 and integrate with respect to $\pi$ to get that
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\Phi</em>{\frac{\lambda}{m}}(R(\mathbf{\pi}))+\frac{\log(\delta)}{\lambda}\leq\hat{R}(\mathbf{\pi})\right)\leq1-\delta.$$
+Which for any posterior $\rho$ can be written as
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(\Phi</em>{\frac{\lambda}{m}}(R(\rho))+\frac{\log(\delta)}{\lambda}-\log\left(\frac{d\rho}{d\pi}\right)\leq\hat{R}(\rho)\right)\leq1-\delta,$$
+which upon re-arrangement completes the proof of the theorem. $\square$</p>
+</details>
+<p>Apply Theorem 3 $T\vert\mathbf{C}\vert$ times with confidence $\frac{\delta}{T\vert\mathbf{C}\vert}$. For each prior $\pi_t\in\mathbf{P}$ and hyperparameter $c\in\mathbf{C}$, we have that
+$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho_S)\leq\frac{1}{1-e^{-c}}\left(1-\exp\left(-c\hat{R}(\rho_S)-\frac{1}{m}\left(\log\left(\frac{\rho_S(\mathbf{w})}{\pi_t(\mathbf{w})}\right)+\log\left(\frac{T\vert\mathbf{C}\vert}{\delta}\right)\right)\right)\right)\right)\geq1-\frac{\delta}{T\vert\mathbf{C}\vert}.$$
+Applying a union bound argument and Lemma 1 the conclusions of the theorem follows which completes the proof. $\square$</p>
+</details>
+<h2 id="52-pac-bayes-compression-bounds">5.2 PAC-Bayes Compression Bounds</h2>
+<p>We will now see how compression ideas can be capitalized to tighten PAC-Bayes bounds. The work of (Zhou, 2019) evaluates generalization bounds by first measuring the effective compressed size of a neural network and then substituting this into the bounds. We have seen that compression techniques can efficiently reduce the effective size of a network, and so accounting for this can lead to tighter bounds. This also captures the intuition that we expect a model to overfit if it is more difficult to compress. Therefore, these updated bounds also incorporate a notion of model complexity. The work of (Zhou, 2019) utilizes a refined version of Theorem 3.11.</p>
+<p><strong>Theorem 5.5</strong> (Catoni, 2007) <em>Let $L$ be a $0$-$1$ valued loss function. Let $\pi$ be a probability measure on the parameter space, and let $\alpha&gt;1,\delta&gt;0$. Then, $$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\rho)\leq\inf</em>{\lambda&gt;1}\Phi^{-1}_{\lambda/m}\left(\hat{R}(\rho)+\frac{\alpha}{\lambda}\left(\mathrm{KL}(\rho,\pi)-\log(\delta)+2\log\left(\frac{\log\left(\alpha^2\lambda\right)}{\log(\alpha)}\right)\right)\right)\right)\geq1-\delta.$$</em></p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>We start from Theorem 3.11 and try to optimize the bound with respect to $\lambda$. Let us introduce the parameter $\alpha&gt;1$ and let $\Lambda=\left{\alpha^k:k\in\mathbb{N}\right}$ on which we define the probability measure $\nu\left(\alpha^k\right)=\frac{1}{(k+1)(k+2)}$. Now for each $k\in\mathbb{N}$ apply Theorem 3.11 with $\lambda=\alpha^k$ and confidence $1-\frac{\delta}{(k+1)(k+2)}$. Now apply a union bound argument to conclude that
+$$\mathbb{P}<em>{S\sim\mathcal{D}^m}\left(R(\rho)\leq\inf</em>{\lambda^\prime\in\Lambda}\Phi^{-1}<em>{\frac{\lambda^\prime}{m}}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)+2\log\left(\frac{\log\left(\alpha^2\lambda^\prime\right)}{\log(\alpha)}\right)}{\lambda^\prime}\right)\right)\geq1-\delta.$$
+We note that $\lambda\in(1,\infty)$ (as for $\lambda&lt;1$ we get a bound larger than $1$) and so there is a $\lambda^\prime\in\Lambda$ such that
+$$\frac{\lambda}{\alpha}\leq\lambda^\prime\leq\lambda.$$
+Moreover, for any $q\in(0,1)$ we have that $\beta\mapsto\Phi</em>{\beta}(q)$ is increasing on $\mathbb{R}<em>+$. Therefore,
+$$\mathbb{P}</em>{S\sim\mathcal{D}^m}\left(R(\rho)\leq\inf_{\lambda\in(1,\infty)}\Phi^{-1}_{\frac{\lambda}{m}}\left(\hat{R}(\rho)+\frac{\alpha}{\lambda}\left(\mathrm{KL}(\rho,\pi)-\log\left(\delta\right)+2\log\left(\frac{\log\left(\alpha^2\lambda^\prime\right)}{\log(\alpha)}\right)\right)\right)\right)\geq1-\delta,$$
+which completes the proof. $\square$</p>
+</details>
+<p>The intention now is to motivate the choice of $\pi$ using ideas of compressibility such that $\mathrm{KL}(\rho,\pi)$ is kept small. To do this we will choose a prior $\pi$ that assigns greater probability mass to models with a shorter code length.</p>
+<p><strong>Theorem 5.6</strong> (Zhou, 2019) <em>Let $\vert\mathbf{w}\vert_c$ denote the number of bits required to represent hypothesis $h_{\mathbf{w}}$ using some pre-specified coding $c$. Let $\rho$ denote the point mass distribution at $\hat{\mathbf{w}}$ which is the compression of $\mathbf{w}$ and corresponds to the compressed model $h_{\hat{\mathbf{w}}}$. Let $M$ denote any probability measure on the positive integers. Then there exists a prior $\pi_c$ such that $$\mathrm{KL}(\rho,\pi_c)\leq\left\vert\hat{\mathbf{w}}\right\vert_c\log(2)-\log\left(M\left(\left\vert\hat{\mathbf{w}}\right\vert_c\right)\right).$$</em></p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>Let $\mathcal{W}_c\subseteq\mathcal{W}$ be the set of compressed weights. Then let $\pi_c$ be a distribution on $\mathcal{W}<em>c$ defined by
+$$\pi_c(\mathbf{w})=\frac{1}{Z}M(\vert\mathbf{w}\vert_c)\cdot2^{-\vert\mathbf{w}\vert_c},\text{ where }Z=\sum</em>{\mathbf{w}\in\mathcal{W}_c}M(\vert\mathbf{w}\vert_c)\cdot 2^{-\vert\mathbf{w}\vert_c}.$$
+As $c$ is injective on $\mathcal{W}_c$ we have that $Z\leq 1$. Therefore,
+$$\begin{align*}\mathrm{KL}(\rho,\pi_c)=\log\left(\frac{\rho\left(\hat{\mathbf{w}}\right)}{\pi_c\left(\hat{\mathbf{w}}\right)}\right)\rho\left(\hat{\mathbf{w}}\right)&amp;=-\log\left(\pi_c\left(\hat{\mathbf{w}}\right)\right)\&amp;=\log(Z)+\left\vert\hat{\mathbf{w}}\right\vert_c\log(2)-\log\left(M\left(\left\vert\hat{\mathbf{w}}\right\vert_c\right)\right)\&amp;\leq\left\vert\hat{\mathbf{w}}\right\vert_c\log(2)-\log\left(M\left(\left\vert\hat{\mathbf{w}}\right\vert_c\right)\right).\end{align*}$$
+Which completes the proof of the theorem. $\square$</p>
+</details>
+<p><strong>Remark 5.7</strong> <em>An example of a coding scheme $c$ could be the Huffman encoding. However, such a compression scheme is agnostic to any structure of the hypotheses which is translated to the space $\mathcal{W}$. By exploiting structure in the hypothesis class the bound can be improved substantially.</em></p>
+<p>We now formalise compression schemes to allow us to refine Theorem 5.6. Denote a compression procedure by a triple $(S,C,Q)$ where</p>
+<ul>
+<li>$S={s_1,\dots,s_k}\subseteq{1,\dots,d}$ is the location of the non-zero weights,</li>
+<li>$C={c_1,\dots,c_r}\subseteq\mathbb{R}$, is a codebook, and</li>
+<li>$Q=(q_1,\dots,q_k)$ for $q_i\in{1,\dots,r}$ are the quantized values.</li>
+</ul>
+<p>Define the corresponding weights $\mathbf{w}(S,Q,C)\in\mathbb{R}^d$ as,
+$$w_i(S,Q,C)=\begin{cases}c_{q_j}&amp;i=s_j\0&amp;\text{otherwise}.\end{cases}$$
+Training a neural network is a stochastic process due to the randomness of SGD. So to analyse the generalization error we try to capture randomness in the analysis by applying Gaussian noise to weights. For this we use $\rho\sim\mathcal{N}\left(\mathbf{w},\sigma^2J\right)$, with $J$ being a diagonal matrix.</p>
+<p><strong>Theorem 5.8</strong> (Zhou, 2019) <em>Let $(S,C,Q)$ be the output of a compression scheme, and let $\rho_{S,C,Q}$ be the stochastic estimator given by the weights decoded from the triplet and variance $\sigma^2$. Let $c$ denote an arbitrary fixed coding scheme and let $M$ denote an arbitrary distribution on the positive integers. Then for any $\tau&gt;0$, there is a prior $\pi$ such that $$\begin{align</em>}\mathrm{KL}(\rho_{S,C,Q},\pi)\leq&amp;(k\lceil\log(r)\rceil+\vert S\vert_c+\vert C\vert_c)\log(2)-\log(M(k\lceil\log(r)\rceil+\vert S\vert_c+\vert C\vert_c))\&amp;+\sum_{i=1}^k\mathrm{KL}\left(\mathcal{N}\left(c_{q_i},\sigma^2\right),\sum_{j=1}^r\mathcal{N}\left(c_j,\tau^2\right)\right).\end{align*}$$*</p>
+<details>
+<summary>Proof</summary>
+<br>
+<p>The following is a proof by construction, that is we construct prior $\pi$ with the desired property. To do this we want to express the prior as a mixture over all possible compressions provided by the algorithm. We first define the mixture component
+$$\pi_{S,Q,C}=\mathcal{N}\left(\mathbf{w}(S,Q,C),\tau^2\right).$$
+We then define our prior to be a weighted mixture over all possible compressions, that is
+$$\pi=\frac{1}{Z}\sum_{S,Q,C}M\left(\vert S\vert_c+\vert C\vert_c+k\lceil\log(r)\rceil\right)\cdot2^{-\vert S\vert_c-\vert C\vert_c-k\lceil\log(r)\rceil}\pi_{S,Q,C}.$$
+Where $Z\leq1$ as the compression scheme is injective. Let $\left(\hat{S},\hat{Q},\hat{C}\right)$ be the output of our compression algorithm, so that out posterior $\rho$ is $\mathcal{N}\left(\mathbf{w}\left(\hat{S},\hat{Q},\hat{C}\right),\sigma^2\right)$. Therefore,
+$$\begin{align*}\mathrm{KL}(\rho,\pi)&amp;\leq\mathrm{KL}\left(\rho,\sum_{S,Q,C}M\left(\vert S\vert_c+\vert C\vert_c+k\lceil\log(r)\rceil\right)\cdot2^{-\vert S\vert_c-\vert C\vert_c-k\lceil\log(r)\rceil}\pi_{S,Q,C}\right)\&amp;\leq\mathrm{KL}\left(\rho,\sum_QM\left(\left\vert \hat{S}\right\vert_c+\left\vert \hat{C}\right\vert_c+k\lceil\log\left(\hat{r}\right)\rceil\right)\cdot2^{-\left\vert \hat{S}\right\vert_c-\left\vert \hat{C}\right\vert_c-k\lceil\log\left(\hat{r}\right)\rceil}\pi_{\hat{S},Q,\hat{C}}\right)\&amp;\leq\left(\left\vert \hat{S}\right\vert_c+\left\vert \hat{C}\right\vert_c+k\lceil\log\left(\hat{r}\right)\rceil\right)\log(2)+\log\left(M\left(\left\vert \hat{S}\right\vert_c+\left\vert \hat{C}\right\vert_c+k\lceil\log\left(\hat{r}\right)\rceil\right)\right)+\mathrm{KL}\left(\rho,\sum_Q\pi_{\hat{S},Q,\hat{C}}\right)\end{align*}$$
+Let $\phi_{\tau}=\mathrm{N}\left(0,\tau^2\right)$. Then as the mixture term is independent across coordinates we have that
+$$\left(\sum_Q\pi_{\hat{S},Q,\hat{C}}\right)(x)=\sum_{q^1,\dots q^k=1}^r\prod_{i=1}^k\phi_{\tau}\left(x_i-\hat{c}<em>{q^i}\right)=\prod</em>{i=1}^k\sum_{q^i=1}^r\phi_{\tau}\left(x_i-\hat{c}<em>{q^i}\right).$$
+Furthermore, as $\rho$ is independent over the coordinates, we get that
+$$\mathrm{KL}\left(\rho,\sum_Q\pi</em>{\hat{S},Q,\hat{C}}k\right)=\sum_{i=1}^k\mathrm{KL}\left(\rho_i,\sum_{q^i=1}^r\mathcal{N}\left(\hat{c}_{q^i},\tau^2\right)\right),$$
+from which the result follows and completes the proof of the theorem. $\square$</p>
+</details>
+<p>Choosing the prior alluded to by Theorem 5.8 and utilizing Theorem 5.5 one can obtain a PAC-Bayes generalization bound that exploits notions of compressibility.</p>
+
+</body>
+</html>

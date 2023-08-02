@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Introduction</title>
+<title>References.md</title>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 <style>
@@ -365,18 +365,22 @@ code {
           : 'default'
     });
   </script>
-<h1 id="undergraduate-research-project-2023">Undergraduate Research Project 2023</h1>
-<p>In the summer of 2023 I completed an undergraduate research project under the supervision of Professor Alessio Lomuscio. The aim of the project was to investigate the generalization of deep neural networks. I started the project by performing a survey of the different approaches taken to understand this phenomena. After which my I focused my attention to the statistical guarantees on network generalization via Probably Accurately Correct bounds (PAC). Below is a report I compiled that provides an overview of the application of PAC bounds specifically to neural networks.</p>
-<h1 id="introduction">Introduction</h1>
-<p>A great resource for introducing the field of PAC theory is given in (Alquier, 2023). It details the progression of results in the field and motivates the various research avenues. PAC learning theory is a more general field than just neural networks. However, my aim is to illustrate how this theory is being contextualized within machine learning, with a specific focus on neural networks. In (Alquier, 2023) many of the applications of PAC theory were stated with accompanying references for the reader's interests. With this report, I want to elaborate on some of those points and provide further applications of the theory. This report will not provide an exhaustive summary of the theory of PAC bounds being applied to neural networks. I will provide some well-known results in the literature and additional results necessary for the applications we will discuss. It is recommended that for a comprehensive introduction to the field of PAC, the reader refers to (Alquier, 2023). Nevertheless, this report will be mostly self-contained, with proofs for the major results and elaboration on the specific implementations of PAC theory.</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li>Chapter 2 - PAC Bounds</li>
-<li><a href="/urop2023/3_Empirical_PAC_Bayes.html">Chapter 3 - Empirical PAC-Bayes Bounds</a></li>
-<li><a href="/urop2023/4_Oracle_PAC_Bayes.html">Chapter 4 - Oracle PAC-Bayes Bounds</a></li>
-<li><a href="/urop2023/5_Extensions_PAC_Bayes.html">Chapter 5 - Extensions of PAC-Bayes Bounds</a></li>
-<li><a href="/urop2023/References.html">References</a></li>
-</ul>
+<p>(Habib, 1998) Michel Habib, Colin McDiarmid, Jorge Ramirez-Alfonsin, Bruce Reed. Probabilistic Methods for Algorithmic Discrete Mathematics. 1998<br>
+(McAllester, 1999) D. A. McAllester. PAC-Bayesian model averaging. In Proceedings of the twelfth annual conference on Computational learning theory, pages 164–170, 1999.<br>
+(Seeger, 2001) John Langford and Matthias Seeger. “Bounds for Averaging Classifiers”. In: (Feb. 2001).<br>
+(Maurer, 2004) Andreas Maurer. “A Note on the PAC Bayesian Theorem”. In: CoRR (2004).<br>
+(Catoni, 2007) Olivier Catoni. “Pac-Bayesian Supervised Classification: The Thermodynamics of Statistical Learning”. In: IMS Lecture Notes Monograph Series 56 (2007), pp. 1–163.<br>
+(Blanchard, 2007) Gilles Blanchard and François Fleuret. Occam’s Hammer. In COLT, pages 112–126, 2007.<br>
+(McAllester, 2013) David A. McAllester. “A PAC-Bayesian Tutorial with A Dropout Bound”. In: CoRR (2013).<br>
+(Scott, 2014) Clayton Scott. Hoeffding’s Inequality. 2014.<br>
+(Dziugaite, 2017) Gintare Karolina Dziugaite and Daniel M. Roy. “Computing Nonvacuous Generalization Bounds for Deep (Stochastic) Neural Networks with Many More Parameters than Training Data”. In: CoRR (2017).<br>
+(Arora, 2018) S. Arora, R. Ge, B. Neyshabur, and Y. Zhang. “Stronger generalization bounds for deep nets via a compression approach”. In: CoRR (2018).<br>
+(Guedj, 2019) Benjamin Guedj. A Primer on PAC-Bayesian Learning. 2019.<br>
+(Zhou, 2019) Wenda Zhou, Victor Veitch, Morgane Austern, Ryan P. Adams, and Peter Orbanz. Non-Vacuous Generalization Bounds at the ImageNet Scale: A PAC-Bayesian Compression Approach. 2019.<br>
+(Dziugaite, 2020) Gintare Karolina Dziugaite, Kyle Hsu,Waseem Gharbieh, and Daniel M. Roy. “On the role of data in PAC-Bayes bounds”. In: CoRR (2020).<br>
+(Rivasplata, 2020) Omar Rivasplata, Ilja Kuzborskij, Csaba Szepesvári, and John Shawe-Taylor. PAC-Bayes Analysis Beyond the Usual Bounds. In NeurIPS, 2020.<br>
+(Viallard, 2021) Paul Viallard, Pascal Germain, Amaury Habrard, and Emilie Morvant. A General Framework for the Disintegration of PAC-Bayesian Bounds. 2021.<br>
+(Alquier, 2023) Pierre Alquier. User-friendly introduction to PAC-Bayes bounds. 2023.</p>
 
 </body>
 </html>
