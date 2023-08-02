@@ -384,11 +384,16 @@ code {
 </p>
 <h3 id="411-oracle-pac-bayes-bounds-in-expectation">4.1.1 Oracle PAC-Bayes Bounds in Expectation</h3>
 <p>
-	<strong>Theorem 4.1</strong> For $\lambda&gt;0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$
+	<strong>Theorem 4.1</strong>
+	For $\lambda&gt;0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
+<p>
+	<strong>Theorem 4.1.1 (Fubini's Theorem)</strong>
+	If $\mathcal{X}_1$ and $\mathcal{X}_2$ are $\sigma$-finite measurable spaces and $f:\mathcal{X}_1\times\mathcal{X}_2$ is measurable and $$\int_{\mathcal{X}_1\times\mathcal{X}_2}\vert f(x_1,x_2)\vert d(x_1,x_2)&lt;\infty,$$ then $$\int_{\mathcal{X}_1}\left(\int_{\mathcal{X}_2}f(x_1,x_2)dx_2\right)dx_1=\int_{\mathcal{X}_2}\left(\int_{\mathcal{X}_1}f(x_1,x_2)dx_2\right)dx_1=\int_{\mathcal{X}_1\times\mathcal{X}_2}f(x_1,x_2)d(x_1,x_2).$$ 
+</p>
 <p>
 	We proceed from Corollary 3.9 to deduce that $$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\rho}_{\lambda}\right)\right)&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\right)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)\right)\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\end{align}$$ where Fubini's theorem has been applied in the last inequality. Recalling that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$ completes the proof of the theorem. $\square$
 </p>
@@ -401,15 +406,9 @@ code {
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>Recall the proof of Theorem 3.4 and the subsequent application to the Gibbs posterior that yielded Corollary 3.6.</p>
-<p>$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
-<p>In the proof we utilized the result of Theorem 2.1. The inequality of Theorem 2.1 can be reversed by replacing the $U_i$ by $-U_i$ in its proof. Applying the reverse inequality of Theorem 2.1 in the proof of Theorem 3.4 gives the updated corollary
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\leq R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta.$$
-Which holds for all $\rho\in\mathcal{M}(\mathcal{W})$. Applying a union bound on Corollary 3.6 and the updated result above gives
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\begin{pmatrix}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right),\\hat{R}(\rho)\leq R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\end{pmatrix}\geq1-2\delta,$$
-which holds for all $\rho\in\mathcal{M}(\mathcal{W})$. Using the upper bound on $\hat{R}(\rho)$ from the second event on the first event gives
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{4m}+\frac{2\left(\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)}{\lambda}\right)\right)\geq1-2\delta.$$
-We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof. $\square$</p>
+<p>
+	Recall the proof of Theorem 3.4 and the subsequent application to the Gibbs posterior that yielded Corollary 3.6. $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$ In the proof we utilized the result of Theorem 2.1. The inequality of Theorem 2.1 can be reversed by replacing the $U_i$ by $-U_i$ in its proof. Applying the reverse inequality of Theorem 2.1 in the proof of Theorem 3.4 gives the updated corollary $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\leq R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right)\geq1-\delta.$$ Which holds for all $\rho\in\mathcal{M}(\mathcal{W})$. Applying a union bound on Corollary 3.6 and the updated result above gives $$\mathbb{P}_{S\sim\mathcal{D}^m}\begin{pmatrix}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\right),\\\hat{R}(\rho)\leq R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{\lambda}\end{pmatrix}\geq1-2\delta,$$ which holds for all $\rho\in\mathcal{M}(\mathcal{W})$. Using the upper bound on $\hat{R}(\rho)$ from the second event on the first event gives $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{4m}+\frac{2\left(\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)}{\lambda}\right)\right)\geq1-2\delta.$$ We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof. $\square$
+</p>
 </details>
 <h3 id="bernsteins-assumption">Bernstein's Assumption</h3>
 <p>
@@ -423,47 +422,20 @@ We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p><strong>Lemma 1</strong></p>
-<p>Let $g$ denoted the Bernstein function defined by
-$$g(x)=\begin{cases}1&x=0\\frac{e^x-1-x}{x^2}&x\neq0.\end{cases}$$
-Let $U_1,\dots,U_n$ be $\mathrm{i.i.d}$ random variables such that $\mathbb{E}(U_i)$ is finite and $U_i-\mathbb{E}(U_i)\leq C$ almost surely for some $C\in\mathbb{R}$. Then,
-$$\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\leq\exp\left(g(Ct)nt^2\mathrm{Var}(U_i)\right).$$</p>
+<p>
+	<strong>Lemma 4.4.1</strong>
+	Let $g$ denoted the Bernstein function defined by $$g(x)=\begin{cases}1&x=0\\\frac{e^x-1-x}{x^2}&x\neq0.\end{cases}$$ Let $U_1,\dots,U_n$ be $\mathrm{i.i.d}$ random variables such that $\mathbb{E}(U_i)$ is finite and $U_i-\mathbb{E}(U_i)\leq C$ almost surely for some $C\in\mathbb{R}$. Then, $$\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\leq\exp\left(g(Ct)nt^2\mathrm{Var}(U_i)\right).$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof (Habib, 1998)</summary>
 <br>
-<p>We first show that function $g$ is increasing. For $x\neq0$ we have that
-$$g^\prime(x)=\frac{(x-2)e^x+2+x}{x^3}.$$
-Let $h(x)=(x-2)e^x+2+x$ then $h(0)=0$ and $h^\prime(x)=(x-2)e^x+1$, so that $h^\prime(0)=0$ and $h^{\prime\prime}(x)=xe^x$. Therefore, $h^\prime(x)&lt;0$ for $x&lt;0$ and $h^\prime(x)&gt;0$ for $x&gt;0$ which implies that $h(x)\geq0$ for all $x$. This means that $g^{\prime}(x)&gt;0$ and the function $g$ is increasing. So that
-$$e^x=1+x+x^2g(x)\leq1+x+x^2g(\alpha)$$
-for $x\leq\alpha$. Therefore, if we have a random variable $X$ with $\mathbb{E}(X)=0$ and $X\leq\alpha$ it follows that
-$$\mathbb{E}\left(\exp(X)\right)\leq1+g(\alpha)\mathrm{Var}(X)\leq\exp(g(\alpha)\mathrm{Var}(X)).$$
-Applying this conclusion to $\alpha=Ct$, $X=t(U_i-\mathbb{E}(U_i))$ we can conclude that
-$$\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\leq\exp\left(g(Ct)t^2\mathrm{Var}(U_i)\right)$$
-Therefore, by the independence of the $U_i$
-$$\begin{align}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\&\leq\prod_{i=1}^n\exp\left(g(Ct)t^2\mathrm{Var}(U_i)\right)\\&=\exp\left(g(Ct)nt^2\mathrm{Var}(U_i)\right)\end{align}$$
-as required. $\square$</p>
+<p>
+	We first show that function $g$ is increasing. For $x\neq0$ we have that $$g^\prime(x)=\frac{(x-2)e^x+2+x}{x^3}.$$ Let $h(x)=(x-2)e^x+2+x$ then $h(0)=0$ and $h^\prime(x)=(x-2)e^x+1$, so that $h^\prime(0)=0$ and $h^{\prime\prime}(x)=xe^x$. Therefore, $h^\prime(x)&lt;0$ for $x&lt;0$ and $h^\prime(x)&gt;0$ for $x>0$ which implies that $h(x)\geq0$ for all $x$. This means that $g^{\prime}(x)>0$ and the function $g$ is increasing. So that $$e^x=1+x+x^2g(x)\leq1+x+x^2g(\alpha)$$ for $x\leq\alpha$. Therefore, if we have a random variable $X$ with $\mathbb{E}(X)=0$ and $X\leq\alpha$ it follows that $$\mathbb{E}\left(\exp(X)\right)\leq1+g(\alpha)\mathrm{Var}(X)\leq\exp(g(\alpha)\mathrm{Var}(X)).$$ Applying this conclusion to $\alpha=Ct$, $X=t(U_i-\mathbb{E}(U_i))$ we can conclude that $$\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\leq\exp\left(g(Ct)t^2\mathrm{Var}(U_i)\right)$$ Therefore, by the independence of the $U_i$ $$\begin{align}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\&\leq\prod_{i=1}^n\exp\left(g(Ct)t^2\mathrm{Var}(U_i)\right)\\&=\exp\left(g(Ct)nt^2\mathrm{Var}(U_i)\right)\end{align}$$ as required. $\square$
+</p>
 </details>
-<p>Now fix $\mathbf{w}\in\mathcal{W}$ and apply Lemma 1 to $U_i=l_i(\mathbf{w}^*)-l_i(\mathbf{w})$ (where this notation is consistent with that of the proof of Theorem 2.1). Note that $\mathbb{E}(U_i)=R(\mathbf{w}^*)-R(\mathbf{w})$ and therefore,
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-R(\mathbf{w}^*)-\hat{R}(\mathbf{w})+\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(g(Ct)mt^2\mathrm{Var}_{S\sim\mathcal{D}^m}(U_i)\right).$$
-Observe that
-$$\begin{align}\mathrm{Var}(U_i)&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(U_i^2\right)\\&=\mathbb{E}_{S\sim\mathcal{D}^m}\left(l_i(\mathbf{w}^*)-l_i(\mathbf{w})\right)\\&\leq K(R(\mathbf{w})-R(\mathbf{w}^*)).\end{align}$$
-Therefore, with $\lambda=tn$ we get that
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-R(\mathbf{w}^*)-\hat{R}(\mathbf{w})+\hat{R}(\mathbf{w}^*)\right)\right)\right)\leq\exp\left(g\left(\frac{\lambda C}{m}\right)\frac{\lambda^2}{m}K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)\right)$$
-which upon rearrangement gives
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\right)\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)-\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)\right)\right)\leq1.$$
-Now integrate with respect to $\pi$ and apply Fubini's theorem along with Lemma 2 from the proof of Theorem 3.4 to get
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\sup_{\rho\in\mathcal{M}(\mathcal{W})}\left(\left(1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\right)\left(R(\rho)-R(\mathbf{w}^*)\right)-\hat{R}(\rho)-\hat{R}(\mathbf{w}^*)-\mathrm{KL}(\rho,\pi)\right)\right)\right)\leq1.$$
-In particular, this holds for $\rho-\hat{\rho}_{\lambda}$, and we can apply Jensen's inequality and re-arrange to yield
-$$\left(1-Kg\left(\frac{\lambda C}{m}\right)\right)\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})-R(\mathbf{w}^*)\right)\right)\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)-\hat{R}(\mathbf{w})+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right).$$
-From now on $\lambda$ will be such that $1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}&gt;0$, thus
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\right)-R(\mathbf{w}^*)\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\hat{\rho}_{\lambda})-\hat{R}(\mathbf{w}^*)+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right)}{1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}}.$$
-As with $\lambda=\frac{m}{\max(2K,C)}$ it follows that
-$$Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\leq\frac{1}{2}$$
-and so we have
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\right)-R(\mathbf{w}^*)\leq 2\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\hat{\rho}_{\lambda})-\hat{R}(\mathbf{w}^*)+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right).$$
-As $\hat{\rho}_{\lambda}$ minimizes the quantity on the right hand side in expectation we can re-write this as
-$$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}(R(\hat{\rho}_{\lambda}))&\leq2\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right)\right)\\&\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right)\\&=2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-R(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right),\end{align}$$
-which completes the proof.$\square$</p>
+<p>
+	Now fix $\mathbf{w}\in\mathcal{W}$ and apply Lemma 4.4.1 to $U_i=l_i(\mathbf{w}^*)-l_i(\mathbf{w})$ (where we inherit the notation of the proof of Theorem 2.1). Note that $\mathbb{E}(U_i)=R(\mathbf{w}^*)-R(\mathbf{w})$ and therefore, $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-R(\mathbf{w}^*)-\hat{R}(\mathbf{w})+\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(g(Ct)mt^2\mathrm{Var}_{S\sim\mathcal{D}^m}(U_i)\right).$$ Observe that $$\begin{align}\mathrm{Var}(U_i)&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(U_i^2\right)\\&=\mathbb{E}_{S\sim\mathcal{D}^m}\left(l_i(\mathbf{w}^*)-l_i(\mathbf{w})\right)\\&\leq K(R(\mathbf{w})-R(\mathbf{w}^*)).\end{align}$$ Therefore, with $\lambda=tn$ we get that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(R(\mathbf{w})-R(\mathbf{w}^*)-\hat{R}(\mathbf{w})+\hat{R}(\mathbf{w}^*)\right)\right)\right)\leq\exp\left(g\left(\frac{\lambda C}{m}\right)\frac{\lambda^2}{m}K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)\right)$$ which upon rearrangement gives $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\right)\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)-\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)\right)\right)\leq1.$$ Now integrate with respect to $\pi$ and apply Fubini's theorem along with Lemma 3.4.3 from the proof of Theorem 3.4 to get $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\sup_{\rho\in\mathcal{M}(\mathcal{W})}\left(\left(1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\right)\left(R(\rho)-R(\mathbf{w}^*)\right)-\hat{R}(\rho)-\hat{R}(\mathbf{w}^*)-\mathrm{KL}(\rho,\pi)\right)\right)\right)\leq1.$$ In particular, this holds for $\rho-\hat{\rho}_{\lambda}$, and we can apply Jensen's inequality and re-arrange to yield $$\left(1-Kg\left(\frac{\lambda C}{m}\right)\right)\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})-R(\mathbf{w}^*)\right)\right)\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)-\hat{R}(\mathbf{w})+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right).$$ From now on $\lambda$ will be such that $1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}>0$, thus $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\right)-R(\mathbf{w}^*)\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\hat{\rho}_{\lambda})-\hat{R}(\mathbf{w}^*)+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right)}{1-Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}}.$$ As with $\lambda=\frac{m}{\max(2K,C)}$ it follows that  $$Kg\left(\frac{\lambda C}{m}\right)\frac{\lambda}{m}\leq\frac{1}{2}$$ and so we have $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\right)-R(\mathbf{w}^*)\leq 2\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\hat{\rho}_{\lambda})-\hat{R}(\mathbf{w}^*)+\frac{\mathrm{KL}(\hat{\rho}_{\lambda},\pi)}{\lambda}\right).$$ As $\hat{\rho}_{\lambda}$ minimizes the quantity on the right hand side in expectation we can re-write this as $$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}(R(\hat{\rho}_{\lambda}))&\leq2\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right)\right)\\&\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})-\hat{R}(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right)\\&=2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\mathbb{E}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-R(\mathbf{w}^*)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right),\end{align}$$ which completes the proof.$\square$
+</p>
 </details>
 <h2 id="42-data-driven-pac-bayes-bounds">4.2 Data Driven PAC-Bayes Bounds</h2>
 <p>
@@ -475,50 +447,45 @@ which completes the proof.$\square$</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>For the proof we define the following notation,
-$$\mathrm{kl}_{\gamma}(q,p)=\gamma q-\log\left(1-p+pe^{\gamma}\right),$$
-for $p,q\in[0,1]$ and $\gamma\in\mathbb{R}$. One can show that
-$$\mathrm{kl}(q,p)=\sup_{\gamma}\left(\mathrm{kl}_{\gamma}(q,p)\right).$$</p>
-<p><strong>Lemma 1</strong> For $\lambda&gt;\frac{1}{2}$, if $\mathrm{kl}_{-\frac{1}{\gamma}}(q,p)\leq c$ then $$p\leq\frac{1}{1-\frac{1}{2\lambda}}(q+\lambda c).$$</p>
+<p>
+	For the proof we define the following notation, $$\mathrm{kl}_{\gamma}(q,p)=\gamma q-\log\left(1-p+pe^{\gamma}\right),$$ for $p,q\in[0,1]$ and $\gamma\in\mathbb{R}$. One can show that $$\mathrm{kl}(q,p)=\sup_{\gamma}\left(\mathrm{kl}_{\gamma}(q,p)\right).$$
+</p>
+<p>
+	<strong>Lemma 4.5.1</strong>
+	For $\lambda&gt;\frac{1}{2}$, if $\mathrm{kl}_{-\frac{1}{\gamma}}(q,p)\leq c$ then $$p\leq\frac{1}{1-\frac{1}{2\lambda}}(q+\lambda c).$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>Let $\gamma=-\frac{1}{\lambda}$ for convenience, which means that $\gamma\in(-2,0)$. Re-arranging the assumption we get that
-$$p\leq\frac{1-e^{\gamma q-c}}{1-e^{\gamma}}.$$
-Using $e^{\gamma}\geq1+\gamma$ in the numerator and $e^{\gamma}\leq 1$ in the denominator we get
-$$p\leq\frac{q-\frac{c}{\gamma}}{1+\frac{1}{2}\gamma},$$
-which when we substitute $\lambda$ back in completes the proof of the lemma. $\square$</p>
+<p>
+	Let $\gamma=-\frac{1}{\lambda}$ for convenience, which means that $\gamma\in(-2,0)$. Re-arranging the assumption we get that $$p\leq\frac{1-e^{\gamma q-c}}{1-e^{\gamma}}.$$ Using $e^{\gamma}\geq1+\gamma$ in the numerator and $e^{\gamma}\leq 1$ in the denominator we get $$p\leq\frac{q-\frac{c}{\gamma}}{1+\frac{1}{2}\gamma},$$ which when we substitute $\lambda$ back in completes the proof of the lemma. $\square$
+</p>
 </details>
-<p><strong>Lemma 2</strong> Let $x_1,\dots,x_n$ be realizations of a random variable $X$ with range $[0,1]$ and mean $\mu$. Let $\hat{\mu}=\frac{1}{n}\sum_{i=1}^nx_i$. Then for any fixed $\gamma$ we have that $$\mathbb{E}\left(\exp\left(n\mathrm{kl}_{\gamma}(\hat{\mu},\mu)\right)\right)\leq1.$$</p>
+<p>
+	<strong>Lemma 4.5.2</strong>
+	Let $x_1,\dots,x_n$ be realizations of a random variable $X$ with range $[0,1]$ and mean $\mu$. Let $\hat{\mu}=\frac{1}{n}\sum_{i=1}^nx_i$. Then for any fixed $\gamma$ we have that $$\mathbb{E}\left(\exp\left(n\mathrm{kl}_{\gamma}(\hat{\mu},\mu)\right)\right)\leq1.$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>Note that $\mathbb{E}\left(\exp(n\gamma\hat{\mu})\right)=\left(\mathbb{E}(\exp(\gamma X))\right)^n$ and that by the convexity of $\exp(\cdot)$ we have that
-$$e^{\gamma X}\leq 1-x+xe^{\gamma}.$$
-Therefore,
-$$\mathbb{E}\left(\exp\left(n\gamma\hat{\mu}\right)\right)\leq\left(1-\mu+\mu e^{\gamma}\right)^n,$$
-which implies that
-$$\mathbb{E}\left(\exp\left(n\left(\gamma\hat{\mu}-\log\left(1-\mu+\mu e^{\gamma}\right)\right)\right)\right)\leq 1$$
-which completes the proof of the lemma. $\square$</p>
+<p>
+	Note that $\mathbb{E}\left(\exp(n\gamma\hat{\mu})\right)=\left(\mathbb{E}(\exp(\gamma X))\right)^n$ and that by the convexity of $\exp(\cdot)$ we have that $$e^{\gamma X}\leq 1-x+xe^{\gamma}.$$ Therefore, $$\mathbb{E}\left(\exp\left(n\gamma\hat{\mu}\right)\right)\leq\left(1-\mu+\mu e^{\gamma}\right)^n,$$ which implies that $$\mathbb{E}\left(\exp\left(n\left(\gamma\hat{\mu}-\log\left(1-\mu+\mu e^{\gamma}\right)\right)\right)\right)\leq 1$$ which completes the proof of the lemma. $\square$
+</p>
 </details>
-<p><strong>Lemma 3</strong> For probability distributions defined on the sample space $\mathcal{X}$ and a measurable function $f$ we have that $$\mathbb{E}_{x\in Q}(f(x))\leq\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).$$</p>
+<p>
+	<strong>Lemma 4.5.3</strong>
+	For probability distributions defined on the sample space $\mathcal{X}$ and a measurable function $f$ we have that $$\mathbb{E}_{x\in Q}(f(x))\leq\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>$$\begin{align}\mathbb{E}_{x\in Q}\left(f(x)\right)&=\mathbb{E}_{x\in Q}\left(\log\left(\exp(f(x))\right)\right)\\&=\mathbb{E}_{x\in Q}\left(\log\left(\frac{P(x)}{Q(x)}\right)e^{f(x)}+\log\left(\frac{Q(x)}{P(x)}\right)\right)\\&\leq\log\left(\mathbb{E}_{x\in Q}\left(\frac{P(x)}{Q(x)}e^{f(x)}\right)\right)+\mathrm{KL}(Q,P)\\&=\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).\end{align}$$</p>
+<p>
+	$$\begin{align}\mathbb{E}_{x\in Q}\left(f(x)\right)&=\mathbb{E}_{x\in Q}\left(\log\left(\exp(f(x))\right)\right)\\&=\mathbb{E}_{x\in Q}\left(\log\left(\frac{P(x)}{Q(x)}\right)e^{f(x)}+\log\left(\frac{Q(x)}{P(x)}\right)\right)\\&\leq\log\left(\mathbb{E}_{x\in Q}\left(\frac{P(x)}{Q(x)}e^{f(x)}\right)\right)+\mathrm{KL}(Q,P)\\&=\mathrm{KL}(Q,P)+\log\left(\mathbb{E}_{x\in P}\left(\exp(f(x))\right)\right).\end{align}$$
+</p>
 </details>
-<p>We can use similar reasoning to that given in the proof of Theorem 3.12 to conclude from Lemma 2 that
-$$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\leq1$$
-for fixed $\mathbf{w}\in\mathcal{W}$.
-Now we can take expectations over $\pi$ on both sides an apply Fubini's theorem to deduce that
-$$\begin{align}1&\geq\mathbb{E}_{\mathbf{w}\sim\pi}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\right)\\&\geq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\pi}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\right).\end{align}$$
-To which we can apply Markov's inequality to get that
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\pi}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\leq\frac{1}{\delta}\right)\geq1-\delta.$$
-Letting $f(\mathbf{w})=m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)$ in Lemma 3 and using the above result we get that
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\leq\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\geq1-\delta.$$
-By the convexity of $\mathrm{kl}_{\gamma}$ we get that
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\geq1-\delta.$$
-Therefore, by re-arranging and applying Lemma 1 the proof of the theorem is complete. $\square$.</p>
+<p>
+	We can use similar reasoning to that given in the proof of Theorem 3.12 to conclude from Lemma 4.5.2 that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\leq1$$ for fixed $\mathbf{w}\in\mathcal{W}$. Now we can take expectations over $\pi$ on both sides an apply Fubini's theorem to deduce that $$\begin{align}1&\geq\mathbb{E}_{\mathbf{w}\sim\pi}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\right)\\&\geq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\pi}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\right).\end{align}$$ To which we can apply Markov's inequality to get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\pi}\left(\exp\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\right)\leq\frac{1}{\delta}\right)\geq1-\delta.$$ Letting $f(\mathbf{w})=m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)$ in Lemma 4.5.3 and using the above result we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\right)\leq\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\geq1-\delta.$$ By the convexity of $\mathrm{kl}_{\gamma}$ we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\geq1-\delta.$$ Therefore, by re-arranging and applying Lemma 4.5.1 the proof of the theorem is complete. $\square$.
+</p>
 </details>
 <p>
 	<strong>Corollary 4.6</strong>
@@ -527,7 +494,9 @@ Therefore, by re-arranging and applying Lemma 1 the proof of the theorem is comp
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>This is the result of the previous Theorem 4.5 with $\lambda=\frac{1}{2(1-\beta)}$ and $C=1$.</p>
+<p>
+	This is the result of the previous Theorem 4.5 with $\lambda=\frac{1}{2(1-\beta)}$ and $C=1$.
+</p>
 </details>
 <p>
 	As we have done previously, we can consider the optimization problem of minimizing the bound of Corollary 4.6.
