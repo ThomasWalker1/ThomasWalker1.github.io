@@ -6519,269 +6519,25 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
           : 'default'
     });
   </script>
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>numpy
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>rpy2
-<span class="o">!{</span>sys.executable<span class="o">}</span><span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>matplotlib
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">rng</span>
-<span class="kn">from</span> <span class="nn">rpy2</span> <span class="kn">import</span> <span class="n">robjects</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<h1 id="Introduction">Introduction</h1>
+<p>This is a secondary report to the main report, where I will discuss how we can generate variates from other distribution across the three languages. We will mainly concern ourselves with the normal distribution and the exponential distribution.</p>
 
-<span class="k">def</span> <span class="nf">int32</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">while</span> <span class="n">num</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span> <span class="ow">or</span> <span class="n">num</span><span class="o">&lt;-</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">31</span><span class="p">:</span>
-            <span class="n">num</span><span class="o">=-</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span> <span class="o">-</span> <span class="n">num</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">31</span><span class="p">:</span>
-            <span class="n">num</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span> <span class="o">+</span> <span class="n">num</span>
-    <span class="k">return</span> <span class="n">num</span>
-
-<span class="k">def</span> <span class="nf">int32_rev</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">num</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="o">+</span><span class="n">num</span>
-    <span class="k">return</span> <span class="n">num</span>
-
-<span class="k">def</span> <span class="nf">state32</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">pos</span><span class="p">,</span> <span class="p">[</span><span class="n">int32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">key</span><span class="p">]</span>
-
-<span class="n">n</span> <span class="o">=</span> <span class="mi">624</span>
-<span class="n">m</span> <span class="o">=</span> <span class="mi">397</span>
-<span class="n">matrix_a</span> <span class="o">=</span> <span class="mh">0x9908b0df</span>
-<span class="n">upper_mask</span> <span class="o">=</span> <span class="mh">0x80000000</span>
-<span class="n">lower_mask</span> <span class="o">=</span> <span class="mh">0x7fffffff</span>
-
-<span class="k">def</span> <span class="nf">mt19937</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">'''</span>
-<span class="sd">    Here we are using the linear recurrence to generate a new key, based on the previous key (or any set of $624$ words)</span>
-<span class="sd">    '''</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">):</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">upper_mask</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">lower_mask</span><span class="p">)</span>
-        <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">m</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">matrix_a</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">upper_mask</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">lower_mask</span><span class="p">)</span>
-        <span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">n</span><span class="p">)]</span> <span class="o">^</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">matrix_a</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">upper_mask</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">lower_mask</span><span class="p">)</span>
-    <span class="n">key</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">^</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">^</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">y</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">matrix_a</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">key</span>
-
-<span class="k">def</span> <span class="nf">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">'''</span>
-<span class="sd">    This function updates the state, that involves incrementing the position variable and if necessary (i.e. we reach the end of the key) we update the key</span>
-<span class="sd">    '''</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">pos</span><span class="o">&gt;=</span><span class="mi">623</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mt19937</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-        
-<span class="k">def</span> <span class="nf">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">'''</span>
-<span class="sd">    The tempering function, takes as input the state so that it can be sampled, it then takes this sample and tempers it to generate the final output</span>
-<span class="sd">    '''</span>
-    <span class="n">pos</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">update_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">key</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">int32_rev</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">^=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">11</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">^=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x9d2c5680</span>
-    <span class="n">y</span> <span class="o">^=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xefc60000</span>
-    <span class="n">y</span> <span class="o">^=</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="mi">18</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">python_state_from_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">seed</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">624</span><span class="p">):</span>
-        <span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-        <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1812433253</span> <span class="o">*</span> <span class="p">(</span><span class="n">seed</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&gt;&gt;</span> <span class="mi">30</span><span class="p">))</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">624</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">r_state_from_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">51</span><span class="p">):</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">int32</span><span class="p">(</span><span class="mi">69069</span><span class="o">*</span><span class="n">seed</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">624</span><span class="p">):</span>
-        <span class="n">seed</span><span class="o">=</span><span class="n">int32</span><span class="p">(</span><span class="mi">69069</span><span class="o">*</span><span class="n">seed</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">624</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">cplusplus_state_from_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
-    <span class="n">key</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">seed</span> <span class="o">&amp;=</span> <span class="mh">0xffffffff</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">624</span><span class="p">):</span>
-        <span class="n">key</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-        <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1812433253</span> <span class="o">*</span> <span class="p">(</span><span class="n">seed</span> <span class="o">^</span> <span class="p">(</span><span class="n">seed</span> <span class="o">&gt;&gt;</span> <span class="mi">30</span><span class="p">))</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">624</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">python_random_uniform</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">output</span><span class="o">=</span><span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-        <span class="n">integer_one</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">integer_two</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">variate</span> <span class="o">=</span> <span class="p">((</span><span class="n">integer_one</span><span class="o">&gt;&gt;</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mf">67108864.0</span><span class="o">+</span><span class="p">(</span><span class="n">integer_two</span><span class="o">&gt;&gt;</span><span class="mi">6</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">9007199254740992</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">variate</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
-
-<span class="k">def</span> <span class="nf">r_random_uniform</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-        <span class="n">state</span><span class="o">=</span><span class="n">state32</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">integer_output</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">integer_output</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
-
-<span class="k">def</span> <span class="nf">cplusplus_generate_canonical</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">def</span> <span class="nf">cplusplus_next_float</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-        <span class="n">integer</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">integer</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">),</span> <span class="n">state</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="o">!=</span><span class="n">size</span><span class="p">:</span>
-        <span class="n">next_float</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">cplusplus_next_float</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">next_float</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_float</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
-
-<span class="k">def</span> <span class="nf">cplusplus_boost_uniform_real_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
-        <span class="n">integer_one</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">integer_two</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">variate</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="p">(((</span><span class="n">integer_two</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mf">67108864.0</span><span class="o">+</span><span class="p">(</span><span class="n">integer_one</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">9007199254740992</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">variate</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
-
-<span class="c1"># Below I define some other functions that are present within the boost library for C++</span>
-<span class="c1"># and are required when generating variates for the normal and exponential distribution</span>
-
-<span class="k">def</span> <span class="nf">cplusplus_boost_uniform_01</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">def</span> <span class="nf">next_float</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">factor</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">result</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">result</span><span class="o">*</span><span class="n">factor</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">result</span><span class="o">*</span><span class="n">factor</span><span class="p">,</span> <span class="n">state</span>
-    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">)</span><span class="o">!=</span><span class="n">size</span><span class="p">:</span>
-        <span class="n">n1</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">next_float</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">state</span>
-
-<span class="k">def</span> <span class="nf">cplusplus_boost_generate_int_float_pair</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">generate_one_digit</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="n">generator_range</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">y0_mask</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="n">bits</span><span class="o">-</span><span class="mi">1</span>
-        <span class="n">y0</span> <span class="o">=</span> <span class="n">generator_range</span><span class="o">+</span><span class="mi">1</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">y0_mask</span>
-        <span class="n">u1</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">while</span> <span class="n">y0</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">u1</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">y0</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">u1</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">mt19937_next</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">u1</span><span class="p">,</span> <span class="n">state</span>
-    <span class="n">m</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">bucket</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">digits</span> <span class="o">=</span> <span class="mi">53</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">generate_one_digit</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">w</span> <span class="o">%</span> <span class="n">m</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span>
-    <span class="n">bucket</span> <span class="o">=</span> <span class="p">(</span><span class="n">bucket</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">w</span> <span class="o">%</span> <span class="n">m</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">u</span><span class="p">)</span>
-    <span class="n">mult</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">m</span><span class="o">-</span><span class="n">w</span> <span class="o">%</span> <span class="n">m</span><span class="p">))</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">u</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">w</span> <span class="o">%</span> <span class="n">m</span><span class="p">))</span><span class="o">*</span><span class="n">mult</span>
-    <span class="n">remaining</span> <span class="o">=</span> <span class="n">digits</span><span class="o">-</span><span class="n">m</span><span class="o">+</span><span class="p">(</span><span class="n">w</span> <span class="o">%</span> <span class="n">m</span><span class="p">)</span> <span class="o">%</span> <span class="n">m</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">generate_one_digit</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-    <span class="n">r</span> <span class="o">+=</span> <span class="n">u</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">remaining</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">mult</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">remaining</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="n">r</span> <span class="o">*=</span> <span class="n">mult</span>
-    <span class="k">return</span> <span class="n">r</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">state</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Requirement already satisfied: numpy in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (1.23.2)
-Requirement already satisfied: rpy2 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (3.5.4)
-Requirement already satisfied: cffi&gt;=1.10.0 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from rpy2) (1.15.1)
-Requirement already satisfied: jinja2 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from rpy2) (3.1.2)
-Requirement already satisfied: pytz in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from rpy2) (2022.2.1)
-Requirement already satisfied: tzlocal in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from rpy2) (4.2)
-Requirement already satisfied: packaging in c:\users\thoma\appdata\roaming\python\python39\site-packages (from rpy2) (21.3)
-Requirement already satisfied: pycparser in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from cffi&gt;=1.10.0-&gt;rpy2) (2.21)
-Requirement already satisfied: MarkupSafe&gt;=2.0 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from jinja2-&gt;rpy2) (2.1.1)
-Requirement already satisfied: pyparsing!=3.0.5,&gt;=2.0.2 in c:\users\thoma\appdata\roaming\python\python39\site-packages (from packaging-&gt;rpy2) (3.0.9)
-Requirement already satisfied: pytz-deprecation-shim in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from tzlocal-&gt;rpy2) (0.1.0.post0)
-Requirement already satisfied: tzdata in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from tzlocal-&gt;rpy2) (2022.2)
-Requirement already satisfied: matplotlib in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (3.5.3)
-Requirement already satisfied: fonttools&gt;=4.22.0 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from matplotlib) (4.37.1)
-Requirement already satisfied: pyparsing&gt;=2.2.1 in c:\users\thoma\appdata\roaming\python\python39\site-packages (from matplotlib) (3.0.9)
-Requirement already satisfied: cycler&gt;=0.10 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from matplotlib) (0.11.0)
-Requirement already satisfied: packaging&gt;=20.0 in c:\users\thoma\appdata\roaming\python\python39\site-packages (from matplotlib) (21.3)
-Requirement already satisfied: kiwisolver&gt;=1.0.1 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from matplotlib) (1.4.4)
-Requirement already satisfied: pillow&gt;=6.2.0 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from matplotlib) (9.2.0)
-Requirement already satisfied: python-dateutil&gt;=2.7 in c:\users\thoma\appdata\roaming\python\python39\site-packages (from matplotlib) (2.8.2)
-Requirement already satisfied: numpy&gt;=1.17 in c:\users\thoma\appdata\local\programs\python\python39\lib\site-packages (from matplotlib) (1.23.2)
-Requirement already satisfied: six&gt;=1.5 in c:\users\thoma\appdata\roaming\python\python39\site-packages (from python-dateutil&gt;=2.7-&gt;matplotlib) (1.16.0)
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Introduction">Introduction<a class="anchor-link" href="#Introduction">&#182;</a></h1><p>This is a secondary report to the main report, where I will discuss how we can generate variates from other distribution across the three languages. We will mainly concern ourselves with the normal distribution and the exponential distribution.</p>
-
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Generating-Exponential-Variates">Generating Exponential Variates<a class="anchor-link" href="#Generating-Exponential-Variates">&#182;</a></h1><h2 id="Python">Python<a class="anchor-link" href="#Python">&#182;</a></h2><p>For this python uses the inverse-CDF method by default, despite having an implementation of the Ziggurat method within the source code and stating within the documentation that the Ziggurat method is used.</p>
-<h2 id="R">R<a class="anchor-link" href="#R">&#182;</a></h2><p>R uses an algorithm attributed to JH Ahrens and U Dieter in order to generate the exponential variates.</p>
-<h2 id="C++">C++<a class="anchor-link" href="#C++">&#182;</a></h2><p>The standard library in C++ has an <code>exponential_distribution</code> function to generate exponential variates. It uses the inverse-CDF method in order to generate its variates. 
+<h1 id="Generating-Exponential-Variates">Generating Exponential Variates</h1>
+<h2 id="Python">Python</h2>
+<p>For this python uses the inverse-CDF method by default, despite having an implementation of the Ziggurat method within the source code and stating within the documentation that the Ziggurat method is used.</p>
+<h2 id="R">R</h2>
+<p>R uses an algorithm attributed to JH Ahrens and U Dieter in order to generate the exponential variates.</p>
+<h2 id="C++">C++</h2>
+<p>The standard library in C++ has an <code>exponential_distribution</code> function to generate exponential variates. It uses the inverse-CDF method in order to generate its variates. 
 The boost library has a similar <code>exponential_distribution</code> function to generate variates from the standard exponential. However, it generates the variates using the Ziggurat method (explain in the appendix).</p>
-<h2 id="Code-Implementation">Code Implementation<a class="anchor-link" href="#Code-Implementation">&#182;</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<h2 id="Code-Implementation">Code Implementation</h2>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">python_random_exponential_inv</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -7020,22 +6776,14 @@ The boost library has a similar <code>exponential_distribution</code> function t
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Testing">Testing<a class="anchor-link" href="#Testing">&#182;</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+
+<h2 id="Testing">Testing</h2>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Python'</span><span class="p">)</span>
@@ -7107,25 +6855,21 @@ Variates from the boost random library:
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Generating-Normal-Variates">Generating Normal Variates<a class="anchor-link" href="#Generating-Normal-Variates">&#182;</a></h1><h2 id="Python">Python<a class="anchor-link" href="#Python">&#182;</a></h2><h2 id="R">R<a class="anchor-link" href="#R">&#182;</a></h2><p>To generate its normal variates R uses the inverse-CDF method. However, by looking through the source code it is clear that it has the ability to use a vast array of other algorithms. 
+
+<h1 id="Generating-Normal-Variates">Generating Normal Variates</h1>
+<h2 id="Python">Python</h2>
+<h2 id="R">R</h2>
+<p>To generate its normal variates R uses the inverse-CDF method. However, by looking through the source code it is clear that it has the ability to use a vast array of other algorithms. 
 The algorithms are implemented such that they sample from a standard normal, the variates are subsequently scaled if we are considering non-standard normal distributions.</p>
-<h2 id="C++">C++<a class="anchor-link" href="#C++">&#182;</a></h2><p>The boost library generates its variates using the Ziggurat method.</p>
-<h2 id="Code-Implementation">Code Implementation<a class="anchor-link" href="#Code-Implementation">&#182;</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<h2 id="C++">C++</h2>
+<p>The boost library generates its variates using the Ziggurat method.</p>
+<h2 id="Code-Implementation">Code Implementation</h2>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">r_random_normal</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -7298,23 +7042,15 @@ The algorithms are implemented such that they sample from a standard normal, the
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Testing">Testing<a class="anchor-link" href="#Testing">&#182;</a></h2><p>Below we will conduct some test to see whether our functions work in practice.</p>
 
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<h2 id="Testing">Testing</h2>
+<p>Below we will conduct some test to see whether our functions work in practice.</p>
+
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'R'</span><span class="p">)</span>
@@ -7367,13 +7103,10 @@ Variates from the boost random library:
 </div>
 
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Appendix">Appendix<a class="anchor-link" href="#Appendix">&#182;</a></h1><h2 id="Ziggurat-Method">Ziggurat Method<a class="anchor-link" href="#Ziggurat-Method">&#182;</a></h2><p>Each of the programming languages mentions that it has some way of implementing the Ziggurat method to generate variates from other distributions, particularly those with decreasing densities. It uses a form of rejection sampling to generate it's variates and works in the following way.</p>
+
+<h1 id="Appendix">Appendix</h1>
+<h2 id="Ziggurat-Method">Ziggurat Method</h2>
+<p>Each of the programming languages mentions that it has some way of implementing the Ziggurat method to generate variates from other distributions, particularly those with decreasing densities. It uses a form of rejection sampling to generate it's variates and works in the following way.</p>
 <p>We choose a covering set $\left(\mathcal{Z}\right)$ for the area under a density $f(x)$ $\left(\mathcal{C}\right)$ which consists of a set of rectangles of equal area ($v$) stacked on top of each other, with the bottom strip tailing off to infinity. We will label the right most co-ordinate of rectangle $i$ $\left(R_i\right)$ by $x_i$. So we have that $0=x_0&lt;x_1&lt;x_2&lt;\dots$</p>
 <p>If a random rectangle $R_i$ is selected then a random point in $R_i$ is $Ux_i$ with $U$ uniform $(0,1)$, and if $x&lt;x_{i-1}$ then our random point $(x,y)$ must be in $\mathcal{C}$ and so we can confirm the point $x$ without having to calculate $y$.</p>
 <p>Let $r$ be the rightmost $x_i$. We may generate from the base strip as follows:</p>
@@ -7395,16 +7128,6 @@ Variates from the boost random library:
 <p>Here $w_i=2^{31}x_i$ and $k_i=\lfloor2^{32}(\frac{x_{i-1}}{x_i})\rfloor$ for $1\leq i\leq 255$ and for $i=0$ $k_0=\lfloor 2^{32}\frac{rf(r)}{v}\rfloor$ and $w_0=2^{31}\frac{v}{f(r)}$</p>
 <p>So for each density we consider we need to find the appropriate values of $r$ and $v$, and consequently $x_i$, to form our rectangles for our covering set $\mathcal{Z}$. We can then sample from $\mathcal{Z}$ and reject samples according to our algorithm to generate variates of our desired distribution. The rejection rate for this algorithm is very low making it efficient (for most distributions a sample $x$ is accepted around $98$% of the time).</p>
 
-</div>
-</div>
-</div>
-</div>
 </body>
-
-
-
-
-
-
 
 </html>

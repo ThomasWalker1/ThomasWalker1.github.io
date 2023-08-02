@@ -6523,8 +6523,10 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <h1 id="Introduction">Introduction</h1>
 <p>In this notebook I will outline the main method used to generate pseudo random numbers in programming languages. Leading on from this we will then explore how the programming languages use these number to generate uniform variates. As a consequence we will be able to construct methods such that we can align pseudo random number generation across the programming languages. This research only concerns itself with Python, R and C++. For python we will consider the random functions within the numpy library, for R we will only concern ourselves with the standard random functions its employs, and for C++ we will look into both its standard random functions and those facilitated by the boost library.</p>
 
-<h1 id="The-Mersenne-Twister">The Mersenne Twister<a class="anchor-link" href="#The-Mersenne-Twister">&#182;</a></h1><p>This is a very popular pseudo random number generator (PRNG) used by programming languages. Although many offer the option to use other PRNG, often the default is an instance of The Mersenne Twister. The reason for its popularity is its large period (which we will discuss in due course, as its dependent on the particular instance of The Mersenne Twister algorithm we implement) and the strong result it provides for the $k$-distribution test.</p>
-<h2 id="$k$-distribution-test">$k$-distribution test<a class="anchor-link" href="#$k$-distribution-test">&#182;</a></h2><p>This is a test that attempts to provide an indication whether a PRNG is 'random'. The general outline of the test is as follows:</p>
+<h1 id="The-Mersenne-Twister">The Mersenne Twister</h1>
+<p>This is a very popular pseudo random number generator (PRNG) used by programming languages. Although many offer the option to use other PRNG, often the default is an instance of The Mersenne Twister. The reason for its popularity is its large period (which we will discuss in due course, as its dependent on the particular instance of The Mersenne Twister algorithm we implement) and the strong result it provides for the $k$-distribution test.</p>
+<h2 id="$k$-distribution-test">$k$-distribution test</h2>
+<p>This is a test that attempts to provide an indication whether a PRNG is 'random'. The general outline of the test is as follows:</p>
 <ul>
 <li>We have a pseudorandom sequence, $x_i$, of $w$-bit integers of period $P$. </li>
 <li>We consider the vectors formed by the leading $v$ bits of $k$ of these $w$-bit integers<ul>
@@ -6536,7 +6538,8 @@ $$(trunc_v(x_i),trunc_v(x_{i+1}),\dots,trunc_v(x_{i+k-1}),\quad\text{for } 0\leq
 </ul>
 <p>The source provides an illustrative geometric understanding of the test, and why it is useful to consider.</p>
 <h2 id="Terminology">Terminology<a class="anchor-link" href="#Terminology">&#182;</a></h2><p>To understand how the algorithm works we should clear up some terminology. We will be dealing with <em>words</em> of size $w$, that is we are considering integers between $0$ and $2^w-1$. For a given word we can associate with it a <em>word vector</em>, this is simply a $w$-dimensional row vector over $\mathbb{F}_2$. We associate the two by the binary representation of the word, the least significant bit appear to the right. To denote these word vectors we will use bold vector notation, $\mathbf{x}$.</p>
-<h2 id="The-Algorithm">The Algorithm<a class="anchor-link" href="#The-Algorithm">&#182;</a></h2><p>The Mersenne Twister algorithm employs a linear recurrence to generate $32$-bit integer words, and then to improve its performance on the $k$-distribution test it employs what is called a <em>tempering</em> stage. Essentially, this involves transforming the outputted $32$-bit integer word by right multiplying its associated word vector by a $w \times w$ invertible matrix. The specific linear recurrence employed is the following:</p>
+<h2 id="The-Algorithm">The Algorithm</h2>
+<p>The Mersenne Twister algorithm employs a linear recurrence to generate $32$-bit integer words, and then to improve its performance on the $k$-distribution test it employs what is called a <em>tempering</em> stage. Essentially, this involves transforming the outputted $32$-bit integer word by right multiplying its associated word vector by a $w \times w$ invertible matrix. The specific linear recurrence employed is the following:</p>
 $$\mathbf{x}_{k+n}:=\mathbf{x}_{k+m}\oplus(\mathbf{x}_k^u\vert x_{k+1}^l)\mathbf{A}, \quad(k=0,1,\dots)$$<p>Where:</p>
 <ul>
 <li>$n$: The degree of the recurrence (Integer)</li>
@@ -6559,7 +6562,8 @@ $$\begin{align*}
 \end{align*}$$<p>Where $u,s,t$, and $l$ are integers
 $&lt;&lt;k$ denotes a left bit shift by $K$ and $&gt;&gt;k$ denotes a right bit shift by $k$.
 $\mathbf{b}$ and $\mathbf{c}$ are called bitmasks.</p>
-<h2 id="MT19937">MT19937<a class="anchor-link" href="#MT19937">&#182;</a></h2><p>Python, R and C++ each employ the MT19937 instance of the The Mersenne Twister algorithm, we is simply a version of the algorithm where the parameters take on specific values. The choice of these parameters is important as it affects the size of the period for the sequence of random numbers generated, as well as their distribution amongst the bits.
+<h2 id="MT19937">MT19937</h2>
+<p>Python, R and C++ each employ the MT19937 instance of the The Mersenne Twister algorithm, we is simply a version of the algorithm where the parameters take on specific values. The choice of these parameters is important as it affects the size of the period for the sequence of random numbers generated, as well as their distribution amongst the bits.
 MT19937 period parameters:</p>
 <ul>
 <li>$w=32$</li>
