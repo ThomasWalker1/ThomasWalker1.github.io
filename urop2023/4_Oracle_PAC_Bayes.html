@@ -379,20 +379,25 @@ code {
   </script>
 <h1 id="4-oracle-pac-bayes-bounds">4 Oracle PAC-Bayes Bounds</h1>
 <h2 id="41-theory-of-oracle-pac-bayes-bounds">4.1 Theory of Oracle PAC-Bayes Bounds</h2>
-<p>Oracle bounds are theoretical objects that are not suitable for practical applications. Their utility lies in their ability to highlight properties about the behaviour of the bounds and they can take the form
-$$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\mathbf{w}}\right)\leq\inf_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w})+r_m(\delta)\right)\geq1-\delta.$$
-Where $r_m(\delta)$ is a remainder term that tends to $0$ as $m$ tends to $\infty$. Although this bound cannot be computed in practice it is illustrative of the behaviour of the bound. Just like empirical bounds, there exist oracle bounds that hold in expectation and in probability.</p>
+<p>
+	Oracle bounds are theoretical objects that are not suitable for practical applications. Their utility lies in their ability to highlight properties about the behaviour of the bounds and they can take the form $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\mathbf{w}}\right)\leq\inf_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w})+r_m(\delta)\right)\geq1-\delta.$$ Where $r_m(\delta)$ is a remainder term that tends to $0$ as $m$ tends to $\infty$. Although this bound cannot be computed in practice it is illustrative of the behaviour of the bound. Just like empirical bounds, there exist oracle bounds that hold in expectation and in probability.
+</p>
 <h3 id="411-oracle-pac-bayes-bounds-in-expectation">4.1.1 Oracle PAC-Bayes Bounds in Expectation</h3>
-<p><strong>Theorem 4.1</strong> For $\lambda&gt;0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$</p>
+<p>
+	<strong>Theorem 4.1</strong> For $\lambda&gt;0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-<p>We proceed from Corollary 3.9 to deduce that
-$$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\rho}_{\lambda}\right)\right)&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\right)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)\right)\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\end{align}$$
-where Fubini's theorem has been applied in the last inequality. Recalling that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$ completes the proof of the theorem. $\square$</p>
+<p>
+	We proceed from Corollary 3.9 to deduce that $$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}\left(R\left(\hat{\rho}_{\lambda}\right)\right)&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\rho)\right)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\\&=\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(\mathbb{E}_{\mathbf{w}\sim\rho}\left(\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)\right)\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\end{align}$$ where Fubini's theorem has been applied in the last inequality. Recalling that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$ completes the proof of the theorem. $\square$
+</p>
 </details>
 <h3 id="412-oracle-pac-bayes-bounds-in-probability">4.1.2 Oracle PAC-Bayes Bounds in Probability</h3>
-<p><strong>Theorem 4.2</strong> For any $\lambda&gt;0$, and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{4m}+\frac{2\mathrm{KL}(\rho,\pi)+\log\left(\frac{2}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$</p>
+<p>
+	<strong>Theorem 4.2</strong>
+	For any $\lambda&gt;0$, and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{4m}+\frac{2\mathrm{KL}(\rho,\pi)+\log\left(\frac{2}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
@@ -407,8 +412,14 @@ $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\
 We can simply replace the $\delta$ with $\frac{\delta}{2}$ to complete the proof. $\square$</p>
 </details>
 <h3 id="bernsteins-assumption">Bernstein's Assumption</h3>
-<p><strong>Definition 4.3</strong> Let $\mathbf{w}^*$ denote a minimizer of $R$ when it exists, $$R(\mathbf{w}^*)=\min_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w}).$$ When $\mathbf{w}^*$ exists and there is a constant $K$ such that for any $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\left(l(h_{\mathbf{w}}(x_i),y_i)-l(h_{\mathbf{w}^*}(x_i),y_i)\right)^2\right)\leq K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)$$ we say that Bernstein's assumption is satisfied with constant $K$.</p>
-<p><strong>Theorem 4.4</strong> Assume Bernstein's assumption is satisfied with some constant $K&gt;0$. Take $\lambda=\frac{m}{\max(2K,C)}$ then we have $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})-R\left(\mathbf{w}^*\right)\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)-R\left(\mathbf{w}^*\right)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right).$$</p>
+<p>
+	<strong>Definition 4.3</strong>
+	Let $\mathbf{w}^*$ denote a minimizer of $R$ when it exists, $$R(\mathbf{w}^*)=\min_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w}).$$ When $\mathbf{w}^*$ exists and there is a constant $K$ such that for any $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\left(l(h_{\mathbf{w}}(x_i),y_i)-l(h_{\mathbf{w}^*}(x_i),y_i)\right)^2\right)\leq K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)$$ we say that Bernstein's assumption is satisfied with constant $K$.
+</p>
+<p>
+	<strong>Theorem 4.4</strong>
+	Assume Bernstein's assumption is satisfied with some constant $K&gt;0$. Take $\lambda=\frac{m}{\max(2K,C)}$ then we have $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})-R\left(\mathbf{w}^*\right)\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)-R\left(\mathbf{w}^*\right)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right).$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
@@ -455,8 +466,12 @@ $$\begin{align}\mathbb{E}_{S\sim\mathcal{D}^m}(R(\hat{\rho}_{\lambda}))&\leq2\ma
 which completes the proof.$\square$</p>
 </details>
 <h2 id="42-data-driven-pac-bayes-bounds">4.2 Data Driven PAC-Bayes Bounds</h2>
-<p>A lot of work to obtain non-vacuous PAC-Bayes bounds is to develop priors that reduce the size of the KL divergence between the prior and the posterior. The idea behind the work of (Dziugaite, 2020) is to hold out some of the training data to obtain data-inspired priors. For this section, we use a PAC-Bayes bound that can be thought of as the Bayesian equivalent of Theorem 2.2, however, now we are dealing with potentially uncountable hypothesis sets.</p>
-<p><strong>Theorem 4.5</strong> (McAllester, 2013) For $\lambda&gt;\frac{1}{2}$ selected before drawing our training sample, then for all $\rho\in\mathcal{M}(\mathcal{W})$ and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{\rho})+\frac{\lambda C}{m}\left(\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$</p>
+<p>
+	A lot of work to obtain non-vacuous PAC-Bayes bounds is to develop priors that reduce the size of the KL divergence between the prior and the posterior. The idea behind the work of (Dziugaite, 2020) is to hold out some of the training data to obtain data-inspired priors. For this section, we use a PAC-Bayes bound that can be thought of as the Bayesian equivalent of Theorem 2.2, however, now we are dealing with potentially uncountable hypothesis sets.</p>
+<p>
+	<strong>Theorem 4.5</strong>
+	(McAllester, 2013) For $\lambda&gt;\frac{1}{2}$ selected before drawing our training sample, then for all $\rho\in\mathcal{M}(\mathcal{W})$ and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{\rho})+\frac{\lambda C}{m}\left(\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
@@ -505,30 +520,43 @@ By the convexity of $\mathrm{kl}_{\gamma}$ we get that
 $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(m\mathrm{kl}_{\gamma}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)\right)\geq1-\delta.$$
 Therefore, by re-arranging and applying Lemma 1 the proof of the theorem is complete. $\square$.</p>
 </details>
-<p><strong>Corollary 4.6</strong> (Dziugaite, 2020) Let $\beta,\delta\in(0,1)$, $\mathcal{D}$ a probability distribution over $\mathcal{Z}$, and $\pi\in\mathcal{M}(\mathcal{W})$. Then for all $\rho\in\mathcal{M}(\mathcal{W})$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Psi_{\beta,\delta}(\rho,\pi;S)\right)\geq1-\delta,$$ where $\Psi_{\beta,\delta}(\rho,\pi;S)=\frac{1}{\beta}\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{2\beta(1-\beta)m}.$</p>
+<p>
+	<strong>Corollary 4.6</strong>
+	(Dziugaite, 2020) Let $\beta,\delta\in(0,1)$, $\mathcal{D}$ a probability distribution over $\mathcal{Z}$, and $\pi\in\mathcal{M}(\mathcal{W})$. Then for all $\rho\in\mathcal{M}(\mathcal{W})$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\leq\Psi_{\beta,\delta}(\rho,\pi;S)\right)\geq1-\delta,$$ where $\Psi_{\beta,\delta}(\rho,\pi;S)=\frac{1}{\beta}\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)+\log\left(\frac{1}{\delta}\right)}{2\beta(1-\beta)m}.$
+</p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>This is the result of the previous Theorem 4.5 with $\lambda=\frac{1}{2(1-\beta)}$ and $C=1$.</p>
 </details>
-<p>As we have done previously, we can consider the optimization problem of minimizing the bound of Corollary 4.6.</p>
-<p><strong>Theorem 4.7</strong> (Dziugaite, 2020) Let $m\in\mathbb{N}$ and fix a probability kernel $\rho:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$. Then for all $\beta,\delta\in(0,1)$ and distributions $\mathcal{D}$ defined on $\mathcal{Z}$ we that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\Psi_{\beta,\delta}(\rho(S),\pi;S)\right)$ is minimized, in $\pi$, by the oracle prior $\pi^*=\mathbb{E}_{S\sim\mathcal{D}^m}(\rho(S))$.</p>
-<p>For a subset $J$ of ${1,\dots,m}$ of size $n$, we can use it to sample the training data and yield the subset $S_J$. We can then define the data-dependent oracle prior as $$\pi^*(S_J)=\inf_{\pi\in\mathcal{Z}^n\to\mathcal{M}(\mathcal{W})}\mathbb{E}(\mathrm{KL}(\rho(s),\pi(S_J)))$$
-which turns out to be $\pi^*(S_J)=\mathbb{E}(\rho(S)\vert S_J)$. It can be shown that the data-dependent oracle prior minimizes the bound of Corollary 4.6 in expectation. Therefore, despite being a theoretical quantity, as it cannot be computed in practice, it motivates the construction of practical data-dependent priors as a method to tighten the bounds.</p>
+<p>
+	As we have done previously, we can consider the optimization problem of minimizing the bound of Corollary 4.6.
+</p>
+<p>
+	<strong>Theorem 4.7</strong>
+	(Dziugaite, 2020) Let $m\in\mathbb{N}$ and fix a probability kernel $\rho:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$. Then for all $\beta,\delta\in(0,1)$ and distributions $\mathcal{D}$ defined on $\mathcal{Z}$ we that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\Psi_{\beta,\delta}(\rho(S),\pi;S)\right)$ is minimized, in $\pi$, by the oracle prior $\pi^*=\mathbb{E}_{S\sim\mathcal{D}^m}(\rho(S))$.
+</p>
+<p>
+	For a subset $J$ of ${1,\dots,m}$ of size $n$, we can use it to sample the training data and yield the subset $S_J$. We can then define the data-dependent oracle prior as $$\pi^*(S_J)=\inf_{\pi\in\mathcal{Z}^n\to\mathcal{M}(\mathcal{W})}\mathbb{E}(\mathrm{KL}(\rho(s),\pi(S_J)))$$ which turns out to be $\pi^*(S_J)=\mathbb{E}(\rho(S)\vert S_J)$. It can be shown that the data-dependent oracle prior minimizes the bound of Corollary 4.6 in expectation. Therefore, despite being a theoretical quantity, as it cannot be computed in practice, it motivates the construction of practical data-dependent priors as a method to tighten the bounds.
+</p>
 <h3 id="421-implementing-data-dependent-priors">4.2.1 Implementing Data-Dependent Priors</h3>
-<p>To implement data-dependent priors we restrict the optimization problem to make it tractable. We only consider the set of Gaussian priors $\mathcal{F}$ that generate Gaussian posteriors. Neural networks are trained via SGD, and hence there is some randomness to the learning algorithm. Let $(\Omega,\mathcal{F},\nu)$ define a probability space and let us focus on the kernels
-$$\rho:\Omega\times\mathcal{Z}^m\to\mathcal{M}(\mathcal{W}),\quad\rho(U,S)=\mathcal{N}(\mathbf{w}_S,\mathbf{s}),$$
-where $\mathbf{w}_S$ are the learned weights via SGD on the full dataset $S$. The random variable $U$ represents the randomness of the learning algorithm. As before we consider a non-negative integer $n\leq m$ and with $\alpha=\frac{n}{m}$ we define a subset $S_{\alpha}$ of size $n$ containing the first $n$ indices of $S$ processed by SGD. Let $\mathbb{E}^{S_{\alpha},U}[\cdot]$ denote the conditional expectation operator given $S_{\alpha}$ and $U$. Our aim now is to tighten the bound of Corollary 4.6 by minimizing $\mathbb{E}^{S_{\alpha},U}(\mathrm{KL}(\rho(U,S),\pi))$. To do this we further restrict the priors of consideration to those of the form $\mathcal{N}(\mathbf{w}_{\alpha},\sigma I)$ such that with $\sigma$ fixed we are left with the minimization problem
-$$\begin{equation}
-\mathrm{argmin}_{\mathbf{w}_{\alpha}}\left(\mathbb{E}^{S_{\alpha},U}\left(\Vert\mathbf{w}_S-\mathbf{w}_{\alpha}\Vert\right)\right),\quad(1)
-\end{equation}$$
-which can be solved to yield $\mathbf{w}_{\alpha}=\mathbb{E}^{S_{\alpha},U}(\mathbf{w}_S)$. This minimizer is unknown in practice so we attempt to approximate it. We first define a so-called ghost sample, $S^G$, which is an independent sample equal in distribution to $S$. We combine a $1-\alpha$ fraction of $S^G$ with $S_{\alpha}$ to obtain the sample $S_{\alpha}^G$. Let $\mathbf{w}_{\alpha}^G$ be the mean of $\rho(U,S_{\alpha}^G)$. By construction, SGD will first process $S_{\alpha}$ then the combined portion of $S^G$ and hence $\mathbf{w}_{\alpha}^G$ and $\mathbf{w}_S$ are equal in distribution when conditioned on $S_{\alpha}$ and $U$. Therefore, $\mathbf{w}_{\alpha}^G$ is an unbiased estimator of $\mathbb{E}^{S_{\alpha},U}(\mathbf{w}_S)$. Before formalizing this process algorithmically we clarify some notation.</p>
+<p>
+	To implement data-dependent priors we restrict the optimization problem to make it tractable. We only consider the set of Gaussian priors $\mathcal{F}$ that generate Gaussian posteriors. Neural networks are trained via SGD, and hence there is some randomness to the learning algorithm. Let $(\Omega,\mathcal{F},\nu)$ define a probability space and let us focus on the kernels $$\rho:\Omega\times\mathcal{Z}^m\to\mathcal{M}(\mathcal{W}),\quad\rho(U,S)=\mathcal{N}(\mathbf{w}_S,\mathbf{s}),$$ where $\mathbf{w}_S$ are the learned weights via SGD on the full dataset $S$. The random variable $U$ represents the randomness of the learning algorithm. As before we consider a non-negative integer $n\leq m$ and with $\alpha=\frac{n}{m}$ we define a subset $S_{\alpha}$ of size $n$ containing the first $n$ indices of $S$ processed by SGD. Let $\mathbb{E}^{S_{\alpha},U}[\cdot]$ denote the conditional expectation operator given $S_{\alpha}$ and $U$. Our aim now is to tighten the bound of Corollary 4.6 by minimizing $\mathbb{E}^{S_{\alpha},U}(\mathrm{KL}(\rho(U,S),\pi))$. To do this we further restrict the priors of consideration to those of the form $\mathcal{N}(\mathbf{w}_{\alpha},\sigma I)$ such that with $\sigma$ fixed we are left with the minimization problem $$\begin{equation}\mathrm{argmin}_{\mathbf{w}_{\alpha}}\left(\mathbb{E}^{S_{\alpha},U}\left(\Vert\mathbf{w}_S-\mathbf{w}_{\alpha}\Vert\right)\right),\quad(1)\end{equation}$$ which can be solved to yield $\mathbf{w}_{\alpha}=\mathbb{E}^{S_{\alpha},U}(\mathbf{w}_S)$. This minimizer is unknown in practice so we attempt to approximate it. We first define a so-called ghost sample, $S^G$, which is an independent sample equal in distribution to $S$. We combine a $1-\alpha$ fraction of $S^G$ with $S_{\alpha}$ to obtain the sample $S_{\alpha}^G$. Let $\mathbf{w}_{\alpha}^G$ be the mean of $\rho(U,S_{\alpha}^G)$. By construction, SGD will first process $S_{\alpha}$ then the combined portion of $S^G$ and hence $\mathbf{w}_{\alpha}^G$ and $\mathbf{w}_S$ are equal in distribution when conditioned on $S_{\alpha}$ and $U$. Therefore, $\mathbf{w}_{\alpha}^G$ is an unbiased estimator of $\mathbb{E}^{S_{\alpha},U}(\mathbf{w}_S)$. Before formalizing this process algorithmically we clarify some notation.
+</p>
 <ul>
-<li>The SGD run on $S$ is the base run.</li>
-<li>The SGD run on $S_{\alpha}$ is the $\alpha$ -prefix run.</li>
-<li>The SGD run on $S_{\alpha}^G$ is the $\alpha$ -prefix $+$ ghost run and obtains the parameters $\mathbf{w}_{\alpha}^G$.</li>
+<li>
+	The SGD run on $S$ is the base run.
+</li>
+<li>
+	The SGD run on $S_{\alpha}$ is the $\alpha$ -prefix run.
+</li>
+<li>
+	The SGD run on $S_{\alpha}^G$ is the $\alpha$ -prefix $+$ ghost run and obtains the parameters $\mathbf{w}_{\alpha}^G$.
+</li>
 </ul>
-<p>The resulting parameters of the $\alpha$ -prefix and $\alpha$ -prefix $+$ ghost run can be used as the centres of the Gaussian priors to give the tightened generalization bounds. However, sometimes the ghost sample is not attainable in practice, and hence one simply relies upon $\alpha$ -prefix runs to obtain the mean of the prior. It is not clear whether $\alpha$ -prefix $+$ ghost run will always obtain a parameter that leads to a tighter generalization bound. Recall, that $\sigma$ is assumed to be fixed in the optimization process. Algorithm 7 is independent of this parameter and so it can be optimized afterwards without requiring a re-run of the optimization process.</p>
+<p>
+	The resulting parameters of the $\alpha$ -prefix and $\alpha$ -prefix $+$ ghost run can be used as the centres of the Gaussian priors to give the tightened generalization bounds. However, sometimes the ghost sample is not attainable in practice, and hence one simply relies upon $\alpha$ -prefix runs to obtain the mean of the prior. It is not clear whether $\alpha$ -prefix $+$ ghost run will always obtain a parameter that leads to a tighter generalization bound. Recall, that $\sigma$ is assumed to be fixed in the optimization process. Algorithm 7 is independent of this parameter and so it can be optimized afterwards without requiring a re-run of the optimization process.
+</p>
 <p><font size="3"> <strong>Algorithm 6</strong> Stochastic Gradient Descent</font></p>
 <blockquote>
 <p><strong>Require:</strong> Learning rate $\eta$<br>
