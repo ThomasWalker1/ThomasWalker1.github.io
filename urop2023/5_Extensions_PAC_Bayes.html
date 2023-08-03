@@ -447,7 +447,7 @@ code {
 <summary>Proof</summary>
 <br>
 <p>
-	To prove this we start from Lemma 5.4.2 and integrate with respect to $\pi$ to get that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\pi)\right)-\hat{R}(\pi)\right)\right)\right)\leq1.$$ Which for any posterior $\rho$ can be written as $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\rho)\right)-\hat{R}(\rho)\right)-\log\left(\frac{d\rho}{d\pi}\right)+\log(\delta)\right)\right)\leq\delta.$$. $\square$
+	To prove this we start from Lemma 5.4.2 and integrate with respect to $\pi$ to get that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\pi)\right)-\hat{R}(\pi)\right)\right)\right)\leq1.$$ Which for any posterior $\rho$ can be written as $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\rho)\right)-\hat{R}(\rho)\right)-\log\left(\frac{d\rho}{d\pi}\right)+\log(\delta)\right)\right)\leq\delta.$$ From this we can deduce using by Markov's inequality that $$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\rho)\geq\Phi^{-1}_{\frac{\lambda}{m}}\left(\hat{R}(\rho)+\frac{1}{\lambda}\log\left(\frac{1}{\delta}\frac{d\rho}{d\pi}\right)\right)\right)&=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\rho)\right)-\hat{R}(\rho)\right)-\log\left(\frac{d\rho}{d\pi}\right)+\log(\delta)\right)\geq e^0\right)\\&\leq\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(\lambda\left(\Phi_{\lambda}{m}\left(R(\rho)\right)-\hat{R}(\rho)\right)-\log\left(\frac{d\rho}{d\pi}\right)+\log(\delta)\right)\right)\\&\leq\delta\end{align*}$$ from which when we take complements we complete the proof of the theorem. $\square$
 </p>
 </details>
 <p>
