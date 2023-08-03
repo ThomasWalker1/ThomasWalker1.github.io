@@ -480,7 +480,7 @@ code {
 <summary>Proof</summary>
 <br>
 <p>
-	Let $Z_i=X_i-\mathbb{E}(X_i)$ and $Z=\frac{1}{n}\sum_{i=1}^nZ_i$. Then for $\lambda>0$ we can apply Markov's inequality to deduce that $$\begin{align*}\mathbb{P}(Z\geq\epsilon)&=\mathbb{P}\left(e^{\lambda Z}\geq e^{\lambda\epsilon}\right)\\&\leq e^{-\lambda\epsilon}\mathbb{E}\left(e^{\lambda Z}\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\mathbb{E}\left(\exp\left({\frac{\lambda Z_i}{n}}\right)\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\exp\left(\frac{\lambda^2(b-a)^2}{n^2}\right)\quad\text{ Lemma 2.1.2}\leq\exp\left(-\lambda\epsilon+\frac{\lambda^2(b-a)^2}{8n}\right).\end{align*}$$ Setting $\lambda=\frac{4n\epsilon}{(b-a)^2}$ gives $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$ Applying the same reasoning but for $\mathbb{P}\left(Z\leq-\epsilon)$ and $\lambda=-\frac{4n\epsilon}{(b-a)^2}$ give $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)$$ which completes the proof of the theorem. $\square$
+	Let $Z_i=X_i-\mathbb{E}(X_i)$ and $Z=\frac{1}{n}\sum_{i=1}^nZ_i$. Then for $\lambda>0$ we can apply Markov's inequality to deduce that $$\begin{align*}\mathbb{P}(Z\geq\epsilon)&=\mathbb{P}\left(e^{\lambda Z}\geq e^{\lambda\epsilon}\right)\\&\leq e^{-\lambda\epsilon}\mathbb{E}\left(e^{\lambda Z}\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\mathbb{E}\left(\exp\left({\frac{\lambda Z_i}{n}}\right)\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\exp\left(\frac{\lambda^2(b-a)^2}{n^2}\right)\quad\text{ Lemma 2.1.2}\\&\leq\exp\left(-\lambda\epsilon+\frac{\lambda^2(b-a)^2}{8n}\right).\end{align*}$$ Setting $\lambda=\frac{4n\epsilon}{(b-a)^2}$ gives $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$ Applying the same reasoning but for $\mathbb{P}\left(Z\leq-\epsilon\right)$ and $\lambda=-\frac{4n\epsilon}{(b-a)^2}$ give $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)$$ which completes the proof of the theorem. $\square$
 </p>
 </details>
 <p>
@@ -529,7 +529,9 @@ code {
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
-	
+<p>
+	To prove Chebyshev's inequality we use Markov's inequality, $$\begin{align*}\mathbb{P}\left(\vert X-\mu\vert\geq k\sigma\right)&=\mathbb{P}\left(\vert X-\mu\vert^2\geq k^2\sigma^2\right)\\&\leq\frac{\mathbb{E}\left((X-\mu)^2\right)}{k^2\sigma^2}\\&=\frac{\sigma^2}{k^2\sigma^2}=\frac{1}{k^2}\end{align*}$$ which completes the proof of the theorem. $\square$
+</p>
 </details>
 <p>
 	<strong>Lemma 2.8.2</strong> 
