@@ -451,11 +451,11 @@ code {
 </p>
 </details>
 <p>
-	Theorem 3.4 motivates the study of the data-dependent probability measure $$\begin{equation}\hat{\rho}_{\lambda}=\mathrm{argmin}_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).\end{equation}$$
+	Theorem 3.4 motivates the study of the data-dependent probability measure $$\begin{equation}\hat{\rho}_{\lambda}=\mathrm{argmin}_{\rho\in\mathcal{M}(\mathcal{W})}\left(\hat{R}(\rho)+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right)\quad(1).\end{equation}$$
 </p>
 <p>
 	<strong>Definition 3.5</strong>
-	The optimization problem defined by Equation $(1)$ has the solution $\hat{\rho}_{\lambda}=\pi_{-\lambda\hat{R}}$ given by $$\hat{\rho}_{\lambda}(d\mathbf{w})=\frac{\exp\left(-\lambda\hat{R}(\mathbf{w})\right)\pi(d\mathbf{w})}{\exp\left(-\lambda\hat{R}(\pi)\right)}.$$ This is distribution is known as the Gibbs posterior.
+	The optimization problem defined by Equation $(1)$ has the solution $\hat{\rho}_{\lambda}=\pi_{-\lambda\hat{R}}$ given by $$\hat{\rho}_{\lambda}(d\mathbf{w})=\frac{\exp\left(-\lambda\hat{R}(\mathbf{w})\right)\pi(d\mathbf{w})}{\mathbb{E}\left(\exp\left(-\lambda\hat{R}(\pi)\right)\right)}.$$ This is distribution is known as the Gibbs posterior.
 </p>
 <p>
 	<strong>Corollary 3.6</strong>
