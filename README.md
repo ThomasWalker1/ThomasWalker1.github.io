@@ -4,7 +4,7 @@
 
 ## Projects
 
-[Category Theory for Machine Learning](/category_theory_for_ml/intro.html)
+[Category Theory for Machine Learning] <(/category_theory_for_ml/intro.html)>
 
 [UROP 2022 - Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates](/urop2022/intro.html)
 
