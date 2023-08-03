@@ -513,8 +513,8 @@ code {
 	(Dziugaite, 2020) Let $m\in\mathbb{N}$ and fix a probability kernel $\rho:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$. Then for all $\beta,\delta\in(0,1)$ and distributions $\mathcal{D}$ defined on $\mathcal{Z}$ we that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\Psi_{\beta,\delta}(\rho(S),\pi;S)\right)$ is minimized, in $\pi$, by the oracle prior $\pi^*=\mathbb{E}_{S\sim\mathcal{D}^m}(\rho(S))$.
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-	<summary>Proof</summary>
-	<br>
+<summary>Proof</summary>
+<br>
 </details>
 <p>
 	For a subset $J$ of ${1,\dots,m}$ of size $n$, we can use it to sample the training data and yield the subset $S_J$. We can then define the data-dependent oracle prior as $$\pi^*(S_J)=\inf_{\pi\in\mathcal{Z}^n\to\mathcal{M}(\mathcal{W})}\mathbb{E}(\mathrm{KL}(\rho(s),\pi(S_J)))$$ which turns out to be $\pi^*(S_J)=\mathbb{E}(\rho(S)\vert S_J)$. It can be shown that the data-dependent oracle prior minimizes the bound of Corollary 4.6 in expectation. Therefore, despite being a theoretical quantity, as it cannot be computed in practice, it motivates the construction of practical data-dependent priors as a method to tighten the bounds.
