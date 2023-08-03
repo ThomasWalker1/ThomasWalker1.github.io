@@ -397,7 +397,7 @@ code {
 	<strong>Theorem 2.1.1 (Markov's Inequality)</strong>
 	For $X$ a non-negative random variable and $\alpha>0$ we have that $$\mathbb{P}\left(X\geq\alpha\right)\leq\frac{\mathbb{E}(X)}{\alpha}.$$
 </p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 	
@@ -432,9 +432,9 @@ code {
 <br>
 <p>
 	<strong>Theorem 2.2.1 (Relative Chernoff Bound)</strong>
-	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\frac{1}{n}\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{2}\right)$$
+	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\frac{1}{n}\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{2}\right).$$
 </p>
-<details>
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 	
@@ -530,7 +530,7 @@ code {
 	<strong>Lemma 2.8.3</strong>
 	Let Algorithm 1 $\left(\frac{\gamma}{2},\mathbf{w}\right)$ return vector $\tilde{\mathbf{w}}$. Let, $$\hat{w}_i=\begin{cases}0&\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{h}\\\text{rounding to nearest multiple of }\frac{\gamma}{2\sqrt{h}}&\text{Otherwise.}\end{cases}$$ Then for any fixed $u$ with probability at least $1-\eta$, $\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma.$
 </p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>
