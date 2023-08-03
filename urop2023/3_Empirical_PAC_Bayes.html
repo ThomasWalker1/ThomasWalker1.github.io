@@ -415,11 +415,14 @@ code {
 <br>
 <p>
 	<strong>Theorem 3.4.1 (Jensen's Inequality)</strong>
-	For a convex function $f(x)$ and a random variable $X$ defined on sample space $\mathcal{X}$, if $\mathbb{E}(f(X))$ and $f(\mathbb{E}(X))$ are finite then $$\mathbb{E}(f(X))\geq f(\mathbb{E}(X)).$$ Equality holds if and only if $f$ is a linear function on some convex set $A$ such that $\mathbb{P}(X\in A)=1$. If $f$ doesn't have this property then equality holds if and only if the random variable is constant.
+	For a convex function $f(x)$ (with a Taylor expansion) and a random variable $X$ defined on sample space $\mathcal{X}$, if $\mathbb{E}(f(X))$ and $f(\mathbb{E}(X))$ are finite then $$\mathbb{E}(f(X))\geq f(\mathbb{E}(X)).$$ Equality holds if and only if $f$ is a linear function on some convex set $A$ such that $\mathbb{P}(X\in A)=1$. If $f$ doesn't have this property then equality holds if and only if the random variable is constant.
 </p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-	<summary>Proof</summary>
-	<br>
+<summary>Proof (Mitzenmacher, 2005)</summary>
+<br>
+<p>
+	Let $\mu=\mathbb{E}(X)$, so by assumption we know there is a $c$ such that $$f(x)=f(\mu)+f^{\prime}(\mu)(x-\mu)+\frac{f^{\prime\prime}(c)(x-\mu)^2}{2}\geq f(\mu)+f^\prime(\mu)(x-\mu).$$ Where we have used the fact that $f^{\prime\prime}(c)>0$ due to the convexity of $f$. Taking expectations of both sides we conclude that $$\begin{align*}\mathbb{E}(f(X))&\geq\mathbb{E}\left(f(\mu)+f^{\prime}(u)(X-\mu)\right)\\&=\mathbb{E}(f(\mu))+f^\prime(\mu)\left(\mathbb{E}(X)-\mu\right)\\&=f(\mu)=f\left(\mathbb{E}(X)\right),\end{align*}$$ which completes the proof of the theorem. $\square$
+</p>
 </details>
 <p>
 	<strong>Proposition 3.4.2</strong>
