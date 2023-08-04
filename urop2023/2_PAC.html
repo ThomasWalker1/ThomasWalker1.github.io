@@ -768,7 +768,7 @@ code {
 <summary>Proof</summary>
 <br>
 <p>
-
+	For $x\in\mathcal{X}$ recall that $x^i$ is the vector before activation at layer $i$. Now we also consider $\hat{x}^i$ as the vector before activation for the network with weights $\hat{A}$. For the lemma $x\in\mathcal{X}$ is fixed so let $\xi_i=\left\vert\hat{x}^i-x^i\right\vert$. Now proceed by induction on the statement $$\xi_i\leq\left(1+\frac{1}{d}\right)^i\Vert x\Vert\left(\prod_{j=1}^i\left\Vert A^j\right\Vert_2\right)\sum_{j=1}^i\frac{\left\Vert A^j-\hat{A}^j\right\Vert_2}{\left\Vert A^j\right\Vert_2}.$$ The base case clearly holds as $\xi_0=0$. Therefore, for $i\geq1$ we proceed as follows, $$\begin{align*}\xi&=\left\vert\hat{A}^{i+1}\phi\left(\hat{x}^i\right)-A^{i+1}\phi\left(x^i\right)\right\vert_2\\&=\left\vert\hat{A}^i\left(\phi\left(\hat{x}^i\right)-\phi\left(x^i\right)\right)+\left(\hat{A}^i-A^i\right)\phi\left(x^i\right)\right\vert_2\end{align*}$$
 </p>
 </details>
 <p>
