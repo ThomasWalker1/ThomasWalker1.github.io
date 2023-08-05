@@ -384,7 +384,7 @@ code {
 </p>
 <h3 id="411-oracle-pac-bayes-bounds-in-expectation">4.1.1 Oracle PAC-Bayes Bounds in Expectation</h3>
 <p>
-	<strong>Theorem 4.1</strong>
+	<strong>Theorem 4.1</strong> (Alquier, 2023)
 	For $\lambda>0$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{8m}+\frac{\mathrm{KL}(\rho,\pi)}{\lambda}\right).$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
@@ -407,7 +407,7 @@ code {
 </details>
 <h3 id="412-oracle-pac-bayes-bounds-in-probability">4.1.2 Oracle PAC-Bayes Bounds in Probability</h3>
 <p>
-	<strong>Theorem 4.2</strong>
+	<strong>Theorem 4.2</strong> (Alquier, 2023)
 	For any $\lambda>0$, and $\delta\in(0,1)$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\hat{\rho}_{\lambda})\leq\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)+\frac{\lambda C^2}{4m}+\frac{2\mathrm{KL}(\rho,\pi)+\log\left(\frac{2}{\delta}\right)}{\lambda}\right)\right)\geq1-\delta.$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
@@ -419,11 +419,11 @@ code {
 </details>
 <h3 id="bernsteins-assumption">Bernstein's Assumption</h3>
 <p>
-	<strong>Definition 4.3</strong>
+	<strong>Definition 4.3</strong> (Alquier, 2023)
 	Let $\mathbf{w}^*$ denote a minimizer of $R$ when it exists, $$R(\mathbf{w}^*)=\min_{\mathbf{w}\in\mathcal{W}}R(\mathbf{w}).$$ When $\mathbf{w}^*$ exists and there is a constant $K$ such that for any $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\left(l(h_{\mathbf{w}}(x_i),y_i)-l(h_{\mathbf{w}^*}(x_i),y_i)\right)^2\right)\leq K\left(R(\mathbf{w})-R(\mathbf{w}^*)\right)$$ we say that Bernstein's assumption is satisfied with constant $K$.
 </p>
 <p>
-	<strong>Theorem 4.4</strong>
+	<strong>Theorem 4.4</strong> (Alquier, 2023)
 	Assume Bernstein's assumption is satisfied with some constant $K>0$. Take $\lambda=\frac{m}{\max(2K,C)}$ then we have $$\mathbb{E}_{S\sim\mathcal{D}^m}R(\hat{\rho}_{\lambda})-R\left(\mathbf{w}^*\right)\leq2\inf_{\rho\in\mathcal{M}(\mathcal{W})}\left(R(\rho)-R\left(\mathbf{w}^*\right)+\frac{\max(2K,C)\mathrm{KL}(\rho,\pi)}{m}\right).$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">

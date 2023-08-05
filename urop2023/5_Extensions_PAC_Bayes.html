@@ -402,7 +402,7 @@ code {
 	We can contextualize this bound to over-parameterized neural networks. Suppose that $\mathbf{w}\in\mathbb{R}^d$ is a weight vector of a neural network, with $d\gg m$. Assume that the network is trained for $T$ epochs and that these epochs are used to generate $T$ priors $\mathbf{P}=\{\pi_t\}_{t=1}^T$. Let the priors be of the form $\pi_t=\mathcal{N}\left(\mathbf{w}_t,\sigma^2\mathbf{I}_d\right)$ where $\mathbf{w}_t$ is the weight vector obtained after the $t^\text{th}$ epoch. We assume that the priors are obtained from the learning algorithm being applied to the sample $S_{\mathrm{prior}}$ where $S_{\mathrm{prior}}\cap S=\emptyset$.
 </p>
 <p>
-	<strong>Corollary 5.3</strong>
+	<strong>Corollary 5.3</strong> (Viallard, 2021)
 	For any distribution $\mathcal{D}$ on $\mathcal{Z}$, for any set $\mathcal{W}$, for any set $\mathbf{P}$ of $T$ priors on $\mathcal{W}$, for any learning algorithm $A:\mathcal{Z}^m\to\mathcal{M}(\mathcal{W})$, for any loss $l:\mathcal{W}\times\mathcal{Z}\to[0,1]$ and for any $\delta>0$ then for any $\pi_t\in\mathbf{P}$ we have that $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m,\mathbf{w}\sim\rho_{S}}\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{\Vert\mathbf{w}-\mathbf{w}_t\Vert_2^2}{\sigma^2}+\log\left(\frac{16T\sqrt{m}}{\delta^3}\right)\right)\right)\geq1-\delta.$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
@@ -413,7 +413,7 @@ code {
 </p>
 </details>
 <p>
-	<strong>Corollary 5.4</strong>
+	<strong>Corollary 5.4</strong> (Viallard, 2021)
 	Under the assumptions of Corollary 5.3 with $\delta\in(0,1)$ and for all $\pi_t\in\mathbf{P}$ we have that $$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}&\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}_t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{2T\sqrt{m}}{\delta}\right)\right)\right),\\\mathbb{P}_{S\sim\mathcal{D}^m,\mathbf{w}\sim\rho_S}&\left(\mathrm{kl}\left(\hat{R}(\mathbf{w}),R(\mathbf{w})\right)\leq\frac{1}{m}\left(\frac{m+1}{m}\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}_t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{T(m+1)}{\delta}\right)\right)\right),\end{align*}$$ and for all $c\in\mathbf{C}$ $$R(\mathbf{w})\leq\frac{1-\exp\left(-c\hat{R}(\mathbf{w})-\frac{1}{m}\left(\frac{\Vert\mathbf{w}+\mathbf{\epsilon}-\mathbf{w}_t\Vert_2^2-\Vert\mathbf{\epsilon}\Vert_2^2}{2\sigma^2}+\log\left(\frac{T\vert\mathbf{C}\vert}{\delta}\right)\right)\right)}{1-\exp(-c)}.$$ Where $\mathbf{\epsilon}\sim\mathcal{N}\left(\mathbf{0},\sigma^2\mathbf{I}_d\right)$ is Gaussian noise such that $\mathbf{w}+\mathbf{\epsilon}$ acts as the weights sampled from $\mathcal{N}(\mathbf{w},\sigma^2\mathbf{I}_d)$, and $\mathbf{C}$ is a set of hyper-parameters fixed a priori.
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
