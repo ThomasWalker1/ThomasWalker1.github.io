@@ -13,7 +13,7 @@
 
 [MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf)
 
-[MATH50002 Group Research Project - Jordan Algebras]
+[MATH50002 Group Research Project - Jordan Algebras](/download_docs/jordan_algebras.pdf)
 
 [UROP 2022 - Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates]
 
