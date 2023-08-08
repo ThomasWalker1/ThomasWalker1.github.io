@@ -35,7 +35,7 @@
 
 [The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/)
 
-[An Investigation Into Procedure Cloning]
+[An Investigation Into Procedure Cloning](/download_docs/procedure_cloning.pdf)
 
 [A Thought Experiment]
 
