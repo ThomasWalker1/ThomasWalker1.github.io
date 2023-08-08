@@ -27,7 +27,7 @@
 
 [Category Theory for Machine Learning]
 
-[Artificial Intelligence Safety Fundamentals]
+[Artificial Intelligence Safety Fundamentals](/ai_safety_fundamentals/intro.html)
 
 ## Articles
 
