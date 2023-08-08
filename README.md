@@ -11,7 +11,7 @@
 
 ## Academic Work
 
-[MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocesses_poster.pdf)
+[MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf)
 
 [MATH50002 Group Research Project - Jordan Algebras]
 
