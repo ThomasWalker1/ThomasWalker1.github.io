@@ -21,6 +21,8 @@
 
 [GRAD600001 Interdisciplinary Research Computing - Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
 
+[Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices]
+
 ## Individual Projects
 
 [Survey of the Perspectives on Neural Network Generalization]
@@ -41,7 +43,7 @@
 
 ## Developed Material on the Imperial Maths Wiki
 
-I am an administrator for a student lead initiative at Imperial College London, to learn more about the work we do click [here](https://imperialmathswiki.com/)
+I am an administrator for a student lead initiative at Imperial College London. To learn more about the work we do click [here](https://imperialmathswiki.com/).
 
 - MATH40002 Analysis
     - Worked Solutions
