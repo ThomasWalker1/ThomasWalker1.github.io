@@ -11,7 +11,7 @@
 
 ## Academic Work
 
-[MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation]()
+[MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocesses_poster.pdf)
 
 [MATH50002 Group Research Project - Jordan Algebras]
 
@@ -19,7 +19,7 @@
 
 [UROP 2023 - A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html)
 
-[GRAD600001 Interdisciplinary Research Computing - Reinforcement Learning Algorithm for HIV Treatment]
+[GRAD600001 Interdisciplinary Research Computing - Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
 
 ## Individual Projects
 
@@ -40,6 +40,8 @@
 [Intelligence]
 
 ## Developed Material on the Imperial Maths Wiki
+
+I am an administrator for a student lead initiative at Imperial College London, to learn more about the work we do click [here](https://imperialmathswiki.com/)
 
 - MATH40002 Analysis
     - Worked Solutions
