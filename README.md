@@ -37,7 +37,7 @@
 
 [An Investigation Into Procedure Cloning](/download_docs/procedure_cloning.pdf)
 
-[A Thought Experiment]
+[A Thought Experiment](/download_docs/thought_experiment.pdf)
 
 [Intelligence]
 
