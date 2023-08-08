@@ -1,6 +1,6 @@
 # Home Page
 
-[About](/about/about.html)
+[CV](/download_docs/CV_July2023.pdf)
 
 ## Academic Work
 
