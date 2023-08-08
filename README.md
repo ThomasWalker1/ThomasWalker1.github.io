@@ -21,7 +21,7 @@
 
 [GRAD600001 Interdisciplinary Research Computing - Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
 
-[Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices]
+[Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices](/download_docs/algorithmic_decision_making.pdf)
 
 ## Individual Projects
 
