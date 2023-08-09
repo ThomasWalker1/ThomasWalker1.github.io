@@ -40,7 +40,7 @@
 
 [A Thought Experiment](/download_docs/thought_experiment.pdf)
 
-[Intelligence]
+[Intelligence](/download_docs/intelligence.pdf)
 
 ## Developed Material on the Imperial Maths Wiki
 
