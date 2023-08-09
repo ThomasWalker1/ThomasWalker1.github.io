@@ -422,27 +422,84 @@ code {
 	<strong>Corollary 6.4</strong>
 	For any convolutional neural network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq1$ and any margin $\gamma$, then Algorithm 8 generates weights $\tilde{\mathbf{w}}$ for the network $h_{\tilde{\mathbf{w}}}$ such that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\zeta+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{(x,y)\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{\beta^2\left(\left\lceil\frac{\kappa_i}{s_i}\right\rceil\right)^2}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right)\right)\geq1-\delta,$$ where $\mu_i,\mu_{i\to},c,\rho_{\delta}$ and $\beta$ are layer cushion, inter-layer cushion, activation contraction, inter-layer smoothness and well-distributed Jacobian respectively measured on a $1-\zeta$ fraction of the training set $S$. Furthermore, $\kappa_i$ and $s_i$ are the filter and stride in layer $i$.
 </p>
-<h2 id="62-rademacher-complexity">6.2 Rademacher Complexity</h2>
+<h2 id="62-sota-pac-bounds">6.2 Current State of the Art PAC-Bayes Bounds</h2>
+<p>
+	We have seen that PAC-Bayes bounds provide a theoretical perspective on the learning process and the consequences it has on the performance of the learned classifier. In practice, we would ideally want these bounds to be meaningful. When implemented naively they produce vacuous bounds that provide no information. The first implementation of non-vacuous PAC-Bayes was discussed in Section 3.2 with the work (Dziugaite, 2017) that focused on a particular setting to get the non-vacuous bounds. Since then there have been directed efforts to improve the tightness of these bounds and extend the success to different contexts. Currently, the tightest bounds seen in practice come from the work of (Lotfi, 2022). In this section, we will discuss the work and see how it is a development of some previous work we have discussed. The work of (Lotfi, 2022) is an extension of the work of (Zhou, 2019) and follows the same compression paradigm that was first considered by (Arora, 2018). In (Lotfi, 2022) the tighter generalization bounds are achieved by first restricting to lower-dimensional settings using a notion called intrinsic dimensionality. Then they develop more aggressive quantization schemes that are adapted to the problem at hand.
+</p>
+<h3 id="pac-bayes-foundations">6.3.1 The PAC-Bayes Foundations</h3>
+<p>
+	Throughout this section, we will adopt the same notation as the rest of this report. Consider Theorem 2.1, the $\log(M)$ term counts the number of bits needed to specify any hypothesis $h_{\mathbf{w}}$ with $\mathbf{w}\in\mathcal{W}$, supposing that we assume each hypothesis is equally likely. If instead we have some prior belief on the likely hypotheses we can construct a variable length code that uses fewer bits to specify those hypotheses. For a prior distribution $\pi$, then for any $\mathbf{w}\in\mathcal{W}$ the number of bits required to represent hypothesis $h_{\mathbf{w}}$ is $\log_2\left(\frac{1}{\pi(\mathbf{w})}\right)$ when using an optimal compression code for $\pi$. Furthermore, if we consider a set of good distributions $\rho$ and we do not care which element of $Q$ we arrive at, we can gain some bits back. In particular, the average number of bits to code a sample from $\rho$ using $\pi$ is the cross entropy $H(\rho,\pi)$ and since we are agnostic to the sample from $\rho$ we get back $H(\rho)$ bits. Therefore, the average number of bits is $$H(\rho,\pi)-H(\rho)=\mathrm{KL}(\rho,\pi).$$
+</p>
+<p>
+	<strong>Definition 6.5</strong>
+	For probability measures $\rho$ and $\pi$ on a state space $\mathcal{X}$ that are absolutely continuous with respect to some measure $\lambda$, then $$H(\rho,\pi)=\int_{\mathcal{X}}\rho(x)\log\left(\pi(x)\right)d\lambda(x),$$ where $H(\rho):=H(\rho,\rho)$.
+</p>
+<p>
+	With these improvements, we can get bounds such as Theorem 3.10. For this work, we will work with Theorem 5.5 to get the generalization bounds. The prior that we will use here is known as the universal prior and explicitly penalizes the minimum compressed length of the hypothesis, $$\pi(\mathbf{w})=\frac{2^{-K(\mathbf{w})}}{Z}.$$ Then using a point mass posterior on the single parameter $\mathbf{w}^*$ we get that $$\mathrm{KL}\left(\mathbf{I}_{\{\mathbf{w}=\mathbf{w}^*\}},\pi\right)=\log\left(\frac{1}{\pi(\mathbf{w}^*)}\right)\leq K\left(\mathbf{w}^*\right)\log(2)\leq l(\mathbf{w}^*)\log(2)+2\log\left(l(\mathbf{w}^*)\right),$$ where $l(\mathbf{w})$ is the length of the program that reproduces $\mathbf{w}$. Improving the tightness of our bounds comes about by reducing the compressed length $l(\mathbf{w}^*)$ for the $\mathbf{w}^*$ achieved through training. For this work, the method for model compression consists of two components. One component is reducing the dimensionality of the problem, and the second is developing an aggressive quantization scheme.
+</p>
+<h3 id="finding-random-subspaces">6.3.2 Finding Random Subspaces</h3>
+<p>
+	A neural network parameterized by the weight vector $\mathbf{w}\in\mathbb{R}^D$ is often optimized through gradient descent so that the updates occur in the $D$-dimensional loss landscape. Despite $D$ being very large the optimization process is relatively stable and converges to simple solutions. However, we can work in a reduced dimension $d&lt;D$ (referred to as the intrinsic dimension) by considering $$\mathbf{w}=\mathbf{w}_0+P\hat{\mathbf{w}},$$ where $\mathbf{w}_0\in\mathbb{R}^D$ is the initialized weight, $P\in\mathbb{R}^{D\times d}$ is such that $P^\top P\approx I_{d\times d}$ and $\hat{\mathbf{w}}\in\mathbb{R}^d$. Now the vector $\hat{\mathbf{w}}$ is optimized so that the updates take place on a $d$-dimensional landscape. Finding the smallest value of $d$ for which we still attain good performance on the problem at hand is the bottleneck to this approach. The work lies in finding projection $P$ that is stable under training and finding optimal subspaces in which to optimize in. Imposing the condition $P^\top P\approx I_{d\times d}$ solves the first concern, for the next, we consider three possible methods for constructing $P$.
+</p>
+<ul>
+	<li>Kronecker Sum Projector: Construct the matrix $$P_{\oplus}=\frac{\mathbf{1}\otimes R_1+R_2\otimes\mathbf{1}}{\sqrt{2D}}$$ where $\otimes$ is the Kronecker product, $R_1,R_2\sim\mathcal{N}(0,1)^{\sqrt{D}\times d}$. Note that $P^\top_{\oplus}P_{\oplus}=I_{d\times d}+O\left(\frac{1}{\sqrt{D}}\right).$ Applying this to a vector $\hat{\mathbf{w}}\in\mathbb{R}^d$ takes $O\left(d\sqrt{D}\right)$ time.</li>
+	<li>Kronecker Product Projector: Construct the matrix $$P_{\otimes}=\frac{Q_1\otimes Q_2}{\sqrt{D}}$$ where $Q_1,Q_2\sim\mathcal{N}(0,1)^{\sqrt{D}\times\sqrt{d}}$. Note that $P_{\otimes}^\top P_{\otimes}=I_{d\times d}+O\left(\frac{1}{D^{\frac{1}{4}}}\right).$ Applying this to a vector $\hat{\mathbf{w}}\in\mathbb{R}^d$ takes $O\left(\sqrt{dD}\right)$ time.</li>
+</ul>
+<h3 id="quantization-and-training">6.3.3 Finding Random Subspaces</h3>
+<p>
+	For the full precision weight vector $\mathbf{w}=(w_1,\dots,w_d)\in\mathbb{R}^d$ and vector $c=(c_1,\dots,c_L)\in\mathbb{R}^L$ of $L$ quantization levels, construct the quantized vector $\tilde{\mathbf{w}}\in\mathbb{R}^d$ where $\tilde{w}_i=c_{q(i)}$ where $q(i)=\mathrm{argmin}_k\vert w_i-c_k\vert$. The vector $c$ is learned alongside $\mathbf{w}$ where the gradients are defined as $$\frac{\partial\tilde{w}_i}{\partial w_j}=\delta_{ij},\text{ and }\;\frac{\partial\tilde{w}_i}{\partial c_k}=\mathbf{I}_{q(i)=k}.$$ $c$ is initialized to have uniform spacing between the minimum and maximum values of $\mathbf{w}$, or using $k$-means. The latter approach refers to a quantization scheme proposed in (Choi, 2017) where for $k=L$ we partition the weights into clusters $\mathcal{C}_1,\dots,\mathcal{C}_k$ with $c_1,\dots,c_k$ such that $$\mathrm{argmin}_{\mathcal{C}_1,\dots,\mathcal{C}_k}\left(\sum_{i=1}^k\sum_{w\in\mathcal{C}_i}\vert w_i-c_i\vert^2\right),\quad\text{ for }c_i=\frac{1}{\vert\mathcal{C}_i\vert}\sum_{w\in\mathcal{C}_i}w.$$ Next, we capitalize on the fact that certain quantization levels will be more likely than others to introduce a variable length coding scheme. For each level $c_k$ associate the probability $p_k$ and apply arithmetic coding. Each arithmetic coding of $\mathbf{w}$ takes at most $\left\lceil d\times H(p)\right\rceil$ bits, where $p$ is the discrete distribution of the $p_k$'s. Considering the total number of bits we see that $$l(\mathbf{w})\leq\left\lceil d\times H(p)\right\rceil+L\times\left(16+\left\lceil\log_2(d)\right\rceil\right)+2$$ as $L\times\left\lceil\log_2(d)\right\rceil$ bits are required for the probabilities $p_k$ and $16L$ bites for the codebook $c$.
+</p>
+<h3 id="optimization">6.3.4 Optimization</h3>
+<p>
+	Note that the smaller the intrinsic dimension $d$ is the closer that our trained weight will be to the initialized weight $\mathbf{w}_0$. Therefore, $\mathbf{w}_0$ is more likely under our universal prior. Recall, that we must therefore condition on $\mathbf{w}_0$ to generate our prior. Similarly, if we optimize over different hyper-parameters such as $d$, $L$ or the learning rate ($\eta$), we must encode these into the prior and pay a penalty for optimizing over them. To do this we simply redefine our weight vector to be $\mathbf{w}^\prime=(\mathbf{w},d,L,\eta)$ and so our prior becomes $$\pi\left(\mathbf{w}^\prime\right)=\frac{2^{-K\left(\mathbf{w}^\prime\right)}}{Z},$$ where now we have that $$K\left(\mathbf{w}^\prime\right)\leq K(\mathbf{w}\vert d,L)+K(d)+K(L)+K(\eta).$$ Typically, we optimize these hyper-parameters over finite sets and so we can bound these terms by the ceiling of $\log_2$ of the size of these sets. The process we have discussed can be summarized in Algorithm 9.
+</p>
+<p><font size="3"> <strong>Algorithm 9** Compute PAC-Bayes Compression Bound</strong></font></p>
+<blockquote>
+<p>
+	<strong>Require:</strong>
+	Neural network $h_{\mathbf{w}}$, training data set $S=\{(x_i,y_i)\}_{i=1}^m$, Clusters $L$, Intrinsic Dimension $d$, Confidence $1-\delta$, Prior distribution $\pi$.<br>
+	<strong>function</strong>$\mathrm{COMPUTEBOUND}\left(h_{\mathbf{w}},L,d,S,\delta,\pi\right)$<br>
+	----$\mathbf{w}\leftarrow\mathrm{TRAINID}(h_{\mathbf{w}},d,S)$<br>
+	----$\tilde{\mathbf{w}}\leftarrow\mathrm{TRAINQUANTIZE}\left(h_{\mathbf{w}},L,S\right).$<br>
+	----Compute quantized empirical risk $\hat{R}(\tilde{\mathbf{w}}).$<br>
+	----$\mathrm{KL}(\rho,\pi)\leftarrow\mathrm{GETKL}\left(\tilde{w},\pi\right).$<br>
+	----<strong>return</strong>$\mathrm{GETCATONIBOUND}\left(\hat{R}(\tilde{w}),\mathrm{KL}(\rho,\pi),\delta,m\right)$.<br>
+	<strong>end function</strong><br>
+	<strong>function</strong>$\mathrm{TRAINQUANTIZE}\left(h_{\mathbf{w}},L,d,S,\delta,\pi\right)$<br>
+	----Initialize $c\leftarrow\mathrm{GETCLUSTERS}\left(\mathbf{w},L\right).$<br>
+	----<strong>for</strong>$i=1\to\mathrm{quantepochs}$<strong>do</strong><br>
+	--------$\begin{pmatrix}c\\\mathbf{w} \end{pmatrix}\leftarrow\begin{pmatrix}c-\eta\nabla_c\mathcal{L}\left(\mathbf{w},c\right)\\\mathbf{w}-\eta\nabla_{\mathbf{w}}\mathcal{L}(\mathbf{w},c)\end{pmatrix}.$
+	----<strong>end for</strong>
+	----<strong>return</strong>$\tilde{w}$<br>
+	<strong>end function</strong><br>
+	<strong>function</strong>$\mathrm{GETKL}\left(\tilde{\mathbf{w}},\pi\right)$<br>
+	----$c,\mathrm{count}\leftarrow\mathrm{GETUNIQUEVALSCOUNTS}\left(\tilde{\mathbf{w}}\right).$
+	----$\mathrm{messagesize}\leftarrow\mathrm{DOARITHMETICENCODING}\left(\tilde{w},c,\mathrm{count}\right).$
+	----$\mathrm{messagesize}\leftarrow\mathrm{messagesize}+\mathrm{hyperparamsearch}$
+	----<strong>return</strong>$\mathrm{messagesize}+2\times\log\left(\mathrm{messagesize}\right).$<br>
+	<strong>end function</strong><br>
+</p>
+<h2 id="62-rademacher-complexity">6.3 Rademacher Complexity</h2>
 <p>
 	Recall, that we have the space $\mathcal{Z}$ on which a distribution $\mathcal{D}$ is defined from which we draw an $\mathrm{i.i.d}$ sampled $S=\{(x_i,y_i)\}_{i=1}^m$. Suppose we have a class of functions $\mathcal{F}=\{f:\mathcal{Z}\to\mathbb{R}\}$.
 </p>
 <p>
-	<strong>Definition 6.5</strong> (Balcan, 2011)
+	<strong>Definition 6.6</strong> (Balcan, 2011)
 	The empirical Rademacher complexity of $\mathcal{F}$ is $$\hat{\mathfrak{R}}(\mathcal{F})=\mathbb{E}_{\sigma\in\{\pm1\}}\left(\sup_{f\in\mathcal{F}}\left(\frac{1}{m}\sum_{i=1}^m\sigma_if((x_i,y_i))\right)\right),$$ where each $\sigma_i$ is an independent random variable uniformly distribution on $\{\pm1\}$.
 </p>
 <p>
-	<strong>Definition 6.6</strong> (Balcan, 2011)
+	<strong>Definition 6.7</strong> (Balcan, 2011)
 	The Rademacher complexity of $\mathcal{F}$ is $$\mathfrak{R}(\mathcal{F})=\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{\mathfrak{R}}(\mathcal{F})\right).$$
 </p>
 <p>
-	<strong>Theorem 6.7</strong> (Balcan, 2011)
+	<strong>Theorem 6.8</strong> (Balcan, 2011)
 	For a parameter $\delta\in(0,1)$ if $\mathcal{F}\subseteq\{f:\mathcal{Z}\to[0,1]\}$ then $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{z\sim\mathcal{D}}\left(f(z)\right)\leq\frac{1}{m}\sum_{i=1}^mf(x_i,y_i)+2\mathfrak{R}(\mathcal{F})+\sqrt{\frac{\log\left(\frac{1}{\delta}\right)}{m}}\right)\geq1-\delta,$$ and $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{z\sim\mathcal{D}}\left(f(z)\right)\leq\frac{1}{m}\sum_{i=1}^mf(x_i,y_i)+2\hat{\mathfrak{R}}(\mathcal{F})+3\sqrt{\frac{\log\left(\frac{2}{\delta}\right)}{m}}\right)\geq1-\delta.$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>
-	<strong>Theorem 6.7.1 (McDiarmid Inequality)</strong>
+	<strong>Theorem 6.8.1 (McDiarmid Inequality)</strong>
 	Let $x_1,\dots, x_n$ be independent random variables taking values in a set $A$ and let $c_1,\dots, c_n$ be positive real constants. If $\phi:A^n\to\mathbb{R}$ satisfies $$\sup_{x_1,\dots,x_n,x_i^\prime}\left\vert\phi(x_1,\dots,x_i,\dots,x_n)-\phi\left(x_1,\dots,x_i^\prime,\dots,x_n\right)\right\vert\leq c_i,$$ for $1\leq i\leq n$, then $$\mathbb{P}\left(\phi(x_1,\dots,x_n)-\mathbb{E}\left(\phi(x_1,\dots,x_n)\right)\geq\epsilon\right)\leq\exp\left(\frac{-2\epsilon}{\sum_{i=1}^nc_i^2}\right).$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
@@ -453,7 +510,7 @@ code {
 </p>
 </details>
 <p>
-	<strong>Lemma 6.7.2</strong>
+	<strong>Lemma 6.8.2</strong>
 	The function $$\phi(S)=\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\hat{S}\sim\mathcal{D}^m}\left(h(x,y)\right)-\frac{1}{m}\sum_{i=1}^mh(x_i,y_i)\right)$$ satisfies $$\sup_{z_1,\dots,z_n,z_i^\prime\in\mathcal{Z}}\left\vert\phi(z_1,\dots,z_i,\dots,z_m)-\phi(z_1,\dots,z_i^\prime,\dots,z_m)\right\vert\leq\frac{1}{m}.$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
@@ -464,14 +521,14 @@ code {
 </p>
 </details>
 <p>
-	Lemma 6.7.2 shows that $\phi(S)=\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\hat{S}\sim\mathcal{D}^m}\left(h(x,y)\right)-\frac{1}{m}\sum_{i=1}^mh(x_i,y_i)\right)$ satisfies the conditions of Theorem 6.7.1, therefore, $$\mathbb{P}\left(\phi(S)-\mathbb{E}_{S^\prime\sim\mathcal{D}^m}\left(\phi\left(S^\prime\right)\right)\geq t\right)\leq\exp\left(-\frac{t^2}{m}\right).$$ With $t=\sqrt{\frac{\log\left(\frac{1}{\delta}\right)}{m}}$ we deduce that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\hat{S}\sim\mathcal{D}^m}(f(x,y))\leq\frac{1}{m}\sum_{i=1}^mf(x_i,y_i)+\mathbb{E}_{\hat{S}^\prime\sim\mathcal{D}^m}\left(\phi\left(\hat{S}^\prime\right)\right)\right)\geq1-\delta.$$ Now we need to bound the expectation of $\phi(S)$ using Rademacher complexity to complete the proof. Let $\tilde{S}=\left\{\tilde{z}_1,\dots,\tilde{z}_m\right\}$ be a sample independent but identically distributed to $S$. As $$\mathbb{E}_{\tilde{S}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)\Bigg\vert S\right)=\mathbb{E}_{z\sim\mathcal{D}}\left(h(z)\right),\text{ and }\;\mathbb{E}_{\tilde{S}}\left(\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)=\frac{1}{m}\sum_{(x,y)\in S}h(x,y)$$ we deduce that $$\begin{align*}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\phi(S)\right)&=\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}\left(h(x,y)\right)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)\right)\right).\end{align*}$$ We can apply Jensen's inequality as $\sup$ is convex to deduce that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)\right)\right)\leq\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\right)\right).$$ As $\mathbb{E}(\sigma_i)=0$ we can multiply each term by $\sigma_i$, and in distribution we have $-\sigma_i=\sigma_i$ so that $$\begin{align*}\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\right)\right)&=\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S},\sigma_i\in\sigma}\sigma_ih(x,y)-\frac{1}{m}\sum_{(x,y)\in S,\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in S,\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S},\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)\\&=2\mathfrak{R}(\mathcal{F}),\end{align*}$$ which when substituted into our previous bounds completes the proof of the first statement. To obtain the second statement we note that $\hat{\mathfrak{R}}(\mathcal{F})$ satisfies Theorem 6.7.1 with constant $\frac{1}{m}$. Therefore, a second application of Theorem 6.7.1 with confidence level (where a confidence level of $\frac{\delta}{2}$ is used for each application) gives the desired result. $\square$
+	Lemma 6.8.2 shows that $\phi(S)=\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\hat{S}\sim\mathcal{D}^m}\left(h(x,y)\right)-\frac{1}{m}\sum_{i=1}^mh(x_i,y_i)\right)$ satisfies the conditions of Theorem 6.8.1, therefore, $$\mathbb{P}\left(\phi(S)-\mathbb{E}_{S^\prime\sim\mathcal{D}^m}\left(\phi\left(S^\prime\right)\right)\geq t\right)\leq\exp\left(-\frac{t^2}{m}\right).$$ With $t=\sqrt{\frac{\log\left(\frac{1}{\delta}\right)}{m}}$ we deduce that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\mathbb{E}_{\hat{S}\sim\mathcal{D}^m}(f(x,y))\leq\frac{1}{m}\sum_{i=1}^mf(x_i,y_i)+\mathbb{E}_{\hat{S}^\prime\sim\mathcal{D}^m}\left(\phi\left(\hat{S}^\prime\right)\right)\right)\geq1-\delta.$$ Now we need to bound the expectation of $\phi(S)$ using Rademacher complexity to complete the proof. Let $\tilde{S}=\left\{\tilde{z}_1,\dots,\tilde{z}_m\right\}$ be a sample independent but identically distributed to $S$. As $$\mathbb{E}_{\tilde{S}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)\Bigg\vert S\right)=\mathbb{E}_{z\sim\mathcal{D}}\left(h(z)\right),\text{ and }\;\mathbb{E}_{\tilde{S}}\left(\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)=\frac{1}{m}\sum_{(x,y)\in S}h(x,y)$$ we deduce that $$\begin{align*}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\phi(S)\right)&=\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}\left(h(x,y)\right)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)\right)\right).\end{align*}$$ We can apply Jensen's inequality as $\sup$ is convex to deduce that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\Bigg\vert S\right)\right)\right)\leq\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\right)\right).$$ As $\mathbb{E}(\sigma_i)=0$ we can multiply each term by $\sigma_i$, and in distribution we have $-\sigma_i=\sigma_i$ so that $$\begin{align*}\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S}}h(x,y)-\frac{1}{m}\sum_{(x,y)\in S}h(x,y)\right)\right)&=\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{S\sim\mathcal{D}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S},\sigma_i\in\sigma}\sigma_ih(x,y)-\frac{1}{m}\sum_{(x,y)\in S,\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{S\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in S,\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\mathbb{E}_{\tilde{S}\sim\mathcal{D}^m}\left(\sup_{h\in\mathcal{F}}\left(\frac{1}{m}\sum_{(x,y)\in\tilde{S},\sigma_i\in\sigma}\sigma_ih(x,y)\right)\right)\\&=2\mathfrak{R}(\mathcal{F}),\end{align*}$$ which when substituted into our previous bounds completes the proof of the first statement. To obtain the second statement we note that $\hat{\mathfrak{R}}(\mathcal{F})$ satisfies Theorem 6.7.1 with constant $\frac{1}{m}$. Therefore, a second application of Theorem 6.8.1 with confidence level (where a confidence level of $\frac{\delta}{2}$ is used for each application) gives the desired result. $\square$
 </p>
 </details>
 <p>
 	If we let $\mathcal{F}=\left\{(x,y)\mapsto\mathbb{I}\left(h_{\mathbf{w}}(x)[y]\leq\gamma+\max_{j\neq y}h_{\mathbf{w}}(x)[j]\right):\mathbf{w}\in\mathcal{W}\right\}$ then for any $\delta\in(0,1)$ and $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_{\gamma}\left(h_{\mathbf{w}}\right)\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+2\hat{\mathfrak{R}}(\mathcal{F})+3\sqrt{\frac{\log\left(\frac{2}{\delta}\right)}{m}}\right)\geq1-\delta.$$
 </p>
 <p>
-	<strong>Definition 6.8</strong> (Rebeschini, 2022)
+	<strong>Definition 6.9</strong> (Rebeschini, 2022)
 	Given a set $\mathcal{S}$ and a function $\rho:\mathcal{S}\times\mathcal{S}\to\mathbb{R}_+$, we call $(\mathcal{S},\rho)$ a pseudo-metric space if for all $x,y,z\in\mathcal{S}$ we have
 </p>
 <ul>
@@ -480,21 +537,21 @@ code {
     <li>$\rho(x,x)=0$.</li>
 </ul>
 <p>
-	<strong>Definition 6.9</strong> (Rebeschini, 2022)
+	<strong>Definition 6.10</strong> (Rebeschini, 2022)
 	Let $(\mathcal{S},\rho)$ be a pseudo-metric space and let $\epsilon>0$. Then the set $\mathcal{C}\subseteq\mathcal{s}$ is an $\epsilon$-cover of $(\mathcal{S},\rho)$ if for every $x\in\mathcal{S}$ there is a $y\in\mathcal{C}$ such that $\rho(x,y)\leq\epsilon$. The set $\mathcal{C}$ is a minimal $\epsilon$-cover if there is no other $\epsilon$-cover with lower cardinality. The cardinality of any minimal $\epsilon$-cover is the $\epsilon$-covering number denoted $N(\mathcal{S},\rho,\epsilon)$.
 </p>
 <p>
     For a given training set $S=\{(x_i,y_i)\}_{i=1}^m$ we can consider the set $$\mathcal{G}=\{(f(x_1,y_1),\dots,f(x_m,y_m)):f\in\mathcal{F}\}.$$
 </p>
 <p>
-    <strong>Theorem 6.10</strong> (Lotz, 2020)
+    <strong>Theorem 6.11</strong> (Lotz, 2020)
 	Let $\mathcal{F}\subseteq\{f:\mathcal{Z}\to[0,1]\}$ and $S\sim\mathcal{D}^m$ then $$\hat{\mathfrak{R}}(\mathcal{F})\leq\inf_{\epsilon>0}\left(\epsilon+\sqrt{\frac{2N(\mathcal{G},\rho,\epsilon)}{m}}\right).$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 <summary>Proof</summary>
 <br>
 <p>
-	<strong>Lemma 6.10.1 (Massart's Lemma)</strong> (Rebeschini, 2022)
+	<strong>Lemma 6.11.1 (Massart's Lemma)</strong> (Rebeschini, 2022)
 	Let $\mathcal{T}\subseteq\mathbb{R}^n$ then we have that $$\mathfrak{R}(\mathcal{T})\leq\max_{t\in\mathcal{T}}\Vert t\Vert_2\frac{\sqrt{2\log\vert\mathcal{T}\vert}}{n}.$$
 </p>
 <details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
@@ -505,7 +562,7 @@ code {
 </p>
 </details>
 <p>
-	Let $T\subseteq\mathcal{G}$ be an $\epsilon$-net of size $N(\mathcal{G},\rho,\epsilon)$, then by Lemma 6.10.1 we have that $$\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\max_{g^\prime\in T}\frac{1}{m}\sigma_ig^\prime(x_i,y_i)\right)\leq\max_{g^\prime\in T}\Vert g(x_i,y_i)\Vert_2\frac{\sqrt{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}}{m}\leq\sqrt{m}\frac{\sqrt{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}}{m}=\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}}.$$ Using this we can conclude that, $$\begin{align*}\hat{\mathfrak{R}}(\mathcal{G})&=\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig(x_i,y_i)\right)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig(x_i,y_i)-\sigma_ig^\prime(x_i,y_i)\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig^\prime(x_i,y_i)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\vert g(x_i,y_i)-g^\prime(x_i,y_i)\vert\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\max_{g^\prime\in T}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig^\prime(x_i,y_i)\right)\right)\\&\leq\sup_{g\in\mathcal{G}}\rho((g(x_1,y_1),\dots,g(x_m,y_m)),(g^\prime(x_1,y_1),\dots,g^\prime(x_m,y_m)))+\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}}\\&\leq\epsilon+\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}},\end{align*}$$ which holds for all $\epsilon>0$ which completes the proof of the theorem. $\square$
+	Let $T\subseteq\mathcal{G}$ be an $\epsilon$-net of size $N(\mathcal{G},\rho,\epsilon)$, then by Lemma 6.11.1 we have that $$\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\max_{g^\prime\in T}\frac{1}{m}\sigma_ig^\prime(x_i,y_i)\right)\leq\max_{g^\prime\in T}\Vert g(x_i,y_i)\Vert_2\frac{\sqrt{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}}{m}\leq\sqrt{m}\frac{\sqrt{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}}{m}=\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}}.$$ Using this we can conclude that, $$\begin{align*}\hat{\mathfrak{R}}(\mathcal{G})&=\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig(x_i,y_i)\right)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig(x_i,y_i)-\sigma_ig^\prime(x_i,y_i)\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig^\prime(x_i,y_i)\right)\\&\leq\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\sup_{g\in\mathcal{G}}\left(\frac{1}{m}\sum_{i=1}^m\vert g(x_i,y_i)-g^\prime(x_i,y_i)\vert\right)\right)+\mathbb{E}_{\sigma\in\{\pm1\}^m}\left(\max_{g^\prime\in T}\left(\frac{1}{m}\sum_{i=1}^m\sigma_ig^\prime(x_i,y_i)\right)\right)\\&\leq\sup_{g\in\mathcal{G}}\rho((g(x_1,y_1),\dots,g(x_m,y_m)),(g^\prime(x_1,y_1),\dots,g^\prime(x_m,y_m)))+\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}}\\&\leq\epsilon+\sqrt{\frac{2\log\left(N(\mathcal{G},\rho,\epsilon)\right)}{m}},\end{align*}$$ which holds for all $\epsilon>0$ which completes the proof of the theorem. $\square$
 </p>
 </details>
 </body>
