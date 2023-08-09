@@ -26,7 +26,7 @@
 ## Individual Projects
 
 **Surveys on the Perspectives taken to Neural Network Generalization**
-- [Appealing to Gradients](/dowload_docs/appealing_to_gradients.pdf)
+- [Appealing to Gradients](/download_docs/appealing_to_gradients.pdf)
 
 [Category Theory for Machine Learning]
 
