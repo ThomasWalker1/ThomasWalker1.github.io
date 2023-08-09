@@ -463,20 +463,20 @@ code {
 	----$\tilde{\mathbf{w}}\leftarrow\mathrm{TRAINQUANTIZE}\left(h_{\mathbf{w}},L,S\right).$<br>
 	----Compute quantized empirical risk $\hat{R}(\tilde{\mathbf{w}}).$<br>
 	----$\mathrm{KL}(\rho,\pi)\leftarrow\mathrm{GETKL}\left(\tilde{w},\pi\right).$<br>
-	----<strong>return</strong>$\mathrm{GETCATONIBOUND}\left(\hat{R}(\tilde{w}),\mathrm{KL}(\rho,\pi),\delta,m\right)$.<br>
+	----<strong>return</strong> $\mathrm{GETCATONIBOUND}\left(\hat{R}(\tilde{w}),\mathrm{KL}(\rho,\pi),\delta,m\right)$.<br>
 	<strong>end function</strong><br>
 	<strong>function</strong> $\mathrm{TRAINQUANTIZE}\left(h_{\mathbf{w}},L,d,S,\delta,\pi\right)$<br>
 	----Initialize $c\leftarrow\mathrm{GETCLUSTERS}\left(\mathbf{w},L\right).$<br>
-	----<strong>for</strong>$i=1\to\mathrm{quantepochs}$<strong>do</strong><br>
+	----<strong>for</strong> $i=1\to\mathrm{quantepochs}$ <strong>do</strong><br>
 	--------$\begin{pmatrix}c\\\mathbf{w} \end{pmatrix}\leftarrow\begin{pmatrix}c-\eta\nabla_c\mathcal{L}\left(\mathbf{w},c\right)\\\mathbf{w}-\eta\nabla_{\mathbf{w}}\mathcal{L}(\mathbf{w},c)\end{pmatrix}.$<br>
-	----<strong>end for</strong>
-	----<strong>return</strong>$\tilde{w}$<br>
+	----<strong>end for</strong><br>
+	----<strong>return</strong> $\tilde{w}$<br>
 	<strong>end function</strong><br>
 	<strong>function</strong> $\mathrm{GETKL}\left(\tilde{\mathbf{w}},\pi\right)$<br>
 	----$c,\mathrm{count}\leftarrow\mathrm{GETUNIQUEVALSCOUNTS}\left(\tilde{\mathbf{w}}\right).$<br>
 	----$\mathrm{messagesize}\leftarrow\mathrm{DOARITHMETICENCODING}\left(\tilde{w},c,\mathrm{count}\right).$<br>
 	----$\mathrm{messagesize}\leftarrow\mathrm{messagesize}+\mathrm{hyperparamsearch}$<br>
-	----<strong>return</strong>$\mathrm{messagesize}+2\times\log\left(\mathrm{messagesize}\right).$<br>
+	----<strong>return</strong> $\mathrm{messagesize}+2\times\log\left(\mathrm{messagesize}\right).$<br>
 	<strong>end function</strong><br>
 </p>
 </blockquote>
