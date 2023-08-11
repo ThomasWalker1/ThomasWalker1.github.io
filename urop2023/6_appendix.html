@@ -453,7 +453,7 @@ code {
 <p>
 	Note that the smaller the intrinsic dimension $d$ is the closer that our trained weight will be to the initialized weight $\mathbf{w}_0$. Therefore, $\mathbf{w}_0$ is more likely under our universal prior. Recall, that we must therefore condition on $\mathbf{w}_0$ to generate our prior. Similarly, if we optimize over different hyper-parameters such as $d$, $L$ or the learning rate ($\eta$), we must encode these into the prior and pay a penalty for optimizing over them. To do this we simply redefine our weight vector to be $\mathbf{w}^\prime=(\mathbf{w},d,L,\eta)$ and so our prior becomes $$\pi\left(\mathbf{w}^\prime\right)=\frac{2^{-K\left(\mathbf{w}^\prime\right)}}{Z},$$ where now we have that $$K\left(\mathbf{w}^\prime\right)\leq K(\mathbf{w}\vert d,L)+K(d)+K(L)+K(\eta).$$ Typically, we optimize these hyper-parameters over finite sets and so we can bound these terms by the ceiling of $\log_2$ of the size of these sets. The process we have discussed can be summarized in Algorithm 9.
 </p>
-<p><font size="3"> <strong>Algorithm 9** Compute PAC-Bayes Compression Bound</strong></font></p>
+<p><font size="3"> <strong>Algorithm 9 Compute PAC-Bayes Compression Bound</strong></font></p>
 <blockquote>
 <p>
 	<strong>Require:</strong>
