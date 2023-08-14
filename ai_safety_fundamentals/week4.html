@@ -377,6 +377,64 @@ code {
           : 'default'
     });
   </script>
-
+<h2>Training Language Models To Follow Instructions With Human Feedback (Long Ouyang, et al)</h2>
+<a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a><br>
+<p>
+    Language models (LM) are trained to predict the next token in a sequence, and not on how to follow user instructions safely. The goal of the research in this paper is to train LMs to follow explicit and implicit instructions. To do this a data set constructed by users and used to fine-tune a misaligned model. As a result of this technique, it is shown that the resulting model was significantly preferred over the previous model, there were improvements in truthfulness, showed small improvements in toxicity, and better generalization to the preferences of the user. Furthermore, the alignment tax was lower compared to other methods.<br>
+	The method used in the paper is as follows:
+	<ol>
+		<li>Collect demonstration data, and train a supervised policy</li>
+		<li>Collect comparison data, and train a reward model</li>
+		<li>Optimize a policy against the reward model</li>
+	</ol>
+	Steps 2 and 3 are iterated as new comparison data becomes available.<br>
+	The dataset comprised the following components:<br>
+	<ol>
+		<li>Plain - Arbitrary tasks with sufficient diversity</li>
+		<li>Few-Shot - An instruction and multiple query/response pairs for the instruction</li>
+		<li>User-based - Prompts for use cases for the OpenAI API</li>
+	</ol>
+	The tasks that the model was able to follow include:
+	<ol>
+		<li>natural language instructions</li>
+		<li>those formulated using few-shot examples</li>
+		<li>or implicit continuation of tasks</li>
+	</ol>
+	The fine-tuning process consisted of three primary models. Firstly, there was a supervised policy model, which was trained on labeler demonstrations. Then there was a reward model, that took in prompts and generated rewards as outputs. Finally, a reinforcement learning model fine-tunes the initial policy using the reward model.<br>
+	The paper defines an aligned model as one that acts in accordance with the user's intention. A helpful model will be one that follows instructions and an honest model is one whose outputs are in accordance with the ground truth. The latter quality is more difficult to evaluate for a model. The harmfulness of a model is also difficult to measure, as it is really dependent on how the model is used. A model may have a capacity for harm, but using a model in such a way may be difficult.<br>
+	The technique outlined in this paper demonstrated the following results:
+	<ul>
+		<li>Cost of increasing model alignment is modest relative to pretraining</li>
+		<li>Better generalization to out-of-distribution settings</li>
+		<ul>
+			<li>Non-English tasks</li>
+			<li>Coding problems</li>
+		</ul>
+		<li>Mitigate performance degradations</li>
+		<ul>
+			<li>Reducing alignment tax</li>
+		</ul>
+	</ul>
+	Due to the nature of how the fine-tuning dataset is generated (using selected labelers), there are questions on how the labelers are chosen. Ultimately, the model is aligned with the preferences of the labelers. It is also aligned with the preferences of the researchers. This may not be a representative group, which could raise concerns. It is impossible to align with everyone's preferences without tradeoffs. Models could be fine-tuned in such a way that when prompted they align with a particular set of views.<br>
+	There are some limitations to this research. One is outlined above and is in regard to the group of labelers chosen. Furthermore, this technique doesn't guarantee full alignment or safety.<br>
+	Some of the open questions that arise due to this research include:
+	<ul>
+		<li>Can these methods be used to produce toxic, biased, and harmful outputs?</li>
+		<li>Can these techniques be used in conjunction with other techniques in model alignment?</li>
+		<li>Can we design an interface to allow a wider audience to provide feedback to be used in the fine-tuning processes?</li>
+		<li>Can we mitigate more of the performance regression?</li>
+	</ul>
+	From this technique, we observe that making our models inherently steerable/fine-tunable may help solve some of the issues in the alignment problem. It also demonstrates how we need to use these techniques and others in conjunction to guarantee the safety of AI models.<br>
+	If we continue to restrict large language models, due to speculations about their safety, we limit their benefits. On the other hand, if they are widely available it makes it difficult to control their use. Making only the API accessible allows one to implement the techniques outlines above to continually fine-tune the model.<br>
+</p>
+<h2>The Easy Goal Inference Problem is Still Hard (Paul Christiano)</h2>
+<a href="https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr">https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr</a><br>
+<p>
+    There are various approaches to tackling the AI control problem. One approach involves observing a user of a system, inferring their preferences from this, and then acting according to those preferences. This has empirically been shown to work, it provides a concrete model to address the problem and can integrate well with the AI practices of today.<br>
+	However, this approach relies on the fact that a user is a rational agent. The easy goal inference problem is the challenge of trying to find a reasonable representation of a user's preferences. It is a very difficult problem, and advances have been made in large part due to developments in the cognitive sciences.<br>
+	If we restrict the problem to narrower domains it becomes easier to solve as humans in these contexts act more rationally.<br>
+	There have been ideas for applying inverse reinforcement learning to this problem. There is some skepticism about whether this approach would work to get a good representation of an expert's behavior as it is thought that the agent would have to be more intelligent than the expert it is learning from. However, as humans transfer knowledge in essentially this format, there is reason to believe that we do not require the agent to be more intelligent than the expert.<br>
+	In fact, recent developments have included mistake models into these techniques to compensate for the discrepancy in intelligence level. With the idea that the agent can gather implicit information by analysing the mistakes made by the expert.<br>
+</p>
 </body>
 </html>
