@@ -21,20 +21,15 @@
 - *Imperial College London - Interdisciplinary Research Computing*
 
 [Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates] (September 2022)
+- *Imperial College London - Undergraduate Research Project*
 
-[ Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf) (June 2022)
+[Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf) (June 2022)
 - *Imperial College London - First Year Individual Research Project*
 
-
-
-
-
-[Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices](/download_docs/algorithmic_decision_making.pdf)
+[Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices](/download_docs/algorithmic_decision_making.pdf) (December 2021)
+- *Imperial College London - Science and Communications Studies
 
 ## Individual Projects
-
-**Surveys on the Perspectives taken to Neural Network Generalization**
-- 
 
 [Category Theory for Machine Learning]
 
@@ -42,7 +37,8 @@
 
 ## Articles
 
-[The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/)
+[The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/) (July 2023)
+- *Imperial College London - Faculty of Natural Sciences Blog Post*
 
 [An Investigation Into Procedure Cloning](/download_docs/procedure_cloning.pdf)
 
