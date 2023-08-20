@@ -3,13 +3,16 @@
 ## About
 
 
+## Academic Projects
 
-### Links
-- [CV](/download_docs/Thomas_Walker_CV.pdf)
-- [LinkedIn](https://www.linkedin.com/in/thomas-walker-706854189/)
-- [GitHub](https://github.com/ThomasWalker1)
+[Using Region Testing to Evaluate PAC Bounds](/download_docs/urop2023/region_testing_for_pac_bounds.pdf) (July - August 2023)
+- *Imperial College London - Undergraduate Research Project*
 
-## Academic Work
+[A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html) (July - August 2023)
+- *Imperial College London - Undergraduate Research Project*
+
+[Appealing to Gradients](/download_docs/urop2023/appealing_to_gradients.pdf)
+- *Imperial College London - Undergraduate Research Project*
 
 [MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf)
 
@@ -26,7 +29,7 @@
 ## Individual Projects
 
 **Surveys on the Perspectives taken to Neural Network Generalization**
-- [Appealing to Gradients](/download_docs/appealing_to_gradients.pdf)
+- 
 
 [Category Theory for Machine Learning]
 
@@ -41,6 +44,11 @@
 [A Thought Experiment](/download_docs/thought_experiment.pdf)
 
 [Intelligence](/download_docs/intelligence.pdf)
+
+### Links
+- [CV](/download_docs/Thomas_Walker_CV.pdf)
+- [LinkedIn](https://www.linkedin.com/in/thomas-walker-706854189/)
+- [GitHub](https://github.com/ThomasWalker1)
 
 ## Developed Material on the Imperial Maths Wiki
 
