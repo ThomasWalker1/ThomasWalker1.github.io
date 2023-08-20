@@ -377,6 +377,87 @@ code {
           : 'default'
     });
   </script>
-
+<h2>Summarizing Books With Human Feedback (Wu et al)</h2>
+<a href="https://openai.com/blog/summarizing-books/"></a>https://openai.com/blog/summarizing-books/<br>
+<p>
+    To effectively solve the alignment problem, solutions need to work on tasks where outputs are difficult and time-consuming for humans to evaluate.<br>
+	This paper illustrates an approach to summarising books using a fine-tuned GPT3 model. The approach uses recursive task decomposition to procedurally break the problem down into easier problems. This allows for better human evaluation, we can more easily trace the summary-writing process and it allows us to summarize books of varying lengths.<br>
+	This approach allows for the detection of subtle problems in the model, and it empowers the human evaluators of the model.<br>
+</p>
+<h2>Factored Cognition (Ought)</h2>
+<a href="https://ought.org/research/factored-cognition/scalability"></a>https://ought.org/research/factored-cognition/scalability<br>
+<p>
+    Factored cognition is a mechanism for breaking down learning and reasoning into smaller independent tasks. Currently, we only know concrete ways to align models when their actions are carried out in narrow domains. So factored cognition could allow us to align a large model by considering it in terms of smaller components.<br>
+	A scalable solution is one that produces better results as the resources available to it increases. Better is defined as being more aligned with principle interests and resources can include human work hours as well as the quality of the ML components.<br>
+	When tasks are broken down into subtasks that are each tackled by an individual agent, the challenge is to motivate each agent to do their best. An underlying assumption of this work is that no single agent has a lot of context about the over task. Each participant has time to solve their task, otherwise, it times out. Therefore, to execute a task we must decompose it, distribute it to the individual agents to solve, then process their solutions to produce a collective result. When developing a mechanism for this process to occur we want it to be scalable. However, as tasks become more complex there may be no simple way to decompose them into a set of smaller tasks that when solved would produce a high-quality output. To overcome this we may apply machine learning to automate the process.<br>
+	There are some ML approaches that would not scale when applied to this problem. For example, training a supervised algorithm on task solution pairs. Or an RL algorithm that receives a task as input and generates a solution based on a reward signal.<br>
+	An approach that might scale is known as iterated distillation-amplification and works as follows:
+	<ol>
+		<li>Initialize a fast ML agent, A, randomly</li>
+		<li>Repeat:</li>
+		<ol>
+			<li>Build a slow system where a participant, H, executes a single step. Where they can make multiple calls to A during a step</li>
+			<li>Retrain A to replicate the behavior of the slow system</li>
+		</ol>
+		<li>The idea is that through iteration we create a better slow system and train A to be a fast copy of that system. After each iteration H gets access to the most advanced version of A. This method is scalable with respect to ML components, but only works if we can break down long-term problems into smaller, context-free problems. Furthermore, it is only scalable if we can reach arbitrary solution quality by the assembly of a sufficient number of steps.</li>
+	</ol>
+</p>
+<h2>Supervising Strong Learner By Amplifying Weak Experts (Christiano et al)</h2>
+<a href="https://arxiv.org/abs/1810.08575"></a>https://arxiv.org/abs/1810.08575<br>
+<p>
+	If we can evaluate the output of an ML system using an algorithm, we say that there is an algorithmic training signal. For outputs that require human evaluation, we say there is a human training signal. However, some outputs are beyond human scale, in the sense that we could potentially evaluate an output on its long-term effect. However, to train the model effectively we need to evaluate the effect of its output in the short term. We could develop a short-term proxy that is correlated with what we want, but this may have unforeseen failure modes.<br>
+	In iterated amplification, we have a human agent, $H$, that trains an agent $X$. $H$ is allowed to use multiple copies of $X$ to create a composite system $\text{Amplify}^H(X)$. This composite model works by delegation. $\text{Amplify}^H(X)$ answers a question, $Q$, by having $H$ identify a sequence of useful subquestion and using each $X$ to produce subanswers. $H$ then answers $Q$ using each of these outputs. $X$ then learns from $\text{Amplify}^H(X)$ through supervised learning methods.<br>
+	Assuming that multiple agents can collaborate effectively, $\text{Amplify}^H(X)$ can outperform $X$ and provide $X$ with a useful training signal. The goal of this technique is for $X$ to learn the goal at the same time it learns to behave competently.<br>
+	In detail, iterated amplification works in the following way. We train a human predictor $H^{\prime}$ to generate our training data. $H^{\prime}$ only learns to identify subquestions and combine sub-answers, rather than learning how to solve the entire problem, and so requires less training data than to train a model to replicate $H$. $H^{\prime}$ is continually updated as it predicts how $H$ would respons to sub-answers provided by $X$.<br>
+	Train $X$ from distribution $\mathcal{D}$ in the following way:
+	<ol>
+		<li>Sample $Q\sim \mathcal{D}$, use $\text{Amplify}^H(X)$ to answer $Q$, record decisions made by $H$ to decompose $Q$. Repeat $k$ times, then $H$ produces an answer $A$. This produces the following transcript $$\tau=(Q,Q_1,A_1,\dots,Q_k,A_k,A)$$</li>
+		<li>Then we train $H^{\prime}$ to predict the $Q_i$ and $A$.</li>
+		<li>Repeatedly sample $Q\sim\mathcal{D}$ and use $\text{Amplify}^H(X)$ to produce pairs $(Q,A)$</li>
+		<li>$X$ is trained through supervised methods on pairs $(Q,A)$</li>
+	</ol>
+	Initially, $X$ will answer questions randomly. The human is able to answer some of the questions without the help of $X$, thus $X$ will be able to learn from this. Now the human can provide slightly better answers as $X$ is improved. This forms a positive feedback loop, where at each iteration $\text{Amplify}^H(X)$ is modestly smarter than an individual $X$, and $X$ chases this moving target.<br>
+	One of the assumptions was that a question can be decomposed into smaller questions that require little to no context to answer. In reality, this may not be possible and so we divide $X$ into two phases to deal with questions that require context. We have a context-encoding phase and a question-answering phase. During training we sample a context with multiple questions about that context, then when composing agents to form $\text{Amplify}^H(X)$ we reuse the context-encodings between all the subquestions being answered by $X$. We can represent a context as a set of facts, each of which is a sequence of tokens. We can embed each token in a look-up table and then apply a transformer encoder to the embedded facts. We can embed questions in the same way, then apply the transformer decoder to a batch of questions.<br>
+	For tasks that do not involve decomposition IA is a more cumbersome technique. It requires more training steps, more computation, and is not as fast. However, it does require fewer examples to train, making it more accessible for humans in the loop training.<br>
+	It has been shown that AI is successful in solving algorithmically complex tasks, where there is no external reward function and the objective is implicit within the learned decomposition.
+</p>
+<h2>AI Safety via Debate (Irving et al)</h2>
+<a href="https://arxiv.org/abs/1805.00899"></a>https://arxiv.org/abs/1805.00899<br>
+<p>
+    Alignment is a training-time problem because it is difficult to retroactively fix the behavior of a trained misaligned agent. To solve the alignment problem we require humans to be in the training loop. However, a human may not always be able to judge whether an explained answer is correct or whether it just seems correct. We could train an AI to identify its own flaws, but again this is challenging to evaluate. This is where the idea of debate comes in. There are two competing agents, the agents play in such a way that incentivizes them to produce honest and aligned information. The agents debate each other and the human decides who wins the debate. This removes the responsibility on the human in evaluating individual moves of the debate, and instead they simply evaluate who wins the debate. Making this approach to training much more accessible for humans to be in the loop.<br>
+	The debate proceeds as follows:
+	<ol>
+		<li>A question $q\in Q$ is given to both agents</li>
+		<li>The agents state their answers $a_0,a_1\in A$</li>
+		<li>They then take turns in making statements $s_0,s_1,\dots,s_{n-1}\in S$</li>
+		<li>The judge sees the debate $(q,a,s)$ and decides which agent has won the debate</li>
+	</ol>
+	When it comes to testing we simply stop the game at step 2.<br>
+	The structure of the game is so that it is harder to lie than to refute a lie.<br>
+	Debates trace paths through the tree of possible points and counterpoints. Short debates occur when the debate doesn't branch off within the tree, they cover a single path through the tree. On the other hand, long debates will involve many arguments and sub arguments, traversing various branches within the tree. Through experiments, it can be seen that short debates increase the likelihood that an agent is honest and that the honest agent wins the debate.<br>
+	In theory, this approach is only limited by the capacity of the ML models, and therefore their performance should scale with resources. Giving hope to the idea that debate could resolve the alignment problem without sacrificing model strength.<br>
+	The goal of this technique is to align ML systems that are more capable than humans.<br>
+</p>
+<h2>Debate Update: Obfuscated Arguments Problem (Barnes, Christiano)</h2>
+<a href="https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem"></a>https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem<br>
+<p>
+	The debate focuses on verifying the step-by-step reasoning of a model. It becomes difficult for humans to identify flaws in arguments when the arguments are large, this is known as the obfuscated argument problem.<br>
+	Obfuscated arguments are ones which is constructed such that both debaters know the conclusion is wrong but:
+	<ul>
+		<li>The argument is made invalid by the inclusion of a small number of flawed steps</li>
+		<li>The argument is sufficiently large that it is unlikely to find flaws in a naive way</li>
+		<li> Neither debater knows where the flaws are</li>
+	</ul>
+	Honest arguments that we can't distinguish from these are ones where both debaters know the conclusion is correct but:
+	<ul>
+		<li>The argument is sufficiently complex that a relatively small number of flaws could invalidate the argument</li>
+		<li>The argument is sufficiently large that its intractable to find one of those such flaws</li>
+		<li>The dishonest debater claims that there are enough flaws to invalidate the argument but cannot tell where they are</li>
+	</ul>
+	In the honest case, if we were to check any step in the argument we would find it to be correct. In the dishonest case, almost any step we check will be correct and there is no obvious way to spot the stops that are not correct.<br>
+	An honest debater will need to justify their intuitions during a debate. A dishonest debater may be ambiguous, turn the attention away from weaker arguments and intentionally misinterpret the other debater to prolong the debate and make it harder to decide a winner.<br>
+	The debate format allows a human to provide a supervision signal at each step even if the complete argument is intractable for the humans. Debaters can strategically unpack their arguments to allow human verification. However, this assumption is optimistic as an expert will likely have sophisticated concepts that allow them to form compact arguments. Difficulties may arise when a model that has learned rich concepts cannot convince the judge of the correctness of their arguments, as they cannot formulate their ideas clearly.<br>
+	There are various problems within the debate framework. A dishonest debater can avoid giving a precise answer to steer the debate away from weaker arguments. To combat this you would have to impose some sort of structure on the debate. Furthermore, due to the potential discrepancy in intelligence between the human and the debater, the dishonest debater may be able to construct a sequence of claims where each individual claim is correct, however, as a collective it is false. There is also ambiguity in deciding which answer is better than the other. This can arise due to ambiguity in the language being used by the debaters, or simply due to the length of the debate. It is also important to train the debaters to maximize their expected score of a debate, rather than their win probability. The problems outlined previously are in relation to the debaters. However, there are practical problems that occur due to the humans in the experiment. For example, the judge may be inattentive or have poor critical reasoning. In a similar vein to the ambiguity issues raised previously, there may be misinterpretations of the debater's claims. A solution to this is to give the debaters the capacity to ask questions to the judge to get ground truth answers.
+</p>
 </body>
 </html>
