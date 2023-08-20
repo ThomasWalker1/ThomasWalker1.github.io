@@ -377,6 +377,93 @@ code {
           : 'default'
     });
   </script>
-
+<h2>Feature Visualization (Olah et al)</h2>
+<a href="https://distill.pub/2017/feature-visualization/"></a>https://distill.pub/2017/feature-visualization/<br>
+<p>
+	We can understand individual features by searching for examples where a neuron or an entire channel has large values. This can be done at the layer level as well. Similarly, we can create examples through optimization. Style transfers teach us about the kinds of style and content that a network understands. The optimization approach is flexible as we are not constrained to fixed examples.<br>
+	By looking through the data set we can find diverse examples that trigger a certain response. We can look across the spectrum of activation rather than individual neurons. We can cluster the activations across the data set and optimize for the cluster centroids. Furthermore, examples in the data set can provide starting points for the optimization process. Through the optimization process, we can ensure diversity by
+	<ul>
+		<li>penalising similarity of examples</li>
+		<li>use style transfer to force features to be displayed in different styles</li>
+	</ul>
+	This diversification allows us to check what causes the neuron to activate, and shows us the different objects that trigger a certain activation.<br>
+	The activation space is the space of all possible combinations of neuron activations. Neuron activations can be thought of as a basis in this space, that is they form the units of all activations. Random directions in this space are therefore interpretable but at a lower rate than those in the basis directions.<br>
+	When optimizing an image to fire neurons the resulting image is full of noise and high-frequency patterns. Therefore, we need to impose a more natural structure using a prior. However, a prior that is too strict will mean the resulting image will just be one of the data sets. We can regularize by penalising frequency. Instead of generating an image from scratch, we can instead manipulate examples in the data set. A more sophisticated approach may be to create a model of the real data which enforces the regularisation of the optimization process.<br>
+	Neurons may not be the most meaningful units to extract features of a model.<br>
+</p>
+<h2>Zoom In: An Introduction To Circuits (Olah et al)</h2>
+<a href="https://distill.pub/2020/circuits/zoom-in/"></a>https://distill.pub/2020/circuits/zoom-in/<br>
+<p>
+	
+</p>
+<h2>Mechanistic Interpretability, Variables, and The Importance of Interpretable Bases (Olah et al)</h2>
+<a href="https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html"></a>https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html<br>
+<p>
+	Mechanistic interpretability is the process of reverse engineering neural networks. At the core of this is trying to understand the role neurons play in the network's performance.<br>
+	As the input to a neural network grows the number of dimensions increases exponentially. Therefore, there is little hope to understand particularly large networks in a reasonable amount of time. To combat this either simpler neural networks are studied, or we focus our interest on a specific behavior of the network.<br>
+	Neural networks can be thought of as a set of binary instructions, where a neuron plays a role analogous to that of a variable. The parameters of the network simply determine how and when each neuron should be activated.<br>
+	For a neural network "interpretable features" can be thought of as being embedded in arbitrary directions within an activation space. Activation functions encourage these features to be aligned with the neurons, this is called a privilege basis. This works if each neuron represents a single feature, however, polysemantic neurons that encode multiple features are known to exist.<br>
+	The goal of mechanistic interpretability is to decompose representations into understandable components.<br>
+</p>
+<h2>Locating and Editing Factual Associations in GPT: Blog Post (Meng et al)</h2>
+<a href="https://rome.baulab.info/"></a>https://rome.baulab.info/<br>
+<p>
+	Factual knowledge within GPT corresponds to localized computations that can be directly edited. The reasons to locate the facts within the model are to improve their transparency and also to allow the possibility to fix mistakes.<br>
+	Facts can be described as a tuple, $t=(s,r,o)$. Where $s,o$ are the subjects and $r$ is the relation between the subjects. When querying GPT we express $(s,r)$ as a text prompt and check whether the generated output matches $o$.<br>
+	This research demonstrates how factual associations within a model can be localized and how these individual factual associations can be changed.<br>
+	The method used to locate the factual associations is known as causal tracing. Individual states are isolated within the network while processing a factual statement. Corruptions can be introduced and then restored to observe the effect specific states have on the results.<br>
+	ROME (Rank-One Model Editing) is a technique that modifies directly the weights of key-value pairs to generate new key-value pairs within the model.<br>
+	After manipulating facts the model's ability to generalize the rest of its knowledge based on this new fact is tested. During testing we need to determine whether the model knows the fact change or is simply saying the new fact. During testing we can evaluate:
+	<ol>
+		<li>Specificity - Knowledge about a fact changes, and other facts remain the same.</li>
+		<li>Generalization - Knowledge of a fact is robust to changes in wording and context.</li>
+	</ol>
+</p>
+<h2>Acquisition of Chess Knowledge In AlphaZero (McGrath et al)</h2>
+<a href="https://arxiv.org/abs/2111.09259"></a>https://arxiv.org/abs/2111.09259<br>
+<p>
+	Some neural networks learn human-understandable representations, however, this may not be the case for deep neural networks. Having the ability to interpret an AI system is incredibly valuable.<br>
+	One way to approach the challenge of interpreting an AI system is the following (using the context of AlphaZero):
+	<ol>
+		<li>Probe to see whether human chess concepts are linearly decodable</li>
+		<li>Examing the behavior over training runs</li>
+		<li>Investigate the layers activations</li>
+	</ol>
+	When probing for concepts we are trying to understand whether the internal representations of the network correlate with human concepts. We do this by observing the activations on a data set.<br>
+	To measure changes in behavior across training runs, we can evaluate performance on curated data sets across each of the runs.<br>
+	To discern information that is not tied to pre-existing human concepts we try and decompose representations into principal factors. We can the measure covariance between single neurons and the inputs to find the correlation between features and neurons.<br>
+	In relation to the AlphaZero network it was found that:
+	<ol>
+		<li>Many human concepts are found within the network</li>
+		<ol>
+			<li>Many human concepts can be regressed from internal representations</li>
+		</ol>
+		<li>A detailed picture of knowledge acquired during training can be gained</li>
+		<ol>
+			<li>Measure the emergence of information over the course of training</li>
+			<li>Many (human) concepts arise early in the training</li>
+		</ol>
+		<li>High-level concepts emerge toward the end of the training</li>
+		<li>There are similarities to the historical development of human play</li>
+	</ol>
+	When it comes to model interpretability there are two approaches:
+	<ol>
+		<li>Build inherently interpretable models</li>
+		<li>Generate post-hoc explanations for already trained models</li>
+	</ol>
+	Concept-based interpretability tries to understand models in terms of human concepts.<br>
+	Post-hoc interpretability can be approached by dissecting the network in the search for interpretable units. The challenge with post-hoc interpretability is that understanding causal relationships between behavior and concepts is difficult, especially for large complex models.<br>
+	There are particular challenges for interpretability in the Reinforcement Learning setting as we have that
+	<ul>
+		<li>complexity of the environment</li>
+		<li>complexity of the agent architecture</li>
+	</ul>
+	Representation learning in RL is developing low-dimensional representations for states, policies, and actions. A promising approach is learning these representations alongside the agent. Structural causal models aim to learn action-influence models for the agent. Reward differences can be used to understand why actions are taken. Hierarchical reinforcement learning and sub-task decomposition introduce structure into the action space, making it more interpretable. The above are all examples of creating inherently interpretable RL models. Post-hoc methods include saliency maps, extracting finite-state models of an agent's recurrent state, and analysis of agent behavior by looking at behavioral trajectories.
+</p>
+<h2></h2>
+<a href=""></a><br>
+<p>
+	
+</p>
 </body>
 </html>
