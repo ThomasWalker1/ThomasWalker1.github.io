@@ -14,15 +14,20 @@
 [Appealing to Gradients](/download_docs/urop2023/appealing_to_gradients.pdf)
 - *Imperial College London - Undergraduate Research Project*
 
-[MATH40008 Individual Research Project - Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf)
+[Jordan Algebras](/download_docs/jordan_algebras.pdf) (June 2023)
+- *Imperial College London - Second Year Group Research Project*
 
-[MATH50002 Group Research Project - Jordan Algebras](/download_docs/jordan_algebras.pdf)
+[Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
+- *Imperial College London - Interdisciplinary Research Computing*
 
-[UROP 2022 - Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates]
+[Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates] (September 2022)
 
-[UROP 2023 - A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html)
+[ Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf) (June 2022)
+- *Imperial College London - First Year Individual Research Project*
 
-[GRAD600001 Interdisciplinary Research Computing - Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
+
+
+
 
 [Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices](/download_docs/algorithmic_decision_making.pdf)
 
