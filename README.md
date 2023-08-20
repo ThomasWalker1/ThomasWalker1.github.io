@@ -29,7 +29,7 @@
 [Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf) (March 2022)
 - *Imperial College London - Interdisciplinary Research Computing*
 
-[Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates] (September 2022)
+[Pseudo Random Number Generators in Python, R, and C++](/download_docs/pseudo_random_number_generators.pdf) (September 2022)
 - *Imperial College London - Undergraduate Research Project*
 
 [Point Processes For Equipment Failure Simulation](/download_docs/pointprocess_poster.pdf) (June 2022)
