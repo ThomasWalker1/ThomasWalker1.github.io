@@ -84,6 +84,8 @@ I am an administrator for a student-led initiative at Imperial College London. T
     - Summary Pages
 - MATH60031 Markov Processes
     - Summary Pages
+- MATH60043 Statistical Theory
+    - Summary Pages
 - MATH60047 Stochastic Simulations
     - Summary Pages
 - MATH60049 Introduction to Statistical Learning
