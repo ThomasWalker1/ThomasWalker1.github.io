@@ -2,6 +2,11 @@
 
 ## About
 
+<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+<summary>Extended</summary>
+<br>
+
+</details>
 
 ## Academic Projects
 
