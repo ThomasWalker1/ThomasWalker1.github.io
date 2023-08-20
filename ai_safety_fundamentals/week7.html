@@ -377,6 +377,117 @@ code {
           : 'default'
     });
   </script>
-
+<h2>Embedded Agents, Part 1 (Demski and Garrabrant)</h2>
+<a href="https://intelligence.org/2018/10/29/embedded-agents/"></a>https://intelligence.org/2018/10/29/embedded-agents/<br>
+<p>
+	A reinforcement learning agent can either be embedded in its environment or be separated from it. When an agent is separated from the environment it can store the environment and can observe the effects of its actions. On the other hand, an agent embedded in the environment has no way to formalize the complete effect of their actions as they form part of the system on which the action has an effect on, therefore, must be smaller than the environment. In the latter case training the agent is more problematic, whereas in the former case, there is a framework we can use to train the agent.<br>
+	Suppose an agent interacts with the environment with action $a$, to cause an observation $o$ and receives a subsequent reward $r$. Each action taken is a function of the previous action-observation-reward triple, and the observation is a function of the same triple along with the immediately preceding action. The training framework is designed to optimize the policy so that the highest expected reward is obtained. An agent trained in such a way is called dualistic. As they have a set possible of interactions between themselves and the environment, and they are larger than the environment. This latter point means they do not require self-referential reasoning.<br>
+	An agent embedded within the environment...
+	<ul>
+		<li>...does not have well-defined input/output channels</li>
+		<li>...is smaller than the environment</li>
+		<li>...can reason about themselves and self-improve</li>
+		<li>...are made out of similar stuff to that of the environment</li>
+	</ul>
+	Decision theory aims to optimize such an embedded agent, the challenges facing this theory include logical counterfactuals, environments with multiple copies of the agent, and logical updatelesness.<br>
+	Embedded World Models aims to make good models of the world that the agent can store. This suffers from logical uncertainty, multi-level modeling, and ontological crises.<br>
+	Robust Delegation is when an agent wants to make a more intelligent successor to help optimize its own goals. Again problems arise in trusting the smarter agents, value learning, and corrigibility.<br>
+	Subsystem alignment aims to unify an agent along with its subsystems. The challenge arises in how to have do you create a base optimizer that doesn't generate adversarial optimizers. This can happen both intentionally or unintentionally.<br>
+</p>
+<h2>Logical Induction (Garrabrant et al)</h2>
+<a href="https://intelligence.org/2016/09/12/new-paper-logical-induction/"></a>https://intelligence.org/2016/09/12/new-paper-logical-induction/<br>
+<p>
+	An algorithm that learns to assign probabilities to sentences in ways that respect logical patterns. It learns to reason about its own beliefs and trust future beliefs whilst avoiding paradoxes.<br>
+	Any algorithm that satisfies the logical induction criterion will exhibit the following properties:
+	<ol>
+		<li>Limit convergence and limit coherence.</li>
+		<li>Provability induction</li>
+		<li>Affine Coherence</li>
+		<li>Learning pseudorandom frequencies</li>
+		<li>Calibration and unbiasedness</li>
+		<li>Scientific induction</li>
+		<li>Closure under conditioning</li>
+		<li>Introspection</li>
+		<li>Self-trust</li>
+	</ol>
+	Under uncertainty, we desire good reasoning to be:
+	<ul>
+		<li>Ability to recognize patterns in what is provable</li>
+		<li>Ability to recognize statistical patterns in sequences of logical claims</li>
+	</ul>
+	Achieving both with one algorithm proved difficult.
+</p>
+<h2>AI Governance - Opportunity and Theory of Impact (Everitt et al)</h2>
+<a href="https://forum.effectivealtruism.org/posts/42reWndoTEhFqu6T8/ai-governance-opportunity-and-theory-of-impact"></a>https://forum.effectivealtruism.org/posts/42reWndoTEhFqu6T8/ai-governance-opportunity-and-theory-of-impact<br>
+<p>
+	AI governance is how humanity can best navigate the transition to a world containing advanced AI technology. Currently, AI governance is being neglected as a result of economic and performance incentives.<br>
+	AI policymakers are playing catch up with AI being deployed in important domains. One needs knowledge surrounding the technicalities of AI systems to make informed and effective policies.<br>
+	A longtermist is someone concerned with the long-term risk, rather than focusing on the short-term incentives deploying an AI system may provide. They draw their attention to the potential long-term benefits of systems and plan deployment strategies to capitalize on those benefits.<br>
+	Superintelligent AI could pose threats to human control and existence. AI needs to be aligned with human values for us to fully appreciate its benefits. However, such alignment comes at a cost, and those in the race to develop such a system may be tempted to cut corners. The constitutional design will be paramount in ensuring that such malpractices are suppressed and safe development of systems is encouraged.<br>
+	There are a couple of perspectives on how AI may transform society. The ecological perspective suggests that a diverse collection of AI systems will pose a risk to society. On the other hand, the GPT perspective sees a single AI system fundamentally changing the parameters of our society.<br>
+	The risks posed by an AI system can be decomposed into three broad categories:
+	<ol>
+		<li>Misuse - A person uses AI in an unethical manner</li>
+		<li>Accidents - Unintended consequences of an AI system</li>
+		<li>Structural - Collective risk imposed by society implementing the system</li>
+	</ol>
+	There are a few pathways in how existential risk may arise:
+	<ul>
+		<li>Nuclear Instability</li>
+		<ul>
+			<li>"Flash" escalation of an autonomous system</li>
+		</ul>
+		<li>Power Transition</li>
+		<ul>
+			<li>The system changes parameters in geopolitical bargains, causing general turbulence in this space</li>
+		</ul>
+		<li>Inequality and Labor Displacement</li>
+		<ul>
+			<li>Society may become more unequal and undemocratic as a result of the systems changing the dynamics of society</li>
+		</ul>
+		<li>Epistemic Security</li>
+		<ul>
+			<li>Political communities become separated as they are unable to competently cooperate to develop advanced AI systems</li>
+		</ul>
+		<li>Value Erosion</li>
+		<ul>
+			<li>Optimising for performance at the expense of safety. High-stake outcomes encourage corners to be cut in regard to safety</li>
+		</ul>
+	</ul>
+	We need a spectrum of solutions to tackle these problems. Research should be conducted to aid decision-making processes surrounding these topics. However, one cannot focus their research entirely on the broad impacts of such systems as often funding is allocated based on the outcome. Furthermore, if we simply focused on the potential impacts of a system, without ever progressing towards a system we would never reap its benefits. Therefore, there needs to be a balance between narrow endeavors toward developing advanced AI systems and taking a broader perspective on the consequences of developing such systems.
+</p>
+<h2>Cooperation, Conflict, and Transformative AI (Clifton)</h2>
+<a href="https://www.alignmentforum.org/s/p947tK8CoBbdpPtyK/p/KMocAf9jnAKc2jXri"></a>https://www.alignmentforum.org/s/p947tK8CoBbdpPtyK/p/KMocAf9jnAKc2jXri<br>
+<p>
+	TAI - Transformative Artificial Intelligence. A cooperation failure is a potentially catastrophic event arising due to inefficiencies in the interactions between TAI-enable actors. Often caused by destructive, coercive, and social diplomacy events. TAI is an AI system that has equivalent societal impacts to the agricultural/industrial revolution. There is much uncertainty regarding the timeline of TAI, but it is understood to arise in the near future.<br>
+	Certain features of ML systems may lead to fundamental changes in the qualitative nature of the systems, including:
+	<ol>
+		<li>Ability to make credible commitments</li>
+		<li>Ability to self-modify</li>
+		<li>Ability to create a successor</li>
+		<li>Ability to model other agents</li>
+	</ol>
+	A social dilemma is defined to be a game where everyone is better off if cooperation happens, yet individuals still defect. A Nash equilibrium is a strategy where no player would benefit from unilaterally deviating from the strategy. However, when information for a particular agent is incomplete, they may be misinformed about what the rational choice is. There are three hypotheses as to why a rational agent may go to war:
+	<ul>
+		<li>Credibility, cannot commit to a peace agreement</li>
+		<li>Incomplete Information</li>
+		<li>Indivisible stakes, conflict cannot be resolved by dividing the stakes</li>
+	</ul>
+	Complex-decision heuristics among TAI systems means that modeling such failure modes is difficult.<br>
+	The greater chance of a single dominant actor, the lower the chances of a conflict.
+	<ul>
+		<li>Should we expect rapid jumps in capabilities?</li>
+		<li>Which power distributions are at least at risk of catastrophic failures of cooperation?</li>
+		<li>What are the best policy levers for increasing concentration on AI capabilities without initiating an arms race?</li>
+	</ul>
+	Commitment races can produce concerning dynamics, as agents may commit early (dangerously) to improve bargaining positions.
+	<ul>
+		<li>Increasing transparency to reduce dangerous commitments, however, this may also increase incentives for an AI to commit.</li>
+		<li>What policies can make TAI more transparent?</li>
+	</ul>
+	Humans made less dangerous commitments once trade was effective, and long-term cooperation could be established between entities.<br>
+	The alignment problem is the issue of developing powerful AI systems that are aligned with our values. Value loading is the process of ensuring AI systems are compatible with humans. Then the control problem seeks solutions as to how to control powerful AI agents. Creating models of how misaligned AI could arise can help our understanding of potential interactions that may occur between powerful actors.<br>
+	The offense-Defense theory produces a likelihood that conflict will arise by analyzing the relative efficacy of offensive and defensive strategies. Understanding how AI deployment will shift the offense-defense balance is critical.
+</p>
 </body>
 </html>
