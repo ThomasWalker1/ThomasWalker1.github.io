@@ -378,14 +378,14 @@ code {
     });
   </script>
 <h2>Summarizing Books With Human Feedback (Wu et al)</h2>
-<a href="https://openai.com/blog/summarizing-books/"></a>https://openai.com/blog/summarizing-books/<br>
+<a href="https://openai.com/blog/summarizing-books/">https://openai.com/blog/summarizing-books/</a><br>
 <p>
     To effectively solve the alignment problem, solutions need to work on tasks where outputs are difficult and time-consuming for humans to evaluate.<br>
 	This paper illustrates an approach to summarising books using a fine-tuned GPT3 model. The approach uses recursive task decomposition to procedurally break the problem down into easier problems. This allows for better human evaluation, we can more easily trace the summary-writing process and it allows us to summarize books of varying lengths.<br>
 	This approach allows for the detection of subtle problems in the model, and it empowers the human evaluators of the model.<br>
 </p>
 <h2>Factored Cognition (Ought)</h2>
-<a href="https://ought.org/research/factored-cognition/scalability"></a>https://ought.org/research/factored-cognition/scalability<br>
+<a href="https://ought.org/research/factored-cognition/scalability">https://ought.org/research/factored-cognition/scalability</a><br>
 <p>
     Factored cognition is a mechanism for breaking down learning and reasoning into smaller independent tasks. Currently, we only know concrete ways to align models when their actions are carried out in narrow domains. So factored cognition could allow us to align a large model by considering it in terms of smaller components.<br>
 	A scalable solution is one that produces better results as the resources available to it increases. Better is defined as being more aligned with principle interests and resources can include human work hours as well as the quality of the ML components.<br>
@@ -403,7 +403,7 @@ code {
 	</ol>
 </p>
 <h2>Supervising Strong Learner By Amplifying Weak Experts (Christiano et al)</h2>
-<a href="https://arxiv.org/abs/1810.08575"></a>https://arxiv.org/abs/1810.08575<br>
+<a href="https://arxiv.org/abs/1810.08575">https://arxiv.org/abs/1810.08575</a><br>
 <p>
 	If we can evaluate the output of an ML system using an algorithm, we say that there is an algorithmic training signal. For outputs that require human evaluation, we say there is a human training signal. However, some outputs are beyond human scale, in the sense that we could potentially evaluate an output on its long-term effect. However, to train the model effectively we need to evaluate the effect of its output in the short term. We could develop a short-term proxy that is correlated with what we want, but this may have unforeseen failure modes.<br>
 	In iterated amplification, we have a human agent, $H$, that trains an agent $X$. $H$ is allowed to use multiple copies of $X$ to create a composite system $\text{Amplify}^H(X)$. This composite model works by delegation. $\text{Amplify}^H(X)$ answers a question, $Q$, by having $H$ identify a sequence of useful subquestion and using each $X$ to produce subanswers. $H$ then answers $Q$ using each of these outputs. $X$ then learns from $\text{Amplify}^H(X)$ through supervised learning methods.<br>
@@ -422,7 +422,7 @@ code {
 	It has been shown that AI is successful in solving algorithmically complex tasks, where there is no external reward function and the objective is implicit within the learned decomposition.
 </p>
 <h2>AI Safety via Debate (Irving et al)</h2>
-<a href="https://arxiv.org/abs/1805.00899"></a>https://arxiv.org/abs/1805.00899<br>
+<a href="https://arxiv.org/abs/1805.00899">https://arxiv.org/abs/1805.00899</a><br>
 <p>
     Alignment is a training-time problem because it is difficult to retroactively fix the behavior of a trained misaligned agent. To solve the alignment problem we require humans to be in the training loop. However, a human may not always be able to judge whether an explained answer is correct or whether it just seems correct. We could train an AI to identify its own flaws, but again this is challenging to evaluate. This is where the idea of debate comes in. There are two competing agents, the agents play in such a way that incentivizes them to produce honest and aligned information. The agents debate each other and the human decides who wins the debate. This removes the responsibility on the human in evaluating individual moves of the debate, and instead they simply evaluate who wins the debate. Making this approach to training much more accessible for humans to be in the loop.<br>
 	The debate proceeds as follows:
@@ -439,7 +439,7 @@ code {
 	The goal of this technique is to align ML systems that are more capable than humans.<br>
 </p>
 <h2>Debate Update: Obfuscated Arguments Problem (Barnes, Christiano)</h2>
-<a href="https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem"></a>https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem<br>
+<a href="https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem">https://www.alignmentforum.org/posts/PJLABqQ962hZEqhdB/debate-update-obfuscated-arguments-problem</a><br>
 <p>
 	The debate focuses on verifying the step-by-step reasoning of a model. It becomes difficult for humans to identify flaws in arguments when the arguments are large, this is known as the obfuscated argument problem.<br>
 	Obfuscated arguments are ones which is constructed such that both debaters know the conclusion is wrong but:
