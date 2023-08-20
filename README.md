@@ -1,6 +1,6 @@
 # Home Page
 
-[CV](/download_docs/Thomas_Walker_CV.pdf) [LinkedIn](https://www.linkedin.com/in/thomas-walker-706854189/) [GitHub](https://github.com/ThomasWalker1)
+[CV](/download_docs/Thomas_Walker_CV.pdf) - [LinkedIn](https://www.linkedin.com/in/thomas-walker-706854189/) - [GitHub](https://github.com/ThomasWalker1)
 
 ## About
 
