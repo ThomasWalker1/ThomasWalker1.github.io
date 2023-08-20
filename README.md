@@ -27,7 +27,7 @@
 - *Imperial College London - First Year Individual Research Project*
 
 [Analyzing to What Extend AI Decision Making Perpetuates Existing Social Imbalances and Injustices](/download_docs/algorithmic_decision_making.pdf) (December 2021)
-- *Imperial College London - Science and Communications Studies
+- *Imperial College London - Science and Communications Studies*
 
 ## Individual Projects
 
