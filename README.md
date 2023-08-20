@@ -11,13 +11,13 @@
 [A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
 
-[Appealing to Gradients](/download_docs/urop2023/appealing_to_gradients.pdf)
+[Appealing to Gradients](/download_docs/urop2023/appealing_to_gradients.pdf) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
 
 [Jordan Algebras](/download_docs/jordan_algebras.pdf) (June 2023)
 - *Imperial College London - Second Year Group Research Project*
 
-[Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf)
+[Reinforcement Learning Algorithm for HIV Treatment](/download_docs/rl_hiv_treatment_poster.pdf) (March 2022)
 - *Imperial College London - Interdisciplinary Research Computing*
 
 [Pseudo Random Number Generators in Python, R, and C++ with Applications to Generating Uniform Variates] (September 2022)
