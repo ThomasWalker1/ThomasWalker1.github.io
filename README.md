@@ -5,7 +5,7 @@
 
 
 ### Links
-- [CV](/download_docs/CV_July2023.pdf)
+- [CV](/download_docs/Thomas_Walker_CV.pdf)
 - [LinkedIn](https://www.linkedin.com/in/thomas-walker-706854189/)
 - [GitHub](https://github.com/ThomasWalker1)
 
@@ -44,7 +44,7 @@
 
 ## Developed Material on the Imperial Maths Wiki
 
-I am an administrator for a student lead initiative at Imperial College London. To learn more about the work we do click [here](https://imperialmathswiki.com/).
+I am an administrator for a student-led initiative at Imperial College London. To learn more about the work we do click [here](https://imperialmathswiki.com/).
 
 - MATH40002 Analysis
     - Worked Solutions
