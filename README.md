@@ -11,6 +11,7 @@ My interests are diverse and not pinned to a specific discipline. I get captivat
 - Category Theory for Machine Learning
 - Neural Network Generalization, and
 - The Topology of Neural Networks.
+
 However, I am eager to learn about new ideas that operate on the boundary of pure mathematics and theoretical machine learning. A subject that is not a main focus of mine but is something I take an interest in is AI safety. I am open to understand how some of my interests detailed above can be applied to the field of AI safety. I enjoy contemplating the philosophical conundrums encountered when one discussing the threats of AI systems. I would enjoy opportunities to have conversations on the nature of intelligence, consciousness, morality and other concepts that arise when one takes a philosophical perspective on AI.
 
 
