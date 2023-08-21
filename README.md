@@ -53,6 +53,9 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 
 ## Presentations
 
+Aligning Pseudo-Random Number Generation in Python, R and C++
+- *Imperial College London - 3-Minute UROP
+
 ## Articles
 
 [The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/) (July 2023)
