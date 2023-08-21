@@ -54,7 +54,7 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 ## Presentations
 
 Aligning Pseudo-Random Number Generation in Python, R and C++
-- *Imperial College London - 3-Minute UROP
+- *Imperial College London - 3-Minute UROP Thesis Talk*
 
 ## Articles
 
