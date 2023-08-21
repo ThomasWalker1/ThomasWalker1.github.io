@@ -23,7 +23,7 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 [A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
 
-[Appealing to Gradients](/download_docs/urop2023/appealing_to_gradients.pdf) (July - August 2023)
+[Appealing to Gradients to Investigate Neural Network Generalization](/download_docs/urop2023/appealing_to_gradients.pdf) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
 
 [Jordan Algebras](/download_docs/jordan_algebras.pdf) (June 2023)
