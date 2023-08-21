@@ -17,11 +17,18 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 
 ## Academic Projects
 
-[Using Region Testing to Evaluate PAC Bounds](/download_docs/urop2023/region_testing_for_pac_bounds.pdf) (July - August 2023)
+[An Investigation into Neural Network Generalization](/urop2023/overview.html) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
-
-[A Guide to Probably Approximately Correct Bounds for Neural Networks](/urop2023/1_intro.html) (July - August 2023)
-- *Imperial College London - Undergraduate Research Project*
+- Main Work: 
+    - Using Region Testing to Evaluate PAC Bounds
+    - A Guide to Probably Approximately Correct Bounds for Neural Networks
+- Subsidiary Work:
+    - Appealing to Gradients to Investigate Neural Network Generalization
+    - The Information Theoretic Approach Taken to Investigate Neural Network Generalization
+    - A Topological Perspective on Neural Network Training
+    - Other Approaches for Investigating Neural Network Generalization
+    - Connecting Ideas About Neural Network Generalization
+    - Remarks on Neural Network Generalization
 
 [Appealing to Gradients to Investigate Neural Network Generalization](/download_docs/urop2023/appealing_to_gradients.pdf) (July - August 2023)
 - *Imperial College London - Undergraduate Research Project*
