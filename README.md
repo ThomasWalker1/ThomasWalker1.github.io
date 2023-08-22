@@ -22,6 +22,7 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 - Main Work: 
     - Using Region Testing to Evaluate PAC Bounds
     - A Guide to Probably Approximately Correct Bounds for Neural Networks
+        - With slight digression into reinforcement learning.
 - Subsidiary Work:
     - Appealing to Gradients to Investigate Neural Network Generalization
     - The Information Theoretic Approach Taken to Investigate Neural Network Generalization
