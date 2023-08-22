@@ -8,7 +8,7 @@ I am currently studying for a Bachelors in Mathematics from Imperial College Lon
 
 My interests are diverse and not pinned to a specific discipline. I get captivated by the playful nature of the abstract, and I am fascinated at the elegant solutions devised in the practical application of ideas. My attention is peaked by the theories of machine learning as they harmoniously entertain these two aspects of mathematics. I am absorbed by the application abstract concepts to structure machine learning. From my perspective there is a gap between our theoretical understanding and the observed performance of deployed machine learning models. One of my motivations is to progress the frontier of theoretical machine learning such that we can harness the full capacity of this technology and expand its capabilities in an effective and reliable manner. Currently, my interests include,
 - Geometric Deep Learning,
-- Category Theory for Machine Learning
+- Category Theory for Machine Learning,
 - Neural Network Generalization, and
 - The Topology of Neural Networks.
 
