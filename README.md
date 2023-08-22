@@ -47,8 +47,6 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 
 ## Individual Projects
 
-[Category Theory for Machine Learning]
-
 [Artificial Intelligence Safety Fundamentals](/ai_safety_fundamentals/intro.html)
 
 ## Presentations
