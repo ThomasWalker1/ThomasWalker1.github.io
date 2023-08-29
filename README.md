@@ -98,6 +98,10 @@ I am an administrator for a student-led initiative at Imperial College London. T
     - Summary Pages
 - MATH60031 Markov Processes
     - Summary Pages
+- MATH60034 Algebraic Topology
+    - Summary Pages
+- MATH60035 Algebra 3
+    - Summary Pages
 - MATH60043 Statistical Theory
     - Summary Pages
 - MATH60047 Stochastic Simulations
