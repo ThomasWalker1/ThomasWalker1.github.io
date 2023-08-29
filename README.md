@@ -52,6 +52,9 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 
 ## Presentations
 
+Using Region Tests to Evaluate PAC Bounds
+- *Imperial College London - Verification of Autonomous Systems Group Seminar*
+
 Aligning Pseudo-Random Number Generation in Python, R and C++
 - *Imperial College London - 3-Minute UROP Thesis Talk*
 
