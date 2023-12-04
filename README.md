@@ -71,7 +71,7 @@ Aligning Pseudo-Random Number Generation in Python, R and C++
 
 - [Intelligence](/download_docs/intelligence.pdf)
 
-- [Can ChatGPT Write a Mathematical Proof?]()
+- [Can ChatGPT Write a Mathematical Proof?](/download_docs/chatgpt_maths_proof_writing.pdf)
 
 ## Notes
 
