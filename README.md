@@ -62,14 +62,16 @@ Aligning Pseudo-Random Number Generation in Python, R and C++
 
 ## Articles
 
-[The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/) (July 2023)
-- *Imperial College London - Faculty of Natural Sciences Blog Post*
+- [The Prime Minister's Mathematical Propositions](https://blogs.imperial.ac.uk/natural-sciences/2023/07/11/the-prime-ministers-mathematical-propositions/) (July 2023)
+    - *Imperial College London - Faculty of Natural Sciences Blog Post*
 
-[An Investigation Into Procedure Cloning](/download_docs/procedure_cloning.pdf)
+- [An Investigation Into Procedure Cloning](/download_docs/procedure_cloning.pdf)
 
-[A Thought Experiment](/download_docs/thought_experiment.pdf)
+- [A Thought Experiment](/download_docs/thought_experiment.pdf)
 
-[Intelligence](/download_docs/intelligence.pdf)
+- [Intelligence](/download_docs/intelligence.pdf)
+
+- [Can ChatGPT Write a MAthematical Proof?]()
 
 ## Developed Material on the Imperial Maths Wiki
 
