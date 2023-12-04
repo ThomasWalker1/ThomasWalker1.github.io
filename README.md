@@ -48,7 +48,9 @@ However, I am eager to learn about new ideas that operate on the boundary of pur
 
 ## Individual Projects
 
-[Artificial Intelligence Safety Fundamentals](/ai_safety_fundamentals/intro.html)
+- [Artificial Intelligence Safety Fundamentals](/ai_safety_fundamentals/intro.html)
+
+- [Making Explicit the Connected Between Abstract Mathematics and Machine Learning](/ThomasWalker1.github.io/abstract_mathematics_ml/intro.html)
 
 ## Presentations
 
