@@ -73,6 +73,14 @@ Aligning Pseudo-Random Number Generation in Python, R and C++
 
 - [Can ChatGPT Write a MAthematical Proof?]()
 
+## Notes
+
+- Notes I wrote during my third of a mathematics bachelor's degree at Imperial College London.
+    1. [Algebra III]()
+    2. [Function Spaces and Applications]()
+    3. [Markov Processes]()
+    4. [Probability Theory]()
+
 ## Developed Material on the Imperial Maths Wiki
 
 I am an administrator for a student-led initiative at Imperial College London. To learn more about the work we do click [here](https://imperialmathswiki.com/).
