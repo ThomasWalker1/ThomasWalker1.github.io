@@ -242,7 +242,29 @@ pre code {
     });
   </script>
 <h1 id="introduction">Introduction</h1>
-<h2 id="contents">Contents</h2>
+<p>
+	Broadly speaking, one could say that machine learning is the implementation of a computational algorithm to represent a distribution. This is a very loose definition and thus encapsulates many processes that, realistically, one would not consider machine learning. However, it also captures processes that ought to be considered machine learning, and fall out of the scope of the typical conversation surrounding machine learning. 
+</p>
+<p>
+	Computation need not be restricted to the realm of silicon hardware. Indeed, historically computations exclusively referred to mechanical mechanisms; the initial computers implemented gears to conduct operations. Furthermore, the reference to an algorithm is also not precise. For instance, there is no specification of its structure, the possible steps it may involve, or whether we can explicitly determine the procedures of which it comprises. Lastly, the representation of the distributions is not mention with respect to any method of characterisation. That is, there is no requirement that the algorithm captures specific attributes of the distribution in its representation.
+</p>
+<p>
+	Hence, one could argue that a weathered cliff has implemented machine learning. Where the computation is implemented by nature, the algorithm is the process of weathering and the cliff represents the distribution of weather patterns along its sculpted surface. On the other hand, humans are consistently implementing machine learning. The theory of Active Inference [1] argues that any agent in an environment ought to be taking actions to minimising the expected surprise of their observations. Thus the computational algorithm is the process of taking actions and performing observations. Moreover, the agent maintains a generative model that encapsulate a representation of its environment, specifically, it models the distribution of events in this environment such that it can inform subsequent actions and perception. The exact mechanisms operating the human brain remain elusive, however, interrogating the brain has been a fruitful endeavour.
+</p>
+<p>
+	Mainstream machine learning research focuses on systems running explicitly programmed algorithms that perform computations on a set of information to learn a distribution representing the general source of the information. Hence, it will not be necessary to consider the cliff as a machine learning system in our subsequent treatment of machine learning theories. However, despite not knowing the underlying processes governing human cognition, it will be useful to remain aware of the biological machine learning system for it has provided much of the foundational inspiration for the field. Many of the initial techniques in machine learning were motivated by the brain [2], and the brain continues to inspire theoretical work in the field [1]. Moreover, it is possible that biological systems will provide a guiding path to artificial general intelligence.
+</p>
+<p>
+	In this series we forgo the many of these philosophical discussions regarding machine learning systems. Instead we will adopt a theoretical perspective, with the intention to understand how abstract mathematics is being contextualised to explain, enhance, and implement machine learning systems. In particular see how the following fields of mathematics can be applied into the domain of machine learning.
+</p>
+<ul>
+	<li>Algebra</li>
+	<li>Analysis</li>
+	<li>Geometry</li>
+	<li>Graph Theory</li>
+	<li>Probability Theory</li>
+</ul>
+<h2 id="contents">Contextualisations to Machine Learning</h2>
 <ul>
 <li><a href="category_theory_for_ml/intro.html">A Categorical Perspective</a></li>
 <li><a href="">Kernels</a></li>
@@ -256,5 +278,10 @@ pre code {
 <li><a href="">Causal Inference</a></li>
 <li><a href="">Message Passing</a></li>
 <img src="assets/graph_view.png" alt="Graph View">
+<h3>Bibliography</h3>
+<ul>
+	<li>(1) Parr T, Pezzulo G, Friston KJ. Active Inference: The Free Energy Principle in Mind, Brain, and Behavior [Internet]. The MIT Press; 2022 [cited 2023 Dec 8]. Available from: <a href="https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind">https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind</a></li>
+	<li>(2) CBMM10 Panel: Research on Intelligence in the Age of AI [Internet]. 2023 [cited 2023 Dec 8]. Available from: <a href="https://www.youtube.com/watch?v=Gg-w_n9NJIE"></a></li>
+</ul>
 </body>
 </html>
