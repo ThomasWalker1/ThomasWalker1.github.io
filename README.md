@@ -80,6 +80,11 @@ Aligning Pseudo-Random Number Generation in Python, R and C++
     2. [Function Spaces and Applications](/download_docs/Function_Spaces_and_Applications_Lecture_Notes.pdf)
     3. [Markov Processes]()
     4. [Probability Theory](/download_docs/Probability_Theory_Lecture_Notes.pdf)
+    5. [Advanced Topics in Partial Differential Equations]()
+    6. [Introduction to Statistical Learning]()
+    7. [Algebraic Topology]()
+    8. [Stochastic Calculus with Applications to Non-Linear Filtering]()
+    9. [Geometry of Curves and Surfaces]()
 
 ## Developed Material on the Imperial Maths Wiki
 
