@@ -79,7 +79,7 @@ Aligning Pseudo-Random Number Generation in Python, R and C++
     1. [Algebra III]()
     2. [Function Spaces and Applications](/download_docs/Function_Spaces_and_Applications_Lecture_Notes.pdf)
     3. [Markov Processes]()
-    4. [Probability Theory](/download_docs/Probability_Theory.pdf)
+    4. [Probability Theory](/download_docs/Probability_Theory_Lecture_Notes.pdf)
 
 ## Developed Material on the Imperial Maths Wiki
 
