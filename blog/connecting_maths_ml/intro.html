@@ -1,287 +1,54 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Introduction</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-	margin-left: 25px;
-	margin-right: 25px;
-	margin-bottom: 15px;
-	margin-top: 15px;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
-
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h1 id="machine_learning">Machine Learning</h1>
-<p>
-	Broadly speaking, one could say that machine learning is the implementation of a computational algorithm to represent a distribution. This is a very loose definition and thus encapsulates many processes that, realistically, one would not consider machine learning. However, it also captures processes that ought to be considered machine learning, and fall out of the scope of the typical conversation surrounding machine learning. 
-</p>
-<p>
-	Computation need not be restricted to the realm of silicon hardware. Indeed, historically computations exclusively referred to mechanical mechanisms; the initial computers implemented gears to conduct operations. Furthermore, the reference to an algorithm is also not precise. For instance, there is no specification of its structure, the possible steps it may involve, or whether we can explicitly determine the procedures of which it comprises. Lastly, the representation of the distributions is not mention with respect to any method of characterisation. That is, there is no requirement that the algorithm captures specific attributes of the distribution in its representation.
-</p>
-<p>
-	Hence, one could argue that a weathered cliff has implemented machine learning. Where the computation is implemented by nature, the algorithm is the process of weathering and the cliff represents the distribution of weather patterns along its sculpted surface. On the other hand, humans are consistently implementing machine learning. The theory of Active Inference [1] argues that any agent in an environment ought to be taking actions to minimising the expected surprise of their observations. Thus the computational algorithm is the process of taking actions and performing observations. Moreover, the agent maintains a generative model that encapsulate a representation of its environment, specifically, it models the distribution of events in this environment such that it can inform subsequent actions and perception. The exact mechanisms operating the human brain remain elusive, however, interrogating the brain has been a fruitful endeavour.
-</p>
-<p>
-	Mainstream machine learning research focuses on systems running explicitly programmed algorithms that perform computations on a set of information to learn a distribution representing the general source of the information. Hence, it will not be necessary to consider the cliff as a machine learning system in our subsequent treatment of machine learning theories. However, despite not knowing the underlying processes governing human cognition, it will be useful to remain aware of the biological machine learning system for it has provided much of the foundational inspiration for the field. Many of the initial techniques in machine learning were motivated by the brain [2], and the brain continues to inspire theoretical work in the field [1]. Moreover, it is possible that biological systems will provide a guiding path to artificial general intelligence.
-</p>
-<p>
-	In this series we forgo the many of these philosophical discussions regarding machine learning systems. Instead we will adopt a theoretical perspective, with the intention to understand how abstract mathematics is being contextualised to explain, enhance, and implement machine learning systems. In particular see how the following fields of mathematics can be applied into the domain of machine learning.
-</p>
-<ul>
-	<li>Algebra</li>
-	<li>Analysis</li>
-	<li>Geometry</li>
-	<li>Graph Theory</li>
-	<li>Probability Theory</li>
-</ul>
-<h2 id="contents">Contextualisations to Machine Learning</h2>
-<ul>
-<li><a href="category_theory_for_ml/intro.html">A Categorical Perspective</a></li>
-<li><a href="">Kernels</a></li>
-<li><a href="">Neural Tangent Kernel</a></li>
-<li><a href="">Neural Stochastic Differential Equations</a></li>
-<li><a href="">Learning on Groups</a></li>
-<li><a href="">Information Geometry</a></li>
-<li><a href="">Group Theoretic Methods</a></li>
-<li><a href="">Investigating Machine Learning Algorithms using Algebraic Topology</a></li>
-<li><a href="">Symmetries</a></li>
-<li><a href="">Causal Inference</a></li>
-<li><a href="">Message Passing</a></li>
-</ul>
-<img src="assets/graph_view.png" alt="Graph View" style="width:543px;height:447px;" class="center">
-<h3>Bibliography</h3>
-<ul>
-	<li>(1) Parr T, Pezzulo G, Friston KJ. Active Inference: The Free Energy Principle in Mind, Brain, and Behavior [Internet]. The MIT Press; 2022 [cited 2023 Dec 8]. Available from: <a href="https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind">https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind</a></li>
-	<li>(2) CBMM10 Panel: Research on Intelligence in the Age of AI [Internet]. 2023 [cited 2023 Dec 8]. Available from: <a href="https://www.youtube.com/watch?v=Gg-w_n9NJIE">https://www.youtube.com/watch?v=Gg-w_n9NJIE</a></li>
-</ul>
-</body>
-</html>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h1 py-4 mt-3">Making Explicit the Connections Between Abstract Mathematics and Machine Learning</h1>
+  </header>
+  <div class="sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+	<p>
+		Broadly speaking, one could say that machine learning is the implementation of a computational algorithm to represent a distribution. This is a very loose definition and thus encapsulates many processes that, realistically, one would not consider machine learning. However, it also captures processes that ought to be considered machine learning, and fall out of the scope of the typical conversation surrounding machine learning. 
+	</p>
+	<p>
+		Computation need not be restricted to the realm of silicon hardware. Indeed, historically computations exclusively referred to mechanical mechanisms; the initial computers implemented gears to conduct operations. Furthermore, the reference to an algorithm is also not precise. For instance, there is no specification of its structure, the possible steps it may involve, or whether we can explicitly determine the procedures of which it comprises. Lastly, the representation of the distributions is not mention with respect to any method of characterisation. That is, there is no requirement that the algorithm captures specific attributes of the distribution in its representation.
+	</p>
+	<p>
+		Hence, one could argue that a weathered cliff has implemented machine learning. Where the computation is implemented by nature, the algorithm is the process of weathering and the cliff represents the distribution of weather patterns along its sculpted surface. On the other hand, humans are consistently implementing machine learning. The theory of Active Inference [1] argues that any agent in an environment ought to be taking actions to minimising the expected surprise of their observations. Thus the computational algorithm is the process of taking actions and performing observations. Moreover, the agent maintains a generative model that encapsulate a representation of its environment, specifically, it models the distribution of events in this environment such that it can inform subsequent actions and perception. The exact mechanisms operating the human brain remain elusive, however, interrogating the brain has been a fruitful endeavour.
+	</p>
+	<p>
+		Mainstream machine learning research focuses on systems running explicitly programmed algorithms that perform computations on a set of information to learn a distribution representing the general source of the information. Hence, it will not be necessary to consider the cliff as a machine learning system in our subsequent treatment of machine learning theories. However, despite not knowing the underlying processes governing human cognition, it will be useful to remain aware of the biological machine learning system for it has provided much of the foundational inspiration for the field. Many of the initial techniques in machine learning were motivated by the brain [2], and the brain continues to inspire theoretical work in the field [1]. Moreover, it is possible that biological systems will provide a guiding path to artificial general intelligence.
+	</p>
+	<p>
+		In this series we forgo the many of these philosophical discussions regarding machine learning systems. Instead we will adopt a theoretical perspective, with the intention to understand how abstract mathematics is being contextualised to explain, enhance, and implement machine learning systems. In particular see how the following fields of mathematics can be applied into the domain of machine learning.
+	</p>
+	<ul>
+		<li>Algebra</li>
+		<li>Analysis</li>
+		<li>Geometry</li>
+		<li>Graph Theory</li>
+		<li>Probability Theory</li>
+	</ul>
+	<h2 id="contents">Contextualisations to Machine Learning</h2>
+	<ul>
+	<li><a href="category_theory_for_ml/intro.html">A Categorical Perspective</a></li>
+	<li><a href="">Kernels</a></li>
+	<li><a href="">Neural Tangent Kernel</a></li>
+	<li><a href="">Neural Stochastic Differential Equations</a></li>
+	<li><a href="">Learning on Groups</a></li>
+	<li><a href="">Information Geometry</a></li>
+	<li><a href="">Group Theoretic Methods</a></li>
+	<li><a href="">Investigating Machine Learning Algorithms using Algebraic Topology</a></li>
+	<li><a href="">Symmetries</a></li>
+	<li><a href="">Causal Inference</a></li>
+	<li><a href="">Message Passing</a></li>
+	</ul>
+	<img src="assets/graph_view.png" alt="Graph View" style="width:543px;height:447px;" class="center">
+	<h3>Bibliography</h3>
+	<ul>
+		<li>(1) Parr T, Pezzulo G, Friston KJ. Active Inference: The Free Energy Principle in Mind, Brain, and Behavior [Internet]. The MIT Press; 2022 [cited 2023 Dec 8]. Available from: <a href="https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind">https://direct.mit.edu/books/oa-monograph/5299/Active-InferenceThe-Free-Energy-Principle-in-Mind</a></li>
+		<li>(2) CBMM10 Panel: Research on Intelligence in the Age of AI [Internet]. 2023 [cited 2023 Dec 8]. Available from: <a href="https://www.youtube.com/watch?v=Gg-w_n9NJIE">https://www.youtube.com/watch?v=Gg-w_n9NJIE</a></li>
+	</ul>
+  </div>
+</article>
