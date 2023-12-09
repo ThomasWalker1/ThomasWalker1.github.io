@@ -5,6 +5,7 @@ layout: default
   <header>
     <h1 class="h0 py-4 mt-3">Empirical PAC-Bayes Bounds</h1>
   </header>
+  <div>
   <div class="col-4 sm-width-full left mr-lg-4 mt-3">
 	<a class="no-underline border-top-thin py-1 block" href="2_PAC.html">
 	  <span class="h5 bold text-accent">Previous</span>
@@ -18,7 +19,7 @@ layout: default
 	</a>
   </div>
   <div class="prose mb-4 py-4">
-	<span><h2 id="31-introduction-to-pac-bayes-theory">3.1 Introduction to PAC-Bayes Theory</h2></span>
+	<h2 id="31-introduction-to-pac-bayes-theory">3.1 Introduction to PAC-Bayes Theory</h2>
 	<h3 id="311-bayesian-machine-learning">3.1.1 Bayesian Machine Learning</h3>
 	<p>
 		Here we will outline an introduction to Bayesian machine learning given by (Guedj, 2019). This will provide some context to the framework under which PAC-Bayes bounds are derived. As before we suppose that our training data $S=\{(x_i,y_i)\}_{i=1}^m$ consists of samples from the distribution $\mathcal{D}$ defined on $\mathcal{Z}$. Bayesian machine learning is used to find a parameter $\hat{\mathbf{w}}$ that corresponds to a hypothesis $h_{\hat{\mathbf{w}}}$ with the property that $h_{\hat{\mathbf{w}}}(x)\approx y$. To do this a learning algorithm is employed, which is simply a map from the data space to the parameter space, $\mathcal{W}$. The learning algorithm requires some prior distribution, $\pi$, to be defined on $\mathcal{W}$. Then using the training data the posterior distribution, $\rho$, is formed from the prior distribution. From the posterior distribution, there are many methodologies to then determine the parameter $\hat{\mathbf{w}}$. For example, one could take $\hat{\mathbf{w}}$ to be the mean, median or a random realization of $\rho$.
@@ -265,5 +266,6 @@ layout: default
 		<strong>end for</strong><br>
 		<strong>return</strong> $p_0$</p>
 	</blockquote>
+	</div>
 	</div>
 </article>
