@@ -55,9 +55,6 @@ code {
     margin-right: auto;
     max-width: 50%;
 
-    @media (min-width: $breakpoint-lg) {
-      max-width: (12 / 10 * 100%); // make image fill width of container on desktop
-    }
 
   }
 
