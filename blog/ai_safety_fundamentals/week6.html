@@ -1,469 +1,107 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Interpretability</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-<script>
-	MathJax = {
-	  tex: {
-		inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  },
-	  svg: {
-		fontCache: 'global'
-	  }
-	};
-	</script>
-<script type="text/javascript" id="MathJax-script" async
-	src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script>
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h2>Feature Visualization (Olah et al)</h2>
-<a href="https://distill.pub/2017/feature-visualization/">https://distill.pub/2017/feature-visualization/</a><br>
-<p>
-	We can understand individual features by searching for examples where a neuron or an entire channel has large values. This can be done at the layer level as well. Similarly, we can create examples through optimization. Style transfers teach us about the kinds of style and content that a network understands. The optimization approach is flexible as we are not constrained to fixed examples.<br>
-	By looking through the data set we can find diverse examples that trigger a certain response. We can look across the spectrum of activation rather than individual neurons. We can cluster the activations across the data set and optimize for the cluster centroids. Furthermore, examples in the data set can provide starting points for the optimization process. Through the optimization process, we can ensure diversity by
-	<ul>
-		<li>penalising similarity of examples</li>
-		<li>use style transfer to force features to be displayed in different styles</li>
-	</ul>
-	This diversification allows us to check what causes the neuron to activate, and shows us the different objects that trigger a certain activation.<br>
-	The activation space is the space of all possible combinations of neuron activations. Neuron activations can be thought of as a basis in this space, that is they form the units of all activations. Random directions in this space are therefore interpretable but at a lower rate than those in the basis directions.<br>
-	When optimizing an image to fire neurons the resulting image is full of noise and high-frequency patterns. Therefore, we need to impose a more natural structure using a prior. However, a prior that is too strict will mean the resulting image will just be one of the data sets. We can regularize by penalising frequency. Instead of generating an image from scratch, we can instead manipulate examples in the data set. A more sophisticated approach may be to create a model of the real data which enforces the regularisation of the optimization process.<br>
-	Neurons may not be the most meaningful units to extract features of a model.<br>
-</p>
-<h2>Zoom In: An Introduction To Circuits (Olah et al)</h2>
-<a href="https://distill.pub/2020/circuits/zoom-in/">https://distill.pub/2020/circuits/zoom-in/</a><br>
-<p>
-	
-</p>
-<h2>Mechanistic Interpretability, Variables, and The Importance of Interpretable Bases (Olah et al)</h2>
-<a href="https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html">https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html</a><br>
-<p>
-	Mechanistic interpretability is the process of reverse engineering neural networks. At the core of this is trying to understand the role neurons play in the network's performance.<br>
-	As the input to a neural network grows the number of dimensions increases exponentially. Therefore, there is little hope to understand particularly large networks in a reasonable amount of time. To combat this either simpler neural networks are studied, or we focus our interest on a specific behavior of the network.<br>
-	Neural networks can be thought of as a set of binary instructions, where a neuron plays a role analogous to that of a variable. The parameters of the network simply determine how and when each neuron should be activated.<br>
-	For a neural network "interpretable features" can be thought of as being embedded in arbitrary directions within an activation space. Activation functions encourage these features to be aligned with the neurons, this is called a privilege basis. This works if each neuron represents a single feature, however, polysemantic neurons that encode multiple features are known to exist.<br>
-	The goal of mechanistic interpretability is to decompose representations into understandable components.<br>
-</p>
-<h2>Locating and Editing Factual Associations in GPT: Blog Post (Meng et al)</h2>
-<a href="https://rome.baulab.info/">https://rome.baulab.info/</a><br>
-<p>
-	Factual knowledge within GPT corresponds to localized computations that can be directly edited. The reasons to locate the facts within the model are to improve their transparency and also to allow the possibility to fix mistakes.<br>
-	Facts can be described as a tuple, $t=(s,r,o)$. Where $s,o$ are the subjects and $r$ is the relation between the subjects. When querying GPT we express $(s,r)$ as a text prompt and check whether the generated output matches $o$.<br>
-	This research demonstrates how factual associations within a model can be localized and how these individual factual associations can be changed.<br>
-	The method used to locate the factual associations is known as causal tracing. Individual states are isolated within the network while processing a factual statement. Corruptions can be introduced and then restored to observe the effect specific states have on the results.<br>
-	ROME (Rank-One Model Editing) is a technique that modifies directly the weights of key-value pairs to generate new key-value pairs within the model.<br>
-	After manipulating facts the model's ability to generalize the rest of its knowledge based on this new fact is tested. During testing we need to determine whether the model knows the fact change or is simply saying the new fact. During testing we can evaluate:
-	<ol>
-		<li>Specificity - Knowledge about a fact changes, and other facts remain the same.</li>
-		<li>Generalization - Knowledge of a fact is robust to changes in wording and context.</li>
-	</ol>
-</p>
-<h2>Acquisition of Chess Knowledge In AlphaZero (McGrath et al)</h2>
-<a href="https://arxiv.org/abs/2111.09259">https://arxiv.org/abs/2111.09259</a><br>
-<p>
-	Some neural networks learn human-understandable representations, however, this may not be the case for deep neural networks. Having the ability to interpret an AI system is incredibly valuable.<br>
-	One way to approach the challenge of interpreting an AI system is the following (using the context of AlphaZero):
-	<ol>
-		<li>Probe to see whether human chess concepts are linearly decodable</li>
-		<li>Examing the behavior over training runs</li>
-		<li>Investigate the layers activations</li>
-	</ol>
-	When probing for concepts we are trying to understand whether the internal representations of the network correlate with human concepts. We do this by observing the activations on a data set.<br>
-	To measure changes in behavior across training runs, we can evaluate performance on curated data sets across each of the runs.<br>
-	To discern information that is not tied to pre-existing human concepts we try and decompose representations into principal factors. We can the measure covariance between single neurons and the inputs to find the correlation between features and neurons.<br>
-	In relation to the AlphaZero network it was found that:
-	<ol>
-		<li>Many human concepts are found within the network</li>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h1 py-4 mt-3">Week 6: Interpretability</h1>
+  </header>
+  <div class="prose mb-4 py-4">
+  <div class="col-4 sm-width-full left mr-lg-4 mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week5.html">
+      <span class="h5 bold text-accent">Previous</span>
+      <p class="bold h3 link-primary mb-1">Week 5: Decomposing Tasks for Better Supervision</p>
+    </a>
+  </div>
+  <div class="col-4 sm-width-full left mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week7.html">
+      <span class="h5 bold text-accent">Next</span>
+      <p class="bold h3 link-primary mb-1">Week 7: Agent Foundations, AI Governance</p>
+    </a>
+  </div>
+</div>
+  <div class="prose mb-4 py-4">
+	<h2>Feature Visualization (Olah et al)</h2>
+	<a href="https://distill.pub/2017/feature-visualization/">https://distill.pub/2017/feature-visualization/</a><br>
+	<p>
+		We can understand individual features by searching for examples where a neuron or an entire channel has large values. This can be done at the layer level as well. Similarly, we can create examples through optimization. Style transfers teach us about the kinds of style and content that a network understands. The optimization approach is flexible as we are not constrained to fixed examples.<br>
+		By looking through the data set we can find diverse examples that trigger a certain response. We can look across the spectrum of activation rather than individual neurons. We can cluster the activations across the data set and optimize for the cluster centroids. Furthermore, examples in the data set can provide starting points for the optimization process. Through the optimization process, we can ensure diversity by
+		<ul>
+			<li>penalising similarity of examples</li>
+			<li>use style transfer to force features to be displayed in different styles</li>
+		</ul>
+		This diversification allows us to check what causes the neuron to activate, and shows us the different objects that trigger a certain activation.<br>
+		The activation space is the space of all possible combinations of neuron activations. Neuron activations can be thought of as a basis in this space, that is they form the units of all activations. Random directions in this space are therefore interpretable but at a lower rate than those in the basis directions.<br>
+		When optimizing an image to fire neurons the resulting image is full of noise and high-frequency patterns. Therefore, we need to impose a more natural structure using a prior. However, a prior that is too strict will mean the resulting image will just be one of the data sets. We can regularize by penalising frequency. Instead of generating an image from scratch, we can instead manipulate examples in the data set. A more sophisticated approach may be to create a model of the real data which enforces the regularisation of the optimization process.<br>
+		Neurons may not be the most meaningful units to extract features of a model.<br>
+	</p>
+	<h2>Zoom In: An Introduction To Circuits (Olah et al)</h2>
+	<a href="https://distill.pub/2020/circuits/zoom-in/">https://distill.pub/2020/circuits/zoom-in/</a><br>
+	<p>
+		
+	</p>
+	<h2>Mechanistic Interpretability, Variables, and The Importance of Interpretable Bases (Olah et al)</h2>
+	<a href="https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html">https://www.transformer-circuits.pub/2022/mech-interp-essay/index.html</a><br>
+	<p>
+		Mechanistic interpretability is the process of reverse engineering neural networks. At the core of this is trying to understand the role neurons play in the network's performance.<br>
+		As the input to a neural network grows the number of dimensions increases exponentially. Therefore, there is little hope to understand particularly large networks in a reasonable amount of time. To combat this either simpler neural networks are studied, or we focus our interest on a specific behavior of the network.<br>
+		Neural networks can be thought of as a set of binary instructions, where a neuron plays a role analogous to that of a variable. The parameters of the network simply determine how and when each neuron should be activated.<br>
+		For a neural network "interpretable features" can be thought of as being embedded in arbitrary directions within an activation space. Activation functions encourage these features to be aligned with the neurons, this is called a privilege basis. This works if each neuron represents a single feature, however, polysemantic neurons that encode multiple features are known to exist.<br>
+		The goal of mechanistic interpretability is to decompose representations into understandable components.<br>
+	</p>
+	<h2>Locating and Editing Factual Associations in GPT: Blog Post (Meng et al)</h2>
+	<a href="https://rome.baulab.info/">https://rome.baulab.info/</a><br>
+	<p>
+		Factual knowledge within GPT corresponds to localized computations that can be directly edited. The reasons to locate the facts within the model are to improve their transparency and also to allow the possibility to fix mistakes.<br>
+		Facts can be described as a tuple, $t=(s,r,o)$. Where $s,o$ are the subjects and $r$ is the relation between the subjects. When querying GPT we express $(s,r)$ as a text prompt and check whether the generated output matches $o$.<br>
+		This research demonstrates how factual associations within a model can be localized and how these individual factual associations can be changed.<br>
+		The method used to locate the factual associations is known as causal tracing. Individual states are isolated within the network while processing a factual statement. Corruptions can be introduced and then restored to observe the effect specific states have on the results.<br>
+		ROME (Rank-One Model Editing) is a technique that modifies directly the weights of key-value pairs to generate new key-value pairs within the model.<br>
+		After manipulating facts the model's ability to generalize the rest of its knowledge based on this new fact is tested. During testing we need to determine whether the model knows the fact change or is simply saying the new fact. During testing we can evaluate:
 		<ol>
-			<li>Many human concepts can be regressed from internal representations</li>
+			<li>Specificity - Knowledge about a fact changes, and other facts remain the same.</li>
+			<li>Generalization - Knowledge of a fact is robust to changes in wording and context.</li>
 		</ol>
-		<li>A detailed picture of knowledge acquired during training can be gained</li>
+	</p>
+	<h2>Acquisition of Chess Knowledge In AlphaZero (McGrath et al)</h2>
+	<a href="https://arxiv.org/abs/2111.09259">https://arxiv.org/abs/2111.09259</a><br>
+	<p>
+		Some neural networks learn human-understandable representations, however, this may not be the case for deep neural networks. Having the ability to interpret an AI system is incredibly valuable.<br>
+		One way to approach the challenge of interpreting an AI system is the following (using the context of AlphaZero):
 		<ol>
-			<li>Measure the emergence of information over the course of training</li>
-			<li>Many (human) concepts arise early in the training</li>
+			<li>Probe to see whether human chess concepts are linearly decodable</li>
+			<li>Examing the behavior over training runs</li>
+			<li>Investigate the layers activations</li>
 		</ol>
-		<li>High-level concepts emerge toward the end of the training</li>
-		<li>There are similarities to the historical development of human play</li>
-	</ol>
-	When it comes to model interpretability there are two approaches:
-	<ol>
-		<li>Build inherently interpretable models</li>
-		<li>Generate post-hoc explanations for already trained models</li>
-	</ol>
-	Concept-based interpretability tries to understand models in terms of human concepts.<br>
-	Post-hoc interpretability can be approached by dissecting the network in the search for interpretable units. The challenge with post-hoc interpretability is that understanding causal relationships between behavior and concepts is difficult, especially for large complex models.<br>
-	There are particular challenges for interpretability in the Reinforcement Learning setting as we have that
-	<ul>
-		<li>complexity of the environment</li>
-		<li>complexity of the agent architecture</li>
-	</ul>
-	Representation learning in RL is developing low-dimensional representations for states, policies, and actions. A promising approach is learning these representations alongside the agent. Structural causal models aim to learn action-influence models for the agent. Reward differences can be used to understand why actions are taken. Hierarchical reinforcement learning and sub-task decomposition introduce structure into the action space, making it more interpretable. The above are all examples of creating inherently interpretable RL models. Post-hoc methods include saliency maps, extracting finite-state models of an agent's recurrent state, and analysis of agent behavior by looking at behavioral trajectories.
-</p>
-<h2></h2>
-<a href=""></a><br>
-<p>
-	
-</p>
-</body>
-</html>
+		When probing for concepts we are trying to understand whether the internal representations of the network correlate with human concepts. We do this by observing the activations on a data set.<br>
+		To measure changes in behavior across training runs, we can evaluate performance on curated data sets across each of the runs.<br>
+		To discern information that is not tied to pre-existing human concepts we try and decompose representations into principal factors. We can the measure covariance between single neurons and the inputs to find the correlation between features and neurons.<br>
+		In relation to the AlphaZero network it was found that:
+		<ol>
+			<li>Many human concepts are found within the network</li>
+			<ol>
+				<li>Many human concepts can be regressed from internal representations</li>
+			</ol>
+			<li>A detailed picture of knowledge acquired during training can be gained</li>
+			<ol>
+				<li>Measure the emergence of information over the course of training</li>
+				<li>Many (human) concepts arise early in the training</li>
+			</ol>
+			<li>High-level concepts emerge toward the end of the training</li>
+			<li>There are similarities to the historical development of human play</li>
+		</ol>
+		When it comes to model interpretability there are two approaches:
+		<ol>
+			<li>Build inherently interpretable models</li>
+			<li>Generate post-hoc explanations for already trained models</li>
+		</ol>
+		Concept-based interpretability tries to understand models in terms of human concepts.<br>
+		Post-hoc interpretability can be approached by dissecting the network in the search for interpretable units. The challenge with post-hoc interpretability is that understanding causal relationships between behavior and concepts is difficult, especially for large complex models.<br>
+		There are particular challenges for interpretability in the Reinforcement Learning setting as we have that
+		<ul>
+			<li>complexity of the environment</li>
+			<li>complexity of the agent architecture</li>
+		</ul>
+		Representation learning in RL is developing low-dimensional representations for states, policies, and actions. A promising approach is learning these representations alongside the agent. Structural causal models aim to learn action-influence models for the agent. Reward differences can be used to understand why actions are taken. Hierarchical reinforcement learning and sub-task decomposition introduce structure into the action space, making it more interpretable. The above are all examples of creating inherently interpretable RL models. Post-hoc methods include saliency maps, extracting finite-state models of an agent's recurrent state, and analysis of agent behavior by looking at behavioral trajectories.
+	</p>
+</div>
+</article>

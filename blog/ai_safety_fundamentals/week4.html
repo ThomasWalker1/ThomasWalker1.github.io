@@ -1,440 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Learning from Humans</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-<script>
-	MathJax = {
-	  tex: {
-		inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  },
-	  svg: {
-		fontCache: 'global'
-	  }
-	};
-	</script>
-<script type="text/javascript" id="MathJax-script" async
-	src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script>
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h2>Training Language Models To Follow Instructions With Human Feedback (Long Ouyang, et al)</h2>
-<a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a><br>
-<p>
-    Language models (LM) are trained to predict the next token in a sequence, and not on how to follow user instructions safely. The goal of the research in this paper is to train LMs to follow explicit and implicit instructions. To do this a data set constructed by users and used to fine-tune a misaligned model. As a result of this technique, it is shown that the resulting model was significantly preferred over the previous model, there were improvements in truthfulness, showed small improvements in toxicity, and better generalization to the preferences of the user. Furthermore, the alignment tax was lower compared to other methods.<br>
-	The method used in the paper is as follows:
-	<ol>
-		<li>Collect demonstration data, and train a supervised policy</li>
-		<li>Collect comparison data, and train a reward model</li>
-		<li>Optimize a policy against the reward model</li>
-	</ol>
-	Steps 2 and 3 are iterated as new comparison data becomes available.<br>
-	The dataset comprised the following components:<br>
-	<ol>
-		<li>Plain - Arbitrary tasks with sufficient diversity</li>
-		<li>Few-Shot - An instruction and multiple query/response pairs for the instruction</li>
-		<li>User-based - Prompts for use cases for the OpenAI API</li>
-	</ol>
-	The tasks that the model was able to follow include:
-	<ol>
-		<li>natural language instructions</li>
-		<li>those formulated using few-shot examples</li>
-		<li>or implicit continuation of tasks</li>
-	</ol>
-	The fine-tuning process consisted of three primary models. Firstly, there was a supervised policy model, which was trained on labeler demonstrations. Then there was a reward model, that took in prompts and generated rewards as outputs. Finally, a reinforcement learning model fine-tunes the initial policy using the reward model.<br>
-	The paper defines an aligned model as one that acts in accordance with the user's intention. A helpful model will be one that follows instructions and an honest model is one whose outputs are in accordance with the ground truth. The latter quality is more difficult to evaluate for a model. The harmfulness of a model is also difficult to measure, as it is really dependent on how the model is used. A model may have a capacity for harm, but using a model in such a way may be difficult.<br>
-	The technique outlined in this paper demonstrated the following results:
-	<ul>
-		<li>Cost of increasing model alignment is modest relative to pretraining</li>
-		<li>Better generalization to out-of-distribution settings</li>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h1 py-4 mt-3">Week 4: Learning from Humans</h1>
+  </header>
+  <div class="prose mb-4 py-4">
+  <div class="col-4 sm-width-full left mr-lg-4 mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week3.html">
+      <span class="h5 bold text-accent">Previous</span>
+      <p class="bold h3 link-primary mb-1">Week 3: Threat Models and Types of Solutions</p>
+    </a>
+  </div>
+  <div class="col-4 sm-width-full left mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week5.html">
+      <span class="h5 bold text-accent">Next</span>
+      <p class="bold h3 link-primary mb-1">Week 5: Decomposing Tasks for Better Supervision</p>
+    </a>
+  </div>
+</div>
+  <div class="prose mb-4 py-4">
+	<h2>Training Language Models To Follow Instructions With Human Feedback (Long Ouyang, et al)</h2>
+	<a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a><br>
+	<p>
+		Language models (LM) are trained to predict the next token in a sequence, and not on how to follow user instructions safely. The goal of the research in this paper is to train LMs to follow explicit and implicit instructions. To do this a data set constructed by users and used to fine-tune a misaligned model. As a result of this technique, it is shown that the resulting model was significantly preferred over the previous model, there were improvements in truthfulness, showed small improvements in toxicity, and better generalization to the preferences of the user. Furthermore, the alignment tax was lower compared to other methods.<br>
+		The method used in the paper is as follows:
+		<ol>
+			<li>Collect demonstration data, and train a supervised policy</li>
+			<li>Collect comparison data, and train a reward model</li>
+			<li>Optimize a policy against the reward model</li>
+		</ol>
+		Steps 2 and 3 are iterated as new comparison data becomes available.<br>
+		The dataset comprised the following components:<br>
+		<ol>
+			<li>Plain - Arbitrary tasks with sufficient diversity</li>
+			<li>Few-Shot - An instruction and multiple query/response pairs for the instruction</li>
+			<li>User-based - Prompts for use cases for the OpenAI API</li>
+		</ol>
+		The tasks that the model was able to follow include:
+		<ol>
+			<li>natural language instructions</li>
+			<li>those formulated using few-shot examples</li>
+			<li>or implicit continuation of tasks</li>
+		</ol>
+		The fine-tuning process consisted of three primary models. Firstly, there was a supervised policy model, which was trained on labeler demonstrations. Then there was a reward model, that took in prompts and generated rewards as outputs. Finally, a reinforcement learning model fine-tunes the initial policy using the reward model.<br>
+		The paper defines an aligned model as one that acts in accordance with the user's intention. A helpful model will be one that follows instructions and an honest model is one whose outputs are in accordance with the ground truth. The latter quality is more difficult to evaluate for a model. The harmfulness of a model is also difficult to measure, as it is really dependent on how the model is used. A model may have a capacity for harm, but using a model in such a way may be difficult.<br>
+		The technique outlined in this paper demonstrated the following results:
 		<ul>
-			<li>Non-English tasks</li>
-			<li>Coding problems</li>
+			<li>Cost of increasing model alignment is modest relative to pretraining</li>
+			<li>Better generalization to out-of-distribution settings</li>
+			<ul>
+				<li>Non-English tasks</li>
+				<li>Coding problems</li>
+			</ul>
+			<li>Mitigate performance degradations</li>
+			<ul>
+				<li>Reducing alignment tax</li>
+			</ul>
 		</ul>
-		<li>Mitigate performance degradations</li>
+		Due to the nature of how the fine-tuning dataset is generated (using selected labelers), there are questions on how the labelers are chosen. Ultimately, the model is aligned with the preferences of the labelers. It is also aligned with the preferences of the researchers. This may not be a representative group, which could raise concerns. It is impossible to align with everyone's preferences without tradeoffs. Models could be fine-tuned in such a way that when prompted they align with a particular set of views.<br>
+		There are some limitations to this research. One is outlined above and is in regard to the group of labelers chosen. Furthermore, this technique doesn't guarantee full alignment or safety.<br>
+		Some of the open questions that arise due to this research include:
 		<ul>
-			<li>Reducing alignment tax</li>
+			<li>Can these methods be used to produce toxic, biased, and harmful outputs?</li>
+			<li>Can these techniques be used in conjunction with other techniques in model alignment?</li>
+			<li>Can we design an interface to allow a wider audience to provide feedback to be used in the fine-tuning processes?</li>
+			<li>Can we mitigate more of the performance regression?</li>
 		</ul>
-	</ul>
-	Due to the nature of how the fine-tuning dataset is generated (using selected labelers), there are questions on how the labelers are chosen. Ultimately, the model is aligned with the preferences of the labelers. It is also aligned with the preferences of the researchers. This may not be a representative group, which could raise concerns. It is impossible to align with everyone's preferences without tradeoffs. Models could be fine-tuned in such a way that when prompted they align with a particular set of views.<br>
-	There are some limitations to this research. One is outlined above and is in regard to the group of labelers chosen. Furthermore, this technique doesn't guarantee full alignment or safety.<br>
-	Some of the open questions that arise due to this research include:
-	<ul>
-		<li>Can these methods be used to produce toxic, biased, and harmful outputs?</li>
-		<li>Can these techniques be used in conjunction with other techniques in model alignment?</li>
-		<li>Can we design an interface to allow a wider audience to provide feedback to be used in the fine-tuning processes?</li>
-		<li>Can we mitigate more of the performance regression?</li>
-	</ul>
-	From this technique, we observe that making our models inherently steerable/fine-tunable may help solve some of the issues in the alignment problem. It also demonstrates how we need to use these techniques and others in conjunction to guarantee the safety of AI models.<br>
-	If we continue to restrict large language models, due to speculations about their safety, we limit their benefits. On the other hand, if they are widely available it makes it difficult to control their use. Making only the API accessible allows one to implement the techniques outlines above to continually fine-tune the model.<br>
-</p>
-<h2>The Easy Goal Inference Problem is Still Hard (Paul Christiano)</h2>
-<a href="https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr">https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr</a><br>
-<p>
-    There are various approaches to tackling the AI control problem. One approach involves observing a user of a system, inferring their preferences from this, and then acting according to those preferences. This has empirically been shown to work, it provides a concrete model to address the problem and can integrate well with the AI practices of today.<br>
-	However, this approach relies on the fact that a user is a rational agent. The easy goal inference problem is the challenge of trying to find a reasonable representation of a user's preferences. It is a very difficult problem, and advances have been made in large part due to developments in the cognitive sciences.<br>
-	If we restrict the problem to narrower domains it becomes easier to solve as humans in these contexts act more rationally.<br>
-	There have been ideas for applying inverse reinforcement learning to this problem. There is some skepticism about whether this approach would work to get a good representation of an expert's behavior as it is thought that the agent would have to be more intelligent than the expert it is learning from. However, as humans transfer knowledge in essentially this format, there is reason to believe that we do not require the agent to be more intelligent than the expert.<br>
-	In fact, recent developments have included mistake models into these techniques to compensate for the discrepancy in intelligence level. With the idea that the agent can gather implicit information by analysing the mistakes made by the expert.<br>
-</p>
-</body>
-</html>
+		From this technique, we observe that making our models inherently steerable/fine-tunable may help solve some of the issues in the alignment problem. It also demonstrates how we need to use these techniques and others in conjunction to guarantee the safety of AI models.<br>
+		If we continue to restrict large language models, due to speculations about their safety, we limit their benefits. On the other hand, if they are widely available it makes it difficult to control their use. Making only the API accessible allows one to implement the techniques outlines above to continually fine-tune the model.<br>
+	</p>
+	<h2>The Easy Goal Inference Problem is Still Hard (Paul Christiano)</h2>
+	<a href="https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr">https://www.alignmentforum.org/s/4dHMdK5TLN6xcqtyc/p/h9DesGT3WT9u2k7Hr</a><br>
+	<p>
+		There are various approaches to tackling the AI control problem. One approach involves observing a user of a system, inferring their preferences from this, and then acting according to those preferences. This has empirically been shown to work, it provides a concrete model to address the problem and can integrate well with the AI practices of today.<br>
+		However, this approach relies on the fact that a user is a rational agent. The easy goal inference problem is the challenge of trying to find a reasonable representation of a user's preferences. It is a very difficult problem, and advances have been made in large part due to developments in the cognitive sciences.<br>
+		If we restrict the problem to narrower domains it becomes easier to solve as humans in these contexts act more rationally.<br>
+		There have been ideas for applying inverse reinforcement learning to this problem. There is some skepticism about whether this approach would work to get a good representation of an expert's behavior as it is thought that the agent would have to be more intelligent than the expert it is learning from. However, as humans transfer knowledge in essentially this format, there is reason to believe that we do not require the agent to be more intelligent than the expert.<br>
+		In fact, recent developments have included mistake models into these techniques to compensate for the discrepancy in intelligence level. With the idea that the agent can gather implicit information by analysing the mistakes made by the expert.<br>
+	</p>
+</div>
+</article>

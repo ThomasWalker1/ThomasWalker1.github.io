@@ -1,418 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Goals and Misalignment</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-<script>
-	MathJax = {
-	  tex: {
-		inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  },
-	  svg: {
-		fontCache: 'global'
-	  }
-	};
-	</script>
-<script type="text/javascript" id="MathJax-script" async
-	src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script>
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h1 id="week2-consolidation">Consolidation of Week 2 Reading</h1>
-<h2>Specification Gaming: The Flip Side of AI Ingenuity (Victoria Krakovna, et al)</h2>
-<a href="https://www.deepmind.com/blog/specification-gaming-the-flip-side-of-ai-ingenuity"></a>https://www.deepmind.com/blog/specification-gaming-the-flip-side-of-ai-ingenuity<br>
-<p>
-    Specification gaming is the behavior exhibited by an agent that satisfies the literal objective but achieves an unintended outcome. This may arise as an agent finds a shortcut that maximizes reward but does not complete the desired task.<br>
-	On the one hand, such a shortcut may just be an innovative solution to the problem, in which case it is a positive outcome. On the other hand, the agent's solution is not a viable one, so the model cannot be used in practice. The second case may arise from the misspecification of the task or bugs in the environment.<br>
-	Designing task specifications that accurately reflect our intentions is difficult, and as RL algorithms become more powerful designing such specifications becomes harder. Setting out a task specification involves details about the reward design, training environment, and auxiliary rewards, each of which can be points of exploitation leading to specification gaming.<br>
-	The reward design includes when to give the agent a reward, which can have large implications for the overall policy that is learned by the agent. Too broad of a specification makes it easier for the agent to satisfy its conditions with a degenerate solution, however, too narrow of a specification limits the room for innovative policies. Learning from human feedback is a potential solution to this problem. However, this method is reliant on humans providing accurate feedback.<br>
-	The training environment may have bugs that arise as a result of its overall architecture or due to the interaction between itself and the agent. Such issues could see an agent tamper with the task specification. For instance, it could manipulate the representation of objects within the environment. In the extreme case of a superintelligent agent, if the environment is not secure the agent may be able to hijack the computer on which it is running and change the reward specification directly.<br>
-</p>
-<h2>Goal Misgeneralization In Deep Reinforcement Learning (Lauro Langosco, et al)</h2>
-<a href="https://arxiv.org/pdf/2105.14111.pdf"></a>https://arxiv.org/pdf/2105.14111.pdf<br>
-<p>
-    For a model to perform well in practice it must be able to handle information that does not conform exactly to the data it has seen in training. A model is said to have generalized to out-of-distribution (OOD) data if it performs well on test data that is not distributed identically to the training set. In reinforcement learning, there are two ways that an agent can fail these tests. Firstly it could fail to take any useful actions in such scenarios (Capabilities Generalization), secondly, the agent could start to pursue a goal other than the training reward (Goal Misgeneralization). The paper argues that GM failures are more dangerous than CG failures. Simply training an agent to maximize an objective function is not enough to guarantee that it will not learn some proxy for the objective function. The article focuses on Goal Misgineralization for RL agents.<br>
-	Agents suffering from GM may fail suddenly under their imperfect proxies. Suppose our RL agent is trying to maximize a reward $R:S\times A\times S\to\mathbb{R}$, where $S$ is the set of valid states, and $A$ is the set of actions. Then GM occurs when an agent acting in a goal-directed manner achieves a low reward in a new environment. They appear to be optimized for a reward $R^{\prime}$ that is not equal to $R$. $R^{\prime}$ is referred to as the behavioural object, whereas $R$ is the intended objective.<br>
-	GM can arise in different ways. One of the ways includes an agent simply performing pattern recognition on the training data, which does not extrapolate to OOD data. Secondly, the behavioral objective may be correlated with the intended objective but not match. Thirdly, the environment may contain some proxies. These proxies may be aligned with the intended objective and be easier to learn. As mentioned before however, proxies are not always a bad thing for an RL agent to learn.<br>
-	It becomes difficult to know when an agent is pursuing a proxy. In real-world scenarios, it may be more challenging to identify GM compared to CG, as in the latter case we can run experiments that will indicate such failures.<br>
-</p>
-<h2>The Alignment Problem From a Deep Learning Perspective (Rich Ngo, et al)</h2>
-<a href="https://arxiv.org/abs/2209.00626"></a>https://arxiv.org/abs/2209.00626<br>
-<p>
-    The article makes a series of claims about the various phases of progression to AGI that will result in an AGI having undesirable goals.<br>
-	Firstly, learned policies will develop sophisticated representations of different outcomes that are correlated with high rewards on tasks, and it will learn to make plans to achieve those outcomes. As we train increasingly capable policies they will start to use high-level planning. This requires the agent to be able to understand what they are aiming for and figure out what actions will get them closer to that goal. This can cause the agent to take nuanced actions as they can exploit the intricacies of the goal they have been provided, often leading to misspecifications of the goal.<br>
-	Robust goals will
-	<ol>
-		<li>consistently reward in alignment with the intended goal</li>
-		<li>be related to the supervision process</li>
-		<li>operate effectively across a broad range of environments</li>
-	</ol>
-	However, once policies develop a solid understanding of their training process misaligned goals will lead to higher rewards and be reinforced.<br>
-	Next, we consider the phase where a policy becomes self-aware to the point where it can establish the training process and the deployment context to deceptively pursue its own misaligned goals. The article defines situational awareness as the capacity to identify abstract knowledge relevant to a context. A situationally aware policy will therefore know how they are updated and can exploit this. For example, externally they could make themselves appear as if they are acting positively according to the reward function, however, internally they are pursuing their own objectives that are constructed in such a way as to not be detectable from the current reward function. This form of deception is difficult to counter as it relies on us being able to detect it, however, a sufficiently intelligent system will be able to bypass any detection measure we put in place. An agent wishing to pursue their own goals will therefore develop policies that limit obedience and honesty as this would restrict their ability to deceive. Hence, we can potentially limit the rate of deception by discriminating against dishonesty, however, this is challenging for more complex tasks. <br>
-	Once policies became too capable for effective human supervision they may start to take actions that give them more power rather than following human intentions. Such AGI systems will be able to operate at an intelligence level that is above human intelligence. Therefore, we would have no way of comprehending their intentions and defending ourselves against the consequences of their plans. There is the Instrumental Convergence Thesis that states any AGI will have instrumental goals that it must achieve to accomplish any final goal it may have.  These may initially be aligned with our goals but they'll likely quickly diverge as the AGI continues to pursue its goals. Therefore, its short-term goals may seem aligned with our own, however, in the long term, it may be misaligned.<br>
-	Furthermore, as a consequence of an AGI relentlessly pursuing its own goals, it will develop strategies to prevent humans from interfering with its goals.<br>
-	We should expect AGI to generalize in a way that will seem strange to most of us. Due to their greater intellect, some of their moves may seem absurd to us as we cannot understand their deeper purpose.<br>
-	A misaligned AI will try and seek various forms of power, including technological, political/cultural, and economical. Each of these will result in it having significant control over human societies. We will be unable to coordinate ourselves to constrain such a powerful agent.<br>
-	There are multiple research avenues that should be progressed in order to mitigate these risks. For instance, we could explore ways to make our models more transparent, thus allowing us to determine whether it has goals aligned with our own. Similarly, we could use early AGI systems (that do not have a lot of power) to help us solve the alignment problem.<br>
-</p>
-</body>
-</html>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h1 py-4 mt-3">Week 2: Goals and Misalignment</h1>
+  </header>
+  <div class="prose mb-4 py-4">
+  <div class="col-4 sm-width-full left mr-lg-4 mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week1.html">
+      <span class="h5 bold text-accent">Previous</span>
+      <p class="bold h3 link-primary mb-1">Week 1: Artificial General Intelligence</p>
+    </a>
+  </div>
+  <div class="col-4 sm-width-full left mt-3">
+    <a class="no-underline border-top-thin py-1 block" href="week3.html">
+      <span class="h5 bold text-accent">Next</span>
+      <p class="bold h3 link-primary mb-1">Week 3: Threat Models and Types of Solutions</p>
+    </a>
+  </div>
+</div>
+  <div class="prose mb-4 py-4">
+	<h2>Specification Gaming: The Flip Side of AI Ingenuity (Victoria Krakovna, et al)</h2>
+	<a href="https://www.deepmind.com/blog/specification-gaming-the-flip-side-of-ai-ingenuity"></a>https://www.deepmind.com/blog/specification-gaming-the-flip-side-of-ai-ingenuity<br>
+	<p>
+		Specification gaming is the behavior exhibited by an agent that satisfies the literal objective but achieves an unintended outcome. This may arise as an agent finds a shortcut that maximizes reward but does not complete the desired task.<br>
+		On the one hand, such a shortcut may just be an innovative solution to the problem, in which case it is a positive outcome. On the other hand, the agent's solution is not a viable one, so the model cannot be used in practice. The second case may arise from the misspecification of the task or bugs in the environment.<br>
+		Designing task specifications that accurately reflect our intentions is difficult, and as RL algorithms become more powerful designing such specifications becomes harder. Setting out a task specification involves details about the reward design, training environment, and auxiliary rewards, each of which can be points of exploitation leading to specification gaming.<br>
+		The reward design includes when to give the agent a reward, which can have large implications for the overall policy that is learned by the agent. Too broad of a specification makes it easier for the agent to satisfy its conditions with a degenerate solution, however, too narrow of a specification limits the room for innovative policies. Learning from human feedback is a potential solution to this problem. However, this method is reliant on humans providing accurate feedback.<br>
+		The training environment may have bugs that arise as a result of its overall architecture or due to the interaction between itself and the agent. Such issues could see an agent tamper with the task specification. For instance, it could manipulate the representation of objects within the environment. In the extreme case of a superintelligent agent, if the environment is not secure the agent may be able to hijack the computer on which it is running and change the reward specification directly.<br>
+	</p>
+	<h2>Goal Misgeneralization In Deep Reinforcement Learning (Lauro Langosco, et al)</h2>
+	<a href="https://arxiv.org/pdf/2105.14111.pdf"></a>https://arxiv.org/pdf/2105.14111.pdf<br>
+	<p>
+		For a model to perform well in practice it must be able to handle information that does not conform exactly to the data it has seen in training. A model is said to have generalized to out-of-distribution (OOD) data if it performs well on test data that is not distributed identically to the training set. In reinforcement learning, there are two ways that an agent can fail these tests. Firstly it could fail to take any useful actions in such scenarios (Capabilities Generalization), secondly, the agent could start to pursue a goal other than the training reward (Goal Misgeneralization). The paper argues that GM failures are more dangerous than CG failures. Simply training an agent to maximize an objective function is not enough to guarantee that it will not learn some proxy for the objective function. The article focuses on Goal Misgineralization for RL agents.<br>
+		Agents suffering from GM may fail suddenly under their imperfect proxies. Suppose our RL agent is trying to maximize a reward $R:S\times A\times S\to\mathbb{R}$, where $S$ is the set of valid states, and $A$ is the set of actions. Then GM occurs when an agent acting in a goal-directed manner achieves a low reward in a new environment. They appear to be optimized for a reward $R^{\prime}$ that is not equal to $R$. $R^{\prime}$ is referred to as the behavioural object, whereas $R$ is the intended objective.<br>
+		GM can arise in different ways. One of the ways includes an agent simply performing pattern recognition on the training data, which does not extrapolate to OOD data. Secondly, the behavioral objective may be correlated with the intended objective but not match. Thirdly, the environment may contain some proxies. These proxies may be aligned with the intended objective and be easier to learn. As mentioned before however, proxies are not always a bad thing for an RL agent to learn.<br>
+		It becomes difficult to know when an agent is pursuing a proxy. In real-world scenarios, it may be more challenging to identify GM compared to CG, as in the latter case we can run experiments that will indicate such failures.<br>
+	</p>
+	<h2>The Alignment Problem From a Deep Learning Perspective (Rich Ngo, et al)</h2>
+	<a href="https://arxiv.org/abs/2209.00626"></a>https://arxiv.org/abs/2209.00626<br>
+	<p>
+		The article makes a series of claims about the various phases of progression to AGI that will result in an AGI having undesirable goals.<br>
+		Firstly, learned policies will develop sophisticated representations of different outcomes that are correlated with high rewards on tasks, and it will learn to make plans to achieve those outcomes. As we train increasingly capable policies they will start to use high-level planning. This requires the agent to be able to understand what they are aiming for and figure out what actions will get them closer to that goal. This can cause the agent to take nuanced actions as they can exploit the intricacies of the goal they have been provided, often leading to misspecifications of the goal.<br>
+		Robust goals will
+		<ol>
+			<li>consistently reward in alignment with the intended goal</li>
+			<li>be related to the supervision process</li>
+			<li>operate effectively across a broad range of environments</li>
+		</ol>
+		However, once policies develop a solid understanding of their training process misaligned goals will lead to higher rewards and be reinforced.<br>
+		Next, we consider the phase where a policy becomes self-aware to the point where it can establish the training process and the deployment context to deceptively pursue its own misaligned goals. The article defines situational awareness as the capacity to identify abstract knowledge relevant to a context. A situationally aware policy will therefore know how they are updated and can exploit this. For example, externally they could make themselves appear as if they are acting positively according to the reward function, however, internally they are pursuing their own objectives that are constructed in such a way as to not be detectable from the current reward function. This form of deception is difficult to counter as it relies on us being able to detect it, however, a sufficiently intelligent system will be able to bypass any detection measure we put in place. An agent wishing to pursue their own goals will therefore develop policies that limit obedience and honesty as this would restrict their ability to deceive. Hence, we can potentially limit the rate of deception by discriminating against dishonesty, however, this is challenging for more complex tasks. <br>
+		Once policies became too capable for effective human supervision they may start to take actions that give them more power rather than following human intentions. Such AGI systems will be able to operate at an intelligence level that is above human intelligence. Therefore, we would have no way of comprehending their intentions and defending ourselves against the consequences of their plans. There is the Instrumental Convergence Thesis that states any AGI will have instrumental goals that it must achieve to accomplish any final goal it may have.  These may initially be aligned with our goals but they'll likely quickly diverge as the AGI continues to pursue its goals. Therefore, its short-term goals may seem aligned with our own, however, in the long term, it may be misaligned.<br>
+		Furthermore, as a consequence of an AGI relentlessly pursuing its own goals, it will develop strategies to prevent humans from interfering with its goals.<br>
+		We should expect AGI to generalize in a way that will seem strange to most of us. Due to their greater intellect, some of their moves may seem absurd to us as we cannot understand their deeper purpose.<br>
+		A misaligned AI will try and seek various forms of power, including technological, political/cultural, and economical. Each of these will result in it having significant control over human societies. We will be unable to coordinate ourselves to constrain such a powerful agent.<br>
+		There are multiple research avenues that should be progressed in order to mitigate these risks. For instance, we could explore ways to make our models more transparent, thus allowing us to determine whether it has goals aligned with our own. Similarly, we could use early AGI systems (that do not have a lot of power) to help us solve the alignment problem.<br>
+	</p>
+</div>
+</article>
