@@ -1,780 +1,410 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>PAC Bounds</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-<script>
-	MathJax = {
-	  tex: {
-		inlineMath: [['$', '$'], ['\\(', '\\)']]
-	  },
-	  svg: {
-		fontCache: 'global'
-	  }
-	};
-	</script>
-<script type="text/javascript" id="MathJax-script" async
-	src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script>
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h1 id="pac">PAC Bounds</h1>
-<h2 id="21-introducing-pac-bounds">2.1 Introducing PAC Bounds</h2>
-<h3 id="211-notation">2.1.1 Notation</h3>
-<p>
-	We will first introduce some basic notation that is for the most part consistent with (Alquier, 2023) and will remain constant throughout the report. Along the way, we will need to introduce some more specialized notation for the different sections. The problems we will concern ourselves most with will be supervised classification tasks. This means, we have a feature space $\mathcal{X}$ and a label space $\mathcal{Y}$ which combine to form the data space $\mathcal{Z}=\mathcal{X}\times\mathcal{Y}$ for which some unknown $\mathcal{D}$ is defined on. The challenge now is to learn a classifier $h:\mathcal{X}\to\mathcal{Y}$ that correctly labels samples from $\mathcal{X}$ according to $\mathcal{D}$. The training data $S=\{(x_i,y_i)\}_{i=1}^m$ consists of $m$ $\mathrm{i.i.d}$ samples from $\mathcal{D}$. As we are considering neural networks, a classifier will be parameterized by a weight vector $\mathbf{w}$ which we will denote $h_{\mathbf{w}}$. Let $\mathcal{W}$ denote the set of possible weights for a classifier and the set of all possible classifiers $\mathcal{H}$ will sometimes be referred to as the hypothesis set. We will often denote the set of probability distributions over $\mathcal{W}$ as $\mathcal{M}(\mathcal{W})$. To assess the quality of a classifier we define a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to[0,\infty)$ called the loss function and we will assume that $0\leq l\leq C$. As our training data is just a sample from the underlying (unknown) distribution $\mathcal{D}$ there is the possibility that our classifier performs well on the training data, but performs poorly on the true distribution. Let the risk of our classifier be defined as $$R(h_{\mathbf{w}})=\mathbb{E}_{(x,y)\sim\mathcal{D}}\left(l(h(x),y)\right).$$ As our classifier is parameterized $\mathbf{w}$ we will instead write $R(\mathbf{w})$ for the risk of our classifier. Similarly, we define the empirical risk of our classifier to be $$\hat{R}(\mathbf{w})=\frac{1}{m}\sum_{i=1}^ml(h_{\mathbf{w}}(x_i),y_i).$$ Note that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$.
-</p>
-<h3 id="212-pac-bounds">2.1.2 PAC Bounds</h3>
-<p>
-	PAC bounds refer to a general class of bounds on the performance of a learned classifier. They aim to determine with high probability what the performance of a classifier will be like on the distribution $\mathcal{D}$ when trained on some training data taken from this distribution.
-</p>
-<p>
-	<strong>Theorem 2.1</strong>
-	Let $\vert\mathcal{W}\vert=M&lt;\infty$, $\delta\in(0,1)$, and $\mathbf{w}\in\mathcal{W}$ then it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\geq 1-\delta.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Theorem 2.1.1 (Markov's Inequality)</strong>
-	For $X$ a non-negative random variable and $\alpha>0$ we have that $$\mathbb{P}\left(X\geq\alpha\right)\leq\frac{\mathbb{E}(X)}{\alpha}.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Define $Y$ as the indicator random variable $\mathbb{I}_{\{X\geq\alpha\}}$ so that $\mathbb{E}(Y)=\mathbb{P}\left(X\geq\alpha\right)$. It is clear that $\alpha Y\leq X$ which means that $\mathbb{E}(\alpha Y)\leq\mathbb{E}(X)$, which implies that $\alpha\mathbb{P}(X\geq\alpha)\leq\mathbb{E}(X)$. Using the fact that $\alpha>0$ we can re-arrange this expressions to complete the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	<strong>Corollary 2.1.2 (Chernoff Bound)</strong>
-	For a random variable $X$, $t>0$ and $a\in\mathbb{R}$ we have that $$\mathbb{P}\left(X\geq a\right)=\mathbb{E}\left(\exp(tX)\right)\exp(-ta)$$ for $t>0$.
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	This follows from Markov's inequality due to the increasing, positivity and injectivity of $\exp(\cdot)$ in particular we have that $$\mathbb{P}\left(X\geq a\right)=\mathbb{P}\left(\exp(tX)\geq e^{ta}\right)\leq\frac{\mathbb{E}\left(\exp(tX)\right)}{e^{ta}},$$ which completes the proof. $\square$
-</p>
-</details>
-<p>
-	<strong>Lemma 2.1.3</strong> (Scott, 2014) 
-	Let $U_1,\dots,U_n$ be independent random variables taking values in an interval $[a,b]$. Then for any $t>0$ we have that $$\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	For $s>0$ the function $x\mapsto e^{sx}$ is convex  so that $$e^{sx}\leq\frac{x-a}{b-a}e^{sb}+\frac{b-x}{b-a}e^{sa}.$$ Let $V_i=U_i-\mathbb{E}(U_i)$, then as $\mathbb{E}(V_i)=0$ it follows that $$\mathbb{E}\left(\exp(sV_i)\right)\leq\frac{b}{b-a}e^{sa}-\frac{a}{b-a}e^{sb}.$$ With $p=\frac{b}{b-a}$ and $u=(b-a)s$ consider $$\psi(u)=\log\left(pe^{sa}+(1-p)e^{sb}\right)=(p-1)u+\log\left(p+(1-p)e^u\right).$$ This is a smooth function so that by Taylor's theorem we have that for any $u\in\mathbb{R}$ there exists $\xi=\xi(u)\in\mathbb{R}$ such that $$\psi(u)=\psi(0)+\psi^\prime(0)u+\frac{1}{2}\psi^{\prime\prime}(\xi)u^2.$$ As $$\psi^\prime(u)=(p-1)+1-\frac{p}{p+(1-p)e^u}$$ we have that $\psi(0)=0$ and $\psi^\prime(0)=0$. Furthermore, as $$\psi^{\prime\prime}(u)=\frac{p(1-p)e^u}{(p+(1-p)e^u)^2},\text{ and }\psi^{(3)}(u)=\frac{p(1-p)e^u(p+(1-p)e^u)(p-(1-p)e^u)}{(p+(1-p)e^u)^2}$$ we see that $\psi^{\prime\prime}(u)$ has a stationary point at $u^*=\log\left(\frac{p}{p-1}\right)$. For $u$ slightly less than $u^*$ we have $\psi^{(3)}(u)>0$ and for $u$ slightly larger than $u^*$ we have $\psi^{(3)}(u)&lt;0$. Therefore, $u^*$ is a maximum point and so $$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^*)=\frac{1}{4}.$$ Hence, $\psi(u)\leq\frac{u^2}{8}$ which implies that $$\log\left(\mathbb{E}\left(\exp(sV_i)\right)\right)\leq\frac{u^2}{8}=\frac{s^2(b-a)^2}{8}.$$ Therefore, $$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\&\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\\&\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$ which completes the proof. $\square$
-</p>
-</details>
-<p>
-	Recall that we have our random sample $S=\{(x_i,y_i)\}_{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i(\mathbf{w})=l(h_{\mathbf{w}}(x_i),y_i)$. This is a random variable due to the randomness of $S$ and so we can apply Lemma 2.1.3 to $U_i=\mathbb{E}(l_i(\mathbf{w}))-l_i(\mathbf{w})$ to get that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$ Therefore, for any $s>0$ we can apply Markov's Inequality to get that $$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})>s\right)&=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)>\exp(mts)\right)\\&\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\\&\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$ This bound is minimized for $t=\frac{4s}{C^2}$ so that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})>\hat{R}(\mathbf{w})+s\right)\leq\exp\left(-\frac{2ms^2}{C^2}\right).$$ The above bound holds for fixed $\mathbf{w}\in\mathcal{W}$ so develop a uniform bound we consider the following. $$\begin{align*}\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)>s\right)&=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\bigcup_{\mathbf{w}\in\mathcal{W}}\left\{R(\mathbf{w})-\hat{R}(\mathbf{w})>s\right\}\right)\\&\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})>\hat{R}(\mathbf{w})+s\right)\\&\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$ Now taking $\delta=M\exp\left(-\frac{2ms^2}{C^2}\right)$ we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)>C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\leq\delta$$ which upon taking complements completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	Theorem 2.1 says that with arbitrarily high probability we can bound the performance of our trained classifier on the unknown distribution $\mathcal{D}$. However, there is nothing to guarantee that the bound is useful in practice. Note that requiring bounds to hold for greater precision involves sending $\epsilon$ to $0$ which increases the bound. If the bound exceeds $C$ then it is no longer useful as we know already that $R(\mathbf{w})\leq C$. It is important to note at this stage that are two ways in which PAC bounds can hold. One set of bounds holds in expectation whilst the other hold in probability. Risk is a concept that will develop bounds in expectation. In Section 2.3 we will introduce definitions that will let us work with bounds that hold in probability. There are two general forms of PAC bounds, we have uniform convergence bounds and algorithmic-dependent bounds (Viallard, 2021). Uniform convergence bounds have the general form $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left\vert R(\mathbf{w})-\hat{R}(\mathbf{w})\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},\mathcal{W}\right)\right)\geq 1-\delta.$$ This can be considered as a worst-case analysis of hypothesis generalization, and so in practice will lead to vacuous bounds. Algorithmic-dependent bounds involve the details of a learning algorithm $A$ and take the form $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\left\vert R\left(A(S)\right)-\hat{R}\left(A(S)\right)\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},A\right)\right)\geq1-\delta.$$ These bounds can be seen as a refinement of the uniform convergence bounds as they are only required to hold for the output of the learning algorithm. It will be the subject of Section 5.1 to explore such bounds further.
-</p>
-<h3 id="213-occam-bounds">2.1.3 Occam Bounds</h3>
-<p>
-	Occam bounds are derived under the assumption that $\mathcal{H}$ is countable and that we have some bias $\pi$ defined on the hypothesis space. Note that in our setup this does not necessarily mean that $\mathcal{W}$ is countable, as multiple weights may correspond to the same classifier. However, as the Occam bounds hold true for all $h\in\mathcal{H}$ it must also be the case that they hold for all classifiers corresponding to the weight $\mathbf{w}\in\mathcal{W}$. Using this we will instead assume that $\pi$ is defined over $\mathcal{W}$.
-</p>
-<p>
-	<strong>Theorem 2.2</strong> (McAllester, 2013)
-	Simultaneously for all $\mathbf{w}\in\mathcal{W}$ and $\delta\in(0,1)$ the following holds, $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\inf_{\lambda>\frac{1}{2}}\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{w})+\frac{\lambda C}{m}\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Theorem 2.2.1 (Relative Chernoff Bound 1)</strong>
-	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\left(\frac{e^{-\delta}}{(1-\delta)^{(1-\delta)}}\right)^{\mu}.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Using Markov's inequality we note that for $t&lt;0$ we have $$\begin{align*}\mathbb{P}\left(X\leq(1-\delta)\mu\right)&=\mathbb{P}\left(e^{tX}\geq e^{t(1-\delta)\mu}\right)\\&\leq\frac{\mathbb{E}\left(e^{tX}\right)}{e^{t(1-\delta)\mu}}\\&\leq\frac{\exp\left(\left(e^t-1\right)\mu\right)}{\exp\left(t(1-\delta)\mu\right)}.\end{align*}$$ Setting $t=\log(1-\delta)&lt;0$ we get that $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\left(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\right)^\mu.$$ which completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	<strong>Corollary 2.2.2</strong> (Mitzenmacher 2005)
-	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{2}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Consider $$f(\delta)=-\delta-(1-\delta)\log(1-\delta)+\frac{\delta^2}{2}$$ for $\delta\in(0,1)$. Note that $$f^\prime(\delta)=\log(1-\delta)+\delta\text{ and }f^{\prime\prime}(\delta)=-\frac{1}{1-\delta}+1.$$ Which shows that $f^{\prime\prime}(\delta)&lt;0$ for $\delta\in(0,1)$ and hence $f^{\prime}(0)=0$ implies that $f^{\prime}(\delta)\leq0$ in this range. Since, $f(0)=0$ we have that $f(\delta)\leq0$ when $\delta\in(0,1)$. Therefore, $$\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\leq\exp\left(-\frac{\delta^2}{2}\right),$$ which completes the proof of the corollary. $\square$
-</p>
-</details>
-<p>
-	<strong>Theorem 2.2.3 (Union Bound)</strong>
-	Let $E_1,\dots, E_n$ be events. Then $\mathbb{P}\left(\bigcup_{l=1}^nE_l\right)\leq\sum_{l=1}^n\mathbb{P}(E_l).$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	This can be proved by induction on $n$. When $n=1$ the result holds clearly. Now suppose that for events $E_1,\dots, E_k$ we have that $\mathbb{P}\left(\cup_{l=1}^kE_l\right)\leq\sum_{l=1}^k\mathbb{P}(E_l)$. Then for events $E_1,\dots,E_k,E_{k+1}$ it follows that $$\begin{align*}\mathbb{P}\left(\bigcup_{l=1}^{k+1}E_l\right)&=\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)-\mathbb{P}\left(\left(\bigcup_{l=1}^kE_l\right)\cap E_{k+1}\right)\\&\leq\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)\\&\leq\sum_{l=1}^k\mathbb{P}\left(E_l\right)+\mathbb{P}\left(E_{k+1}\right)\\&=\sum_{l=1}^{k+1}\mathbb{P}\left(E_l\right).\end{align*}$$ Therefore, by induction the result holds for all $n\in\mathbb{N}$ which completes the proof. $\square$
-</p>
-</details>
-<p>
-	For the proof we consider the case when $C=1$, with the more general case following by rescaling the loss function. For $\mathbf{w}\in\mathcal{W}$ let $$\epsilon(\mathbf{w})=\sqrt{\frac{2R(\mathbf{w})\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}}.$$ Then Corollary 2.2.2 states that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\leq R(\mathbf{w})-\epsilon(\mathbf{w})\right)\leq\exp\left(-\frac{m\epsilon(\mathbf{w})^2}{2R(\mathbf{w})}\right)=\delta\pi(\mathbf{w}).$$ Summing over all $\mathbf{w}$ and applying the union bound we conclude that the probability that a $\mathbf{w}$ exists with the property that $R(\mathbf{w})>\hat{R}(\mathbf{w})+\epsilon(\mathbf{w})$ is $\delta$. Therefore, for all $\mathbf{w}$ $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\sqrt{R(\mathbf{w})\left(\frac{2\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)}\right)\geq1-\delta.$$ Using $\sqrt{ab}=\inf_{\lambda>0}\left(\frac{a}{2\lambda}+\frac{\lambda b}{2}\right)$ we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\frac{R(\mathbf{w})}{2\lambda}+\frac{\lambda\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)\geq1-\delta,$$ which upon rearrangement completes the proof. $\square$
-</p>
-</details>
-<h2 id="22-expected-risk-minimization">2.2 Expected Risk Minimization</h2>
-<p>
-	In light of Theorem 2.1 it may seem reasonable to want to identify the parameter value $\hat{\mathbf{w}}_{\mathrm{ERM}}$ that minimizes $\hat{R}(\cdot)$. This optimization process is known as Empirical Risk Minimization (ERM) and is formally defined as $$\hat{\mathbf{w}}_{\mathrm{ERM}}=\inf_{\mathbf{W}\in\mathcal{W}}\hat{R}(\mathbf{w}).$$
-</p>
-<h2 id="23-compression">2.3 Compression</h2>
-<p>
-	We now show how PAC bounds can be used to bound the performance of a compressed neural network. In classical statistical theory only as many parameters as training samples are required to overfit. So in practice, neural networks would be able to overfit the training data as they have many more parameters than training samples. Although overfitting to the training sample will yield a low empirical risk, in practice neural networks do not overfit to the data. This suggests that there is some capacity of the network that is redundant in expressing the learned function. In (Arora, 2018) compression frameworks are constructed that aim to reduce the effective number of parameters required to express the function of a trained network whilst maintaining its performance. To do this (Arora, 2018) capitalize on how a neural network responds to noise added to its weights. We first introduce the compression techniques for linear classifiers and then proceed to work with fully connected ReLU neural networks.
-</p>
-<h3 id="231-establishing-the-notion-of-compression">2.3.1 Establishing the Notion of Compression</h3>
-<p>
-	We are in a scenario where we have a learned classifier $h$ that achieves low empirical loss but is complex. In this case, we are considering $\mathcal{Y}=\mathbb{R}^k$ so that the output of $h$ in the $i^\text{th}$ can be thought of as a relative probability that the input belongs to class $i$. With this, we define the classification margin loss for $\gamma\geq0$ to be $$L_{\gamma}(h)=\mathbb{P}_{(x,y)\sim\mathcal{D}}\left(h(x)[y]\leq\gamma+\max_{j\neq y}h(x)[j]\right).$$ Similarly, we have the empirical classification margin loss defined as $$\hat{L}_{\gamma}(h)=\frac{1}{m}\left\vert\left\{x_i\in S:h(x_i)[y_i]\leq\gamma+\max_{j\neq y_i}f(x_i)[j]\right\}\right\vert.$$ We will sometimes use $L(\cdot)$ to denote $L_0(\cdot)$ and refer to it as the classification loss. Suppose that our neural network has $d$ fully connected layers and let $x^i$ be the vector before the activation at layer $i=0,\dots,d$ and as $x^0$ is the input denote it $x$. Let $A^i$ be the weight matrix of layer $i$ and let layer $i$ have $n_i$ hidden layers with $n=\max_{i=1}^dn_i$. The classifier calculated by the network will be denoted $h_\mathbf{w}(x)$, where $\mathbf{w}$ can be thought of as a vector containing the weights of the network. For layers $i\leq j$ the operator for composition of the layers will be denoted $M^{i,j}$, the Jacobian of the input $x$ will be denoted $J_x^{i,j}$ and $\phi(\cdot)$ will denote the component-wise ReLU. With these the following hold, $$x^i=A^i\phi\left(x^{i-1}\right),\;x^j=M^{i,j}\left(x^i\right),\text{ and }M^{i,j}\left(x^i\right)=J_{x^i}^{i,j}x^i.$$ For a matrix $B$, $\Vert B\Vert_F$ will be its Frobenius norm, $\Vert B\Vert_2$ its spectral norm and $\frac{\Vert B\Vert_F^2}{\Vert B\Vert_2^2}$ its stable rank.
-</p>
-<p>
-	<strong>Definition 2.3</strong>
-	Let $h$ be a classifier and $G_{\mathcal{W}}=\{g_{\mathbf{w}}:\mathbf{w}\in\mathcal{W}\}$ be a class of classifiers. We say that $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W}}$ if there exists $\mathbf{w}\in\mathcal{W}$ such that for any $x\in\mathcal{X}$, $$\left\vert h(x)[y]-g_{\mathbf{w}}(x)[y]\right\vert\leq\gamma$$ for all $y\in\{1,\dots,k\}$.
-</p>
-<p>
-	<strong>Definition 2.4</strong>
-	Suppose $G_{\mathcal{W},s}=\{g_{\mathbf{w},s}:\mathbf{w}\in\mathcal{W}\}$ is a class of classifiers indexed by trainable parameters $\mathbf{w}$ and fixed string $s$. A classifier $h$ is $(\gamma,S)$-compressible with respect to $G_{\mathcal{W},s}$ using helper string $s$ if there exists $\mathbf{w}\in\mathcal{W}$ such that for any $x\in \mathcal{X}$, $$\vert h(x)[y]-g_{\mathbf{w},s}(x)[y]\vert\leq\gamma$$ for all $y\in\{1,\dots,k\}$.
-</p>
-<p>
-	<strong>Theorem 2.5</strong>
-	Suppose $G_{\mathcal{W},s}=\{g_{\mathbf{w},s}:\mathbf{w}\in\mathcal{W}\}$ where $\mathbf{w}$ is a set of $q$ parameters each of which has at most $r$ discrete values and $s$ is a helper string. Let $S$ be a training set with $m$ samples. If the trained classifier $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W},s}$ with helper string $s$, then there exists $\mathbf{w}\in\mathcal{W}$ with high probably such that $$L_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+O\left(\sqrt{\frac{q\log(r)}{m}}\right)$$ over the training set.
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Theorem 2.5.1 (Hoeffding's Inequality)</strong> (Mitzenmacher, 2005) Let $X_1,\dots,X_n$ be independent random variables with range $[a,b]$ and $\mathbb{E}(X_i)=\mu$. Then for $\epsilon>0$ we have that $$(i)\quad\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^n X_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)\text{ and }(ii)\quad\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)&lt;\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Let $Z_i=X_i-\mathbb{E}(X_i)$ and $Z=\frac{1}{n}\sum_{i=1}^nZ_i$. Then for $\lambda>0$ we can apply Markov's inequality to deduce that $$\begin{align*}\mathbb{P}(Z\geq\epsilon)&=\mathbb{P}\left(e^{\lambda Z}\geq e^{\lambda\epsilon}\right)\\&\leq e^{-\lambda\epsilon}\mathbb{E}\left(e^{\lambda Z}\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\mathbb{E}\left(\exp\left({\frac{\lambda Z_i}{n}}\right)\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\exp\left(\frac{\lambda^2(b-a)^2}{n^2}\right)\quad\text{ Lemma 2.1.3}\\&\leq\exp\left(-\lambda\epsilon+\frac{\lambda^2(b-a)^2}{8n}\right).\end{align*}$$ Setting $\lambda=\frac{4n\epsilon}{(b-a)^2}$ gives $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$ Applying the same reasoning but for $\mathbb{P}\left(Z\leq-\epsilon\right)$ and $\lambda=-\frac{4n\epsilon}{(b-a)^2}$ give $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)$$ which completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	For $\mathbf{w}\in\mathcal{W}$, the empirical classification margin $\hat{L}_0(g_{\mathbf{w}})$ is the average of $m$ $\mathrm{i.i.d}$ Bernoulli random variables with parameter $L_0(g_{\mathbf{w}})$. Let $X_i\sim\mathrm{Bern}(L_0(g_{\mathbf{w}}))$ so that $\mu=\mathbb{E}(X_i)=L_0(g_{\mathbf{w}})$. It follows that $$\begin{align*}\mathbb{P}\left(L_0(g_{\mathbf{w}})-\hat{L}_0(g_{\mathbf{w}})\geq\tau\right)&=\mathbb{P}\left(L_0(g_{\mathbf{w}})-\frac{1}{m}\sum_{i=1}^nX_i\geq\tau\right)\\&=\mathbb{P}\left(\frac{1}{m}\sum_{i=1}^nX_i-\mu\leq-\tau\right)\\&\leq\exp\left(-2\tau^2m\right),\end{align*}$$ where Hoeffding's inequality $(i)$ has been applied. With $\tau=\sqrt{\frac{q\log(r)}{m}}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp(-2q\log(r)).$$ As there are only $r^q$ different $\mathbf{w}$, we can apply a union bound arguments to conclude that for all $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\geq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\leq r^q\exp(-q\log(r))=\exp\left(q\log(r)-2q\log(r)\right)=\exp\left(-q\log(r)\right).$$ Which implies that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp\left(-q\log(r)\right).$$ As $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W},S}$ then there exists a $\mathbf{w}\in\mathcal{W}$ such that for any $x\in\mathcal{X}$ and any $y$ we have $$\vert h(x)[y]-g_{\mathbf{w}}(x)[y]\vert\leq\gamma.$$ Therefore, as long as $h$ has a margin at least $\gamma$ the classifier $g_{\mathbf{w}}$ classifies the examples correctly so that $$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h).$$ Combining this with the previous observations completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	<strong>Remark 2.6</strong>
-	Theorem 2.5 only gives a bound for $g_{\mathbf{w}}$ which is the compression of $h$. However, there are no requirements on the hypothesis class, assumptions are only made on $h$ and its properties on a finite training set.
-</p>
-<p>
-	<strong>Corollary 2.7</strong>
-	If the compression works for $1-\zeta$ fraction of the training sample, then with a high probability $$L_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\zeta+O\left(\sqrt{\frac{q\log r}{m}}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	The proof of this corollary proceeds in exactly the same ways as the proof of Theorem 2.5, however, in the last step we can use the upper-bound $$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\zeta.$$ Which arises as for the fraction of the training sample where the compression doesn't work we assume that the loss is maximized, which was assumed to be $1$.  
-</p>
-</details>
-<h3 id="232-compression-of-a-linear-classifier">2.3.2 Compression of a Linear Classifier</h3>
-<p>
-	We now develop an algorithm to compress the decision vector of a linear classifier. We will use linear classifiers to conduct binary classification, where the members of one class have label $1$ and the others have label $-1$. The linear classifiers will be parameterized by the weight vector $\mathbf{w}\in\mathbb{R}^d$ such that for $x\in\mathcal{X}$ we have $h_{\mathbf{w}}(x)=\mathrm{sgn}(\mathbf{w}^\top x)$. Define the margin, $\gamma>0$, of $\mathbf{w}$ to be such that $y\left(\mathbf{w}^\top x\right)\geq\gamma$ for all $(x,y)$ in the training set. In compressing $\mathbf{w}$, according to Algorithm 1, we end up with a linear classifier parameterized by the weight vector $\hat{\mathbf{w}}$ with some PAC bounds relating to its performance.
-</p>
-<p><font size="3"><strong>Algorithm 1 $(\gamma,\mathbf{w})$</strong></font></p>
-<blockquote>
-<p>
-	<strong>Require</strong>
-	vector $\mathbf{w}$ with $\Vert\mathbf{w}\Vert\leq 1$, $\eta$.<br>
-	<strong>Ensure</strong>
-	vector $\hat{\mathbf{w}}$ such that for any fixed vector $\Vert u\Vert\leq 1$, with probability at least $1-\eta$, $\left\vert\mathbf{w}^\top u-\hat{\mathbf{w}}^\top u\right\vert\leq\gamma$. Vector $\hat{\mathbf{w}}$ has $O\left(\frac{\log d}{\eta\gamma^2}\right)$ non-zero entries.<br>
-	<strong>for</strong> $i=1\to d$ <strong>do</strong><br>
-	----Let $z_i=1$ with probability $p_i=\frac{2w_i^2}{\eta\gamma^2}$ and $0$ otherwise.<br>
-	----Let $\hat{w}_i=\frac{z_iw_i}{p_i}$.<br>
-	<strong>end for</strong><br>
-	<strong>return</strong> $\hat{\mathbf{w}}$
-</p>
-</blockquote>
-<p>
-	<strong>Theorem 2.8</strong>
-	For any number of samples $m$, Algorithm 1 generates a compressed vector $\hat{\mathbf{w}}$, such that $$L(\hat{\mathbf{w}})\leq\tilde{O}\left(\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Theorem 2.8.1 (Chebyshev's Inequality)</strong>
-	For a random variable $X$, with with variance $\sigma^2\in(0,\infty)$ and mean $\mu&lt;\infty$, then for $k>0$ we have that $$\mathbb{P}(\vert X-\mu\vert\geq k\sigma)\leq\frac{1}{k^2}.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	To prove Chebyshev's inequality we use Markov's inequality, $$\begin{align*}\mathbb{P}\left(\vert X-\mu\vert\geq k\sigma\right)&=\mathbb{P}\left(\vert X-\mu\vert^2\geq k^2\sigma^2\right)\\&\leq\frac{\mathbb{E}\left((X-\mu)^2\right)}{k^2\sigma^2}\\&=\frac{\sigma^2}{k^2\sigma^2}\\&=\frac{1}{k^2}\end{align*}$$ which completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	<strong>Theorem 2.8.2 (Relative Chernoff Bound 2)</strong> (Mitzenmacher 2005)
-	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta>0$ we have $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\left(\frac{e^{\delta}}{(1+\delta)^{(1+\delta)}}\right)^{\mu}.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Using Markov's inequality we note that for $t>0$ we have $$\begin{align*}\mathbb{P}\left(X\geq(1+\delta)\mu\right)&=\mathbb{P}\left(e^{tX}\geq e^{t(1+\delta)\mu}\right)\\&\leq\frac{\mathbb{E}\left(e^{tX}\right)}{e^{t(1+\delta)\mu}}\\&\leq\frac{\exp\left(\left(e^t-1\right)\mu\right)}{\exp\left(t(1+\delta)\mu\right)}.\end{align*}$$ Setting $t=\log(1+\delta)>0$ we get that $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\left(\frac{e^{\delta}}{(1+\delta)^{1+\delta}}\right)^\mu.$$ which completes the proof of the theorem. $\square$
-</p>
-</details>
-<p>
-	<strong>Corollary 2.8.3</strong> (Mitzenmacher 2005)
-	Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta>0$ we have $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{3}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Consider $$f(\delta)=\delta-(1+\delta)\log(1+\delta)+\frac{\delta^2}{3}$$ for $\delta\in(0,1]$. Note that $$f^\prime(\delta)=-\log(1+\delta)+\frac{2}{3}\delta\text{ and }f^{\prime\prime}(\delta)=-\frac{1}{1+\delta}+\frac{2}{3}.$$ Which shows that $f^{\prime\prime}(\delta)&lt;0$ for $\delta\in\left[0,\frac{1}{2}\right)$ and $f^{\prime\prime}(\delta)&lt;0$ for $\delta>\frac{1}{2}$. Since $f^\prime(0)=0$ and $f^\prime(1)&lt;0$ we deduce that $f^\prime(\delta)\leq0$ in the interval $[0,1]$. Since, $f(0)=0$ we have that $f(\delta)\leq0$ when $\delta\in[0,1]$. Therefore, $$\frac{e^{\delta}}{(1+\delta)^{1+\delta}}\leq\exp\left(-\frac{\delta^2}{3}\right),$$ which completes the proof of the corollary. $\square$
-</p>
-</details>
-<p>
-	<strong>Lemma 2.8.4</strong> 
-	Algorithm 1 $(\gamma,\mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that for any fixed $u$, with probability $1-\eta$, $\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma$. The vector $\hat{\mathbf{w}}$ has at most $O\left(\frac{\log d}{\eta\gamma^2}\right)$ non-zero entries with high probability.
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	By the construction of Algorithm 1 it is clear that for all $i$ we have $\mathbb{E}\left(\hat{w}_i\right)=w_i$. Similarly, we have that $$\mathrm{Var}\left(\hat{w}_i\right)=2p_i(1-p_i)\frac{w_i^2}{p_i^2}\leq\frac{2w_i^2}{p_i}=\eta\gamma^2.$$ Therefore, for $u$ independent of $\hat{\mathbf{w}}$ we have that $$\mathbb{E}\left(\hat{\mathbf{w}}^\top u\right)=\sum_{i=1}^d\mathbb{E}\left(\hat{w}_iu_i\right)=\sum_{i=1}^d\mathbb{E}\left(\hat{w}_i\right)u_i=\sum_{i=1}^dw_iu_i=\mathbf{w}^\top u,$$ and $$\mathrm{Var}\left(\hat{\mathbf{w}} u^\top\right)=\mathrm{Var}\left(\sum_{i=1}^d\hat{w}_iu_i\right)=\sum_{i=1}^d\mathrm{Var}(w_i)u_i^2\leq\eta\gamma^2\sum_{i=1}^du_i^2=\eta\gamma^2\Vert u\Vert^2\leq\eta\gamma^2.$$ Therefore, by Chebyshev's inequality we have that $$\mathbb{P}\left(\left\vert \hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\geq\gamma\right)\leq\eta.$$ To determine how we can bound the number of non-zero entries we analyze the behavior of the right-hand side of Theorem 2.8.2. For each entry we can define the indicator random variable $X_i$ which is $1$ when the entry is non-zero and $0$ otherwise. Note that $\mathbb{E}(X_i)=p_i$ and for $X=\sum_{i=1}^dX_i$ we have that $$\mu=\mathbb{E}(X)=\sum_{i=1}^dp_i=\frac{2\Vert\mathbf{w}\Vert^2}{\eta\gamma^2}\leq\frac{2}{\eta\gamma^2}.$$ Therefore, we need to find for what order function $f(\cdot)$ does $$\frac{e^{f(d)-1}}{f(d)^{f(d)}}\to0,\quad\text{ as }d\to\infty,$$ so that the number of non-zero elements is bounded by $O\left(\frac{f(d)}{\eta\gamma^2}\right)$ with high probability using Theorem 2.2.2. We observe that with $f(d)=\log(d)$ we get the desired convergence, and so this completes the proof of the lemma.
-</p>
-</details>
-<p>
-	In the discrete case, a similar result holds. For a vector $\mathbf{w}\in\mathbb{R}^d$ and for a given pair $(\eta,\gamma)$ let its discrete version be $\hat{\mathbf{w}}$ where $$\hat{w}_i=\begin{cases}0&\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{d}\\\text{rounding to nearest multiple of }\frac{\gamma}{2\sqrt{d}}&\text{Otherwise.}\end{cases}$$ Let its capped version be $\mathbf{w}^*$ where $$w_i^*=\begin{cases}0&\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{d}\\w_i&\text{Otherwise.}\end{cases}$$ Let its truncated version be $\mathbf{w}^\prime$ where $$w_i^\prime=\begin{cases}w_i&\vert w_i\vert\geq\frac{\gamma}{4\sqrt{d}}\\0&\text{otherwise.}\end{cases}$$
-</p>
-<p>
-	<strong>Lemma 2.8.5</strong>
-	Let Algorithm 1 $\left(\frac{\gamma}{2},\mathbf{w}\right)$ return the vector $\tilde{\mathbf{w}}$. Then for any fixed $u$ with probability at least $1-\eta$, we have that $$\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	First note that $$\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert^2=\sum_{i=1}^d\left\vert w^\prime_i-w_i\right\vert^2\leq\sum_{i=1}^d\frac{\gamma^2}{16d}=\frac{\gamma^2}{16},$$ which implies that $\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert\leq\frac{\gamma}{4}$. Similarly, $$\left\Vert\hat{\tilde{\mathbf{w}}}-\tilde{\mathbf{w}}^*\right\Vert^2=\sum_{i=1}^d\left\vert\hat{\tilde{w}}_i-\tilde{w}_i^*\right\vert^2\leq\sum_{i=1}^d\left(\frac{1}{2}\frac{\gamma}{2\sqrt{d}}\right)^2=\frac{\gamma^2}{16},$$ which implies that $\left\Vert\hat{\tilde{\mathbf{w}}}-\tilde{\mathbf{w}}^*\right\Vert\leq\frac{\gamma}{4}$. Now suppose Algorithm 2 $\left(\frac{\gamma}{2},\mathbf{w}^\prime\right)$ returns the capped vector $\mathbf{v}$. When $\vert w_i\vert\leq\frac{\gamma}{4\sqrt{d}}$ we have that $w_i^\prime=0$ so that $v_i=0$. We also have that, $\tilde{w_i}$ is either $0$ or $$\vert\tilde{w}_i\vert=\left\vert\frac{w_i}{\left(\frac{2w_i^2}{\eta\gamma^2}\right)}\right\vert=\left\vert\frac{\eta\gamma^2}{2w_i}\right\vert\geq\vert2\eta\gamma\sqrt{d}\vert$$ so that in any case we also have that $\tilde{w}^*_i=0$. If instead $\vert\tilde{w}_i\vert\geq 2\eta\gamma\sqrt{d}$ then $\tilde{w}^*_i=0$ and through similar computations we have that $\vert w_i\vert\leq\frac{\gamma}{4\sqrt{d}}$ and so $v_i=0$. It is clear that when either of these two conditions do not hold we have $\tilde{w}^*_i=v_i$ as $w_i=w^\prime_i$. Therefore, $\tilde{\mathbf{w}}^*=\mathbf{v}$ and so from Lemma 2.8.4 we conclude that with probability at least $1-\eta$ we have $\left\vert\left(\tilde{\mathbf{w}}^*\right)^\top u-(\mathbf{w}^\prime)^\top u\right\vert\leq\frac{\gamma}{2}$ for a fixed vector $u$ with $\Vert u\Vert\leq1$. Using these observation we deduce for a fixed vector $u$ with $\Vert u\Vert\leq1$ that $$\begin{align*}\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\mathbf{w}^\top u\right\vert&\leq\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\left(\tilde{\mathbf{w}}^*\right)^\top u\right\vert+\left\vert\left(\hat{\mathbf{w}}^*\right)^\top u-\left(\mathbf{w}^\prime\right)^\top u\right\vert+\left\vert\left(\mathbf{w}^\prime\right)^\top u-\mathbf{w}^\top u\right\vert\\&\leq\left\Vert\hat{\tilde{\mathbf{w}}}^\prime-\tilde{\mathbf{w}}^*\right\Vert+\frac{\gamma}{2}+\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert\\&\leq\frac{\gamma}{4}+\frac{\gamma}{2}+\frac{\gamma}{4}=\gamma,\end{align*}$$ with probability at least $1-\eta$, which completes the proof of the lemma.$\square$
-</p>
-</details>
-<p>
-	Now choose $\eta=\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}$. By Lemma 2.8.4 and Lemma 2.8.5 we know that Algorithm 1 works with probability $1-\eta$ and has at most $\tilde{O}\left(\frac{\log(d)}{\eta\gamma^2}\right)$ parameters each of which can take some finite number $r$ of discrete values. Using Corollary 2.7 we know that $$L\left(\hat{\mathbf{w}}\right)\leq O\left(\eta+\sqrt{\frac{\log(d)\log(r)}{\eta\gamma^2m}}\right)\leq\tilde{O}\left(\eta+\sqrt{\frac{1}{\eta\gamma^2m}}\right)\leq\tilde{O}\left(\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}\right)$$ which completes the proof of the theorem.
-</p>
-</details>
-<p>
-	<strong>Remark 2.9</strong>
-	The rate is not optimal as it depends on $m^{1/3}$ and not $\sqrt{m}$. To resolve this we employ helper strings.
-</p>
-<p><font size="3"> <strong>Algorithm 2 $(\gamma,\mathbf{w})$</strong></font></p>
-<blockquote>
-<p>
-	<strong>Require:</strong>
-	vector $\mathbf{w}$ with $\Vert\mathbf{w}\Vert\leq 1$, $\eta$.<br>
-	<strong>Ensure</strong> vector $\hat{\mathbf{w}}$ such that for any fixed vector $\Vert u\Vert\leq 1$, with probability at least $1-\eta$, $\vert \mathbf{w}^\top u-\hat{\mathbf{w}}^\top u\vert\leq\gamma$.<br>
-	Let $k=\frac{16\log\left(\frac{1}{\eta}\right)}{\gamma^2}$.<br>
-	Sample the random vectors $v_1,\dots,v_k\sim\mathcal{N}(0,I)$.<br>
-	Let $z_i=\langle v_i,\mathbf{w}\rangle$.<br>
-	(In Discrete Case) Round $z_i$ to closes multiple of $\frac{\gamma}{2\sqrt{dk}}$.<br>
-	<strong>return</strong> $\hat{\mathbf{w}}=\frac{1}{k}\sum_{i=1}^kz_iv_i$
-</p>
-</blockquote>
-<p>
-	<strong>Remark 2.10</strong>
-	The vectors $v_i$ of Algorithm 2 form the helper string.
-</p>
-<p>
-	<strong>Theorem 2.11</strong>
-	For any number of sample $m$, Algorithm 2 with the helper string generates a compressed vector $\hat{\mathbf{w}}$, such that $$L(\hat{\mathbf{w}})\leq\tilde{O}\left(\sqrt{\frac{1}{\gamma^2m}}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Lemma 2.11.1</strong>
-	For any fixed vector $u$, Algorithm 2 $(\gamma, \mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that with probability at least $1-\eta$, we have $\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma$.
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	Observe that $$\hat{\mathbf{w}}^\top u=\frac{1}{k}\sum_{i=1}^k\langle v_i,\mathbf{w}\rangle\langle v_i,u\rangle.$$ Where, $$\mathbb{E}\left(\langle v_i,\mathbf{w}\rangle\langle v_i,u\rangle\right)=\mathbb{E}\left(\mathbf{w}^\top v_iv_i^\top u\right)=\mathbf{w}^\top\mathbb{E}\left(v_iv_i^\top\right)=\mathbf{w}^\top u$$ and $$\mathrm{Var}\left(\hat{\mathbf{w}}^\top u\right)\leq O\left(\frac{1}{k}\right).$$ Therefore, by standard concentration inequalities $$\begin{align*}\mathbb{P}\left(\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\geq\frac{\gamma}{2}\right)\leq\exp\left(\frac{-\gamma^2k}{16}\right)\leq\eta.\end{align*}$$ As with discretization the vector can only change by at most $\frac{\gamma}{2}$, the proof of the lemma is complete. $\square$
-</p>
-</details>
-<p>
-	Choosing $\eta=\frac{1}{m}$ and applying Lemma 2.11.1 we see that with probability $1-\eta$, the compressed vector has at most $$O\left(\frac{\log(m)}{\gamma^2}\right)$$ parameters. As the number of parameters is finite we can assume that there is a finite number of discrete values, $r$, that each parameter can take. For example, if $M$ is the large absolute value of the parameter then we can take $r=2\frac{M}{\left(\frac{\gamma}{2\sqrt{dk}}\right)}+1$. Therefore, from Corollary 2.7 we know that $$L\left(\mathbf{w}\right)\leq O\left(\eta+\sqrt{\frac{\frac{\log(m)}{\gamma^2}\log(r)}{m}}\right)\leq\tilde{O}\left(\sqrt{\frac{1}{\gamma^2m}}\right)$$ which completes the proof of the theorem.
-</p>
-</details>
-<h3 id="233-compression-of-a-fully-connected-network">2.3.3 Compression of a Fully Connected Network</h3>
-<p>
-	In a similar way, the layer matrices of a fully connected network can be compressed in such a way as to maintain a reasonable level of performance. A similar compression algorithm on how to do this is detailed in Algorithm 3. Throughout we will let $\mathbf{w}$ parameterize our classifier. It can just be thought of as a list of layer matrices for our neural network.
-</p>
-<p><font size="3"> <strong>Algorithm 3 $(A,\epsilon,\eta)$</strong></font></p>
-<blockquote>
-<p>
-	<strong>Require</strong>
-	Layer matrix $A\in\mathbb{R}^{n_1\times n_2}$, error parameters $\epsilon,\eta$.<br>
-	<strong>Ensure</strong>
-	Returns $\hat{A}$ such that for all vectors $u,v$ we have that $$\mathbb{P}\left(\left\vert u^\top\hat{A}v-u^\top Av\right\vert\geq\epsilon\Vert A\Vert_F\Vert u\Vert\Vert v\Vert\right)\leq\eta$$<br>
-	Sample $k=\frac{\log(\frac{1}{\eta})}{\epsilon^2}$ random matrices $M_1,\dots,M_k$ with $\mathrm{i.i.d}$ entries $\pm1$.<br>
-	<strong>for</strong> $l=1\to k$ <strong>do</strong><br>
-	----Let $Z_{l}=\langle A,M_{l}\rangle M_{l}$<br>
-	<strong>end for</strong><br>
-	<strong>return</strong> $\hat{A}=\frac{1}{k}\sum_{l=1}^kZ_{l}$</p>
-</blockquote>
-<p>
-	<strong>Definition 2.12</strong>
-	If $M$ is a mapping from real-valued vectors to real-valued vectors, and $\mathcal{N}$ is a noise distribution. Then the noise sensitivity of $M$ at $x$ with respect to $\mathcal{N}$ is $$\psi_{\mathcal{N}}(M,x)=\mathbb{E}\left(\frac{\Vert M(x+\eta\Vert x\Vert)-M(x)\Vert^2}{\Vert M(x)\Vert^2}\right),$$ and $\psi_{\mathcal{N},S}(M)=\max_{x\in S}\psi_{\mathcal{N}}(M,x)$.
-</p>
-<p>
-	<strong>Remark 2.13</strong>
-	When $x\neq0$ and the noise distribution is the Gaussian distribution $\mathcal{N}(0,I)$ then the noise sensitivity of matrix $M$ is exactly $\frac{\Vert M\Vert_F^2}{\Vert Mx\Vert^2}$. Hence, it is at most the stable rank of $M$.
-</p>
-<p>
-	<strong>Definition 2.14</strong>
-	The layer cushion of layer $i$ is defined as the largest $\mu_i$ such that for any $x\in\mathcal{X}$ we have $$\mu_i\left\Vert A^i\right\Vert_F\left\Vert\phi\left(x^{i-1}\right)\right\Vert\leq\left\Vert A^i\phi\left(x^{i-1}\right)\right\Vert.$$
-</p>
-<p>
-	<strong>Remark 2.15</strong>
-	Note that $\frac{1}{\mu_i^2}$ is equal to the noise sensitivity of $A^i$ at $\phi\left(x^{i-1}\right)$ with respect to noise $\eta\sim\mathcal{N}(0,I)$.
-</p>
-<p>
-	<strong>Definition 2.16</strong>
-	For layers $i\leq j$ the inter-layer cushion $\mu_{i,j}$ is the largest number such that $$\mu_{i,j}\left\Vert J_{x^i}^{i,j}\right\Vert_F\left\Vert x^i\right\Vert\leq\left\Vert J_{x^i}^{i,j}x^i\right\Vert$$ for any $x\in\mathcal{X}$. Furthermore, let $\mu_{i\to}=\min_{i\leq j\leq d}\mu_{i,j}$.
-</p>
-<p>
-	<strong>Remark 2.17</strong>
-	Note that $J_{x^i}^{i,i}=I$ so that $$\frac{\left\Vert J_{x^i}^{i,i}x^i\right\Vert}{\left\Vert J_{x^i}^{i,j}\right\Vert_F\left\Vert x^i\right\Vert}=\frac{1}{\sqrt{h^i}}.$$ Furthermore, $\frac{1}{\mu_{i,j}^2}$ is the noise sensitivity of $J_x^{i,j}$ with respect to noise $\eta\sim\mathcal{N}(0,I)$.
-</p>
-<p>
-	<strong>Definition 2.18</strong>
-	The activation contraction $c$ is defined as the smallest number such that for any layer $i$ $$\left\Vert\phi\left(x^i\right)\right\Vert\geq\frac{\left\Vert x^i\right\Vert}{c}$$ for any $x\in\mathcal{X}$.
-</p>
-<p>
-	<strong>Definition 2.19</strong>
-	Let $\eta$ be the noise generated as a result of applying Algorithm 3 to some of the layers before layer $i$. Define the inter-layer smoothness $\rho_{\delta}$ to be the smallest number such that with probability $1-\delta$ and for layers $i&lt;j$ we have that $$\left\Vert M^{i,j}\left(x^i+\eta\right)-J_{x^i}^{i,j}\left(x^i+\eta\right)\right\Vert\leq\frac{\Vert\eta\Vert\left\Vert x^j\right\Vert}{\rho_{\delta}\left\Vert x^i\right\Vert}$$ for any $x\in\mathcal{X}$.
-</p>
-<p>
-	<strong>Remark 2.20</strong>
-	For a neural network let $x$ be the input, $A$ be the layer matrix and $U$ the Jacobian of the network output with respect to the layer input. Then the network output before compression is given by $UAx$ and after compression the output is given by $U\hat{A}x$.
-</p>
-<p>
-	<strong>Theorem 2.21</strong>
-	For any fully connected network $h_{{\mathbf{w}}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(h_{\tilde{{\mathbf{w}}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right)\right)\geq1-\delta.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	<strong>Lemma 2.21.1</strong>
-	For any $0&lt;\delta$ and $\epsilon\leq 1$ let $G=\left\{\left(U^i,x^i\right)\right\}_{i=1}^m$ be a set of matrix-vector pairs of size $m$ where $U\in\mathbb{R}^{k\times n_1}$ and $x\in\mathbb{R}^{n_2}$, let $\hat{A}\in\mathbb{R}^{n_1\times n_2}$ be the output of Algorithm 3 $\left(A,\epsilon,\eta=\frac{\delta}{mk}\right)$. With probability at least $1-\delta$ we have for any $(U,x)\in G$ that $\left\Vert U(\hat{A}-A)x\right\Vert\leq\epsilon \Vert A\Vert_F\Vert U\Vert_F\Vert x\Vert$.
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	For fixed vectors $u,v$ we have that $$u^\top\hat{A}v=\frac{1}{k}\sum_{l=1}^ku^\top Z_lv=\frac{1}{k}\sum_{l=1}^k\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle.$$ Furthermore, we have that $$\begin{align*}\mathbb{E}\left(\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle\right)&=\mathbb{E}\left(\mathrm{tr}\left(A^\top M_l\right)\mathrm{tr}\left(M_l^\top\left(uv^\top\right)\right)\right)\\&=\mathbb{E}\left(\left(\sum_{i,j}a_{ij}m_{ij}\right)\left(\sum_{i,j}m_{ij}u_{ij}\right)\right)\\&=\sum_{i,j}a_{ij}u_{ij}\\&=\left\langle A,uv^\top\right\rangle,\end{align*}$$ where we achieve the last equality as we note that $\mathbb{E}(m_{ij}m_{kl})$ is $1$ when $ij=kl$ and $0$ otherwise. By standard concentration inequalities we deduce that $$\mathbb{P}\left(\left\vert\frac{1}{k}\sum_{l=1}^k\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle-\left\langle A,uv^\top\right\rangle\right\vert\geq\epsilon\Vert A\Vert_F\left\Vert uv^\top\right\Vert_F\right)\leq\exp\left(-k\epsilon^2\right).$$ Therefore, for the choice of $k$ from Algorithm 3 we know that $$\mathbb{P}\left(\left\vert u^\top\hat{A}v-u^\top Av\right\vert\geq\epsilon\Vert A\Vert_F\left\Vert u\right\Vert\left\Vert v\right\Vert\right)\leq\eta.$$ Let $(U,x)\in G$ and $u_i$ be the $i^\text{th}$ row of $U$. We can apply the above result with a union bound over the $mn$ rows $u_i$ in $G$ to get that $$\mathbb{P}\left(\left\vert u_i^\top\hat{A}v-u_i^\top Av\right\vert\leq\epsilon\Vert A\Vert_F\left\Vert u_i\right\Vert\left\Vert v\right\Vert\right)\geq1-\delta$$ for all $i$ simultaneously. Furthermore, $$\left\Vert U\left(\hat{A}-A\right)x\right\Vert^2=\sum_{i=1}^n\left(u_i^\top\left(\hat{A}-A\right)x\right)^2,\text{ and }\Vert U\Vert_F^2=\sum_{i=1}^n\Vert u_i\Vert^2$$ we see that with probability at least $1-\delta$ we have $$\begin{align*}\left\Vert U(\hat{A}-A)x\right\Vert^2&=\sum_{i=1}^n\left(u_i^\top\left(\hat{A}-A\right)x\right)^2\\&\leq\sum_{i=1}^n\epsilon^2\Vert A\Vert_F^2\Vert u_i\Vert^2\Vert x\Vert\\&=\epsilon^2\Vert A\Vert_F^2\Vert U\Vert^2\Vert x\Vert\end{align*}$$ which completes the proof of the lemma. $\square$
-</p>
-</details>
-<p>
-	<strong>Lemma 2.21.2</strong>
-	For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any $0&lt;\epsilon\leq 1$, Algorithm 3 can generate weights $\tilde{\mathbf{w}}$ for a network with at most $$\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\epsilon^2}\cdot\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}$$ total parameters such that for any $x\in\mathcal{X}$ we have $$\mathbb{P}\left(\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{\mathbf{w}}}(x)\right\Vert\leq\epsilon\Vert h_{\mathbf{w}}(x)\Vert\right)\geq1-\frac{\delta}{2},$$ where $\mu_i,\mu_{i\to},c$ and $\rho_{\delta}$ are the layer cushion, inter-layer cushion, activation contraction and inter-layer smoother for the network. $\square$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	The proof of this lemma proceeds by induction. For $i\geq0$ let $\hat{x}_i^j$ be the output at layer $j$ if weights $A^1,\dots,A^i$ are replaced with $\tilde{A}^1,\dots,\tilde{A}^i$. We want to show for any $i$ if $j\geq i$ then $$\mathbb{P}\left(\left\Vert\hat{x}_i^j-x^j\right\Vert\leq\frac{i}{d}\epsilon\left\Vert x^j\right\Vert\right)\geq1-\frac{i\delta}{2d}.$$ For $i=0$ the result is clear as the weight matrices are unchanged. Suppose the result holds true for $i-1$. Let $\hat{A}^i$ be the result of applying Algorithm 3 to $A^i$ with $\epsilon_i=\frac{\epsilon\mu_i\mu_{i\to}}{4cd}$ and $\eta=\frac{\delta}{6d^2n^2m}$. Consider the set  $$G=\left\{\left(J_{x^i}^{i,j},x^i\right):x^i\in\mathcal{X},j\geq i\right\}$$ and let $\Delta^i=\hat{A}^i-A^i$. Note that $$\left\Vert\hat{x}_i^j-x^j\right\Vert\leq\left\Vert\hat{x}_i^j-\hat{x}_{i-1}^j\right\Vert+\left\Vert\hat{x}_{i-1}^j-x^j\right\Vert.$$ The second term is bounded by $\frac{(i-1)\epsilon\left\Vert x^j\right\Vert}{d}$ by inductive assumption. Therefore, it suffices to show that the first term is bounded by $\frac{\epsilon}{d}$ to complete the inductive step. First observe that, $$\left\Vert\hat{x}_i^j-\hat{x}_{i-1}^j\right\Vert\leq\left\Vert J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert+\left\Vert M^{i,j}\left(\hat{A}^i\phi\left(\hat{x}^{i-1}\right)\right)-M^{i,j}\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)-J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert.$$ The first term can be bounded as follows $$\begin{align*}\left\Vert J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert&\leq\frac{\epsilon\mu_i\mu_{i\to}}{6cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert\phi\left(\hat{x}^{i-1}\right)\right\Vert\quad\text{Lemma 2.21.1}\\&\leq\frac{\epsilon\mu_i\mu_{i\to}}{6cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert\hat{x}^{i-1}\right\Vert\quad\text{Lipschitz of $\phi$}\\&\leq\frac{\epsilon\mu_i\mu_{i\to}}{3cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert x^{i-1}\right\Vert\quad\text{ Inductive Assumption}\\&\leq\frac{\epsilon\mu_{i\to}}{3d}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\phi\left(x^{i-1}\right)\right\Vert\\&\leq\frac{\epsilon\mu_{i\to}}{3d}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert x^i\right\Vert\\&\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.\end{align*}$$ The second term can be split as $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(\hat{A}^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert+\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert,$$ which can be bounded by inter-layer smoothness. By inductive assumption $$\left\Vert A^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert\leq\frac{(a-1)\epsilon\left\Vert x^i\right\Vert}{d}\leq\epsilon\left\Vert x^i\right\Vert.$$ Then by inter-layer smoothness $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert\leq\frac{\left\Vert x^b\right\Vert\epsilon}{\rho_{\delta}}\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.$$ On the other hand, $$\left\Vert\hat{A}^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert\leq\left\Vert A^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert+\left\Vert\Delta^i\phi\left(\hat{x}^{i-1}\right)\right\Vert\leq\frac{(i-1)\epsilon}{d}+\frac{\epsilon}{3d}\leq\epsilon$$ so that $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.$$ This completes the inductive step. To complete the proof we bound the total number of parameters. With the values of $\epsilon_i$ and $\eta$ used in the induction we see that the total number of parameters is $$\begin{align*}\sum_{i=1}^d\frac{\log\left(\frac{1}{\frac{\delta}{6d^2n^2m}}\right)}{\left(\frac{\epsilon\mu_i\mu_{i\to}}{4cd}\right)^2}&=\sum_{i=1}^d\frac{16c^2d^2\log\left(\frac{6d^2n^2m}{\delta}\right)}{\epsilon^2\mu_i\mu_{i\to}}\\&\leq\frac{16c^2d^2\log\left(\frac{d^2n^2m^2}{\delta^2}\right)}{\epsilon^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\\&\leq\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\epsilon^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2},\end{align*}$$ which completes the proof of the lemma. $\square$
-</p>
-</details>
-<p>
-	<strong>Lemma 2.21.3</strong>
-	For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0<\delta\leq 1$ and any margin $\gamma>0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	In the first case suppose that $\gamma^2>2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2$, then $$\left\vert h_{\mathbf{w}}(x)[y]-\max_{j\neq y}h_{\mathbf{w}}(x)[j]\right\vert^2\leq 2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2\leq\gamma^2.$$ Therefore, the margin can be at most $\gamma$ which implies that $\hat{L}_{\gamma}(h_{\mathbf{w}})=1$ and so the statement holds in this case. If instead $\gamma^2\leq2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2$, then setting $\epsilon=\frac{\gamma^2}{2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2}$ in Lemma 2.21.2 we conclude that $$\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{\mathbf{w}}}(x)\right\Vert\leq\frac{\gamma}{\sqrt{2}}$$ for any $x\in\mathcal{X}$. If for $(x,y)\in\mathcal{Z}$ we have that $$h_{\mathbf{w}}(x)[y]\leq\gamma+\max_{j\neq y}f_{\mathbf{w}}[j]$$ then for $h_{\tilde{\mathbf{w}}}$ the contribution of this data point to the empirical classification loss can only be less than or equal to its contribution to the empirical classification margin loss of $h_{\mathbf{w}}$. On the other hand, suppose that $$h_{\mathbf{w}}[y]>\gamma+\max_{j\neq y}h_{\mathbf{w}}[j],$$ so that the data point doesn't contribute to $\hat{L}_{\gamma}(h_{\mathbf{w}})$. For the data point's contribution to $\hat{L}_0(h_{\tilde{\mathbf{w}}})$ to be larger we need $$h_{\tilde{w}}\leq\max_{j\neq y}h_{\tilde{w}}(x)[y]$$ which would either require a change of more than $\gamma$ between two components of $h_{\mathbf{w}}(x)$ under compression to $h_{\tilde{\mathbf{w}}}(x)$. If this change occurs then the distance between $h_{\mathbf{w}}(x)$ and $h_{\tilde{\mathbf{w}}}(x)$ is minimized when only two components change by more than $\frac{\gamma}{2}$. Suppose that components the $i^\text{th}$ and $j^\text{th}$ components move sufficiently then, $$\begin{align*}\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{w}}(x)\right\Vert^2&>\vert h_{\mathbf{w}}(x)[i]-h_{\tilde{\mathbf{w}}}(x)[i]\vert^2+\vert h_{\mathbf{w}}(x)[j]-h_{\tilde{\mathbf{w}}}(x)[j]\vert^2\\&>\frac{\gamma^2}{4}+\frac{\gamma^2}{4}\\&=\frac{\gamma^2}{2}\end{align*}$$ which contradicts the conclusion of Lemma 2.21.2. We now bound the number of total parameters. With our value for $\epsilon$ Lemma 2.21.2 tells us that the number of total parameters is at most $$\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\frac{\gamma^2}{2\max_{x\in\mathcal{X}}}}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2},$$ from which the required result follows and completes the proof of the lemma.
-</p>
-</details>
-<p>
-	<strong>Lemma 2.21.4</strong> 
-	For any matrix $A$ let $\hat{A}$ be the truncated version of $A$ where singular values that are smaller than $\delta\left\Vert A\right\Vert_2$.Let $h_{\mathbf{w}}$ be a $d$-layer network with weights $A=\left\{A^1,\dots,A^d\right\}$. Then for any input $x$, weights $A$ and $\hat{A}$, if for any layer $i$, $\left\Vert A^i-\hat{A}^i\right\Vert\leq\frac{1}{d}\Vert A^i\Vert$, then $$\Vert h_\mathbf{w}(x)-h_{\hat{\mathbf{w}}}(x)\Vert\leq e\Vert x\Vert\left(\prod_{i=1}^d\left\Vert A^i\right\Vert_2\right)\sum_{i=1}^d\frac{\left\Vert\hat{A}^i-A^i\right\Vert_2}{\Vert A^i\Vert_2}.$$
-</p>
-<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
-<summary>Proof</summary>
-<br>
-<p>
-	For $x\in\mathcal{X}$ recall that $x^i$ is the vector before activation at layer $i$. Now we also consider $\hat{x}^i$ as the vector before activation for the network with weights $\hat{A}$. For the lemma $x\in\mathcal{X}$ is fixed so let $\xi_i=\left\vert\hat{x}^i-x^i\right\vert$. Now proceed by induction on the statement $$\xi_i\leq\left(1+\frac{1}{d}\right)^i\Vert x\Vert\left(\prod_{j=1}^i\left\Vert A^j\right\Vert_2\right)\sum_{j=1}^i\frac{\left\Vert A^j-\hat{A}^j\right\Vert_2}{\left\Vert A^j\right\Vert_2}.$$ The base case clearly holds as $\xi_0=0$. Therefore, for $i\geq1$ we proceed as follows, $$\begin{align*}\xi_{i+1}&=\left\vert\hat{A}^{i+1}\phi\left(\hat{x}^i\right)-A^{i+1}\phi\left(x^i\right)\right\vert_2\\&=\left\vert\hat{A}^i\left(\phi\left(\hat{x}^i\right)-\phi\left(x^i\right)\right)+\left(\hat{A}^i-A^i\right)\phi\left(x^i\right)\right\vert_2\\&\leq\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\left\vert\phi\left(\hat{x}^i\right)-\phi\left(x^i\right)\right\vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert\phi\left(x^i\right)\right\vert_2\\&\leq\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\left\vert\hat{x}^i-x^i\right\vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert x^i\right\vert_2\\&=\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\xi_i+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert x^i\right\vert_2,\end{align*}$$ note how the second arises as a specific property of the ReLU activation function. By the assumption of the lemma and the inductive assumption it therefore follows that $$\begin{align*}\xi_{i+1}&\leq\xi_i\left(1+\frac{1}{d}\right)\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\Vert x\Vert_2\prod_{j=1}^i\left\Vert A^j\right\Vert_2\\&\leq\left(1+\frac{1}{d}\right)^{i+1}\left(\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\right)\Vert x\Vert_2\sum_{j=1}^i\frac{\left\Vert\hat{A}^j-A^j\right\Vert_2}{\left\Vert A^j\right\Vert_2}+\frac{\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2}{\left\Vert A^{i+1}\right\Vert_2}\Vert x\Vert_2\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\\&\leq\left(1+\frac{1}{d}\right)^{i+1}\left(\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\right)\Vert x\Vert_2\sum_{j=1}^{i+1}\frac{\left\Vert\hat{A}^j-A^j\right\Vert_2}{\left\Vert A^j\right\Vert_2},\end{align*}$$ then using the fact that $\left(1+\frac{1}{d}\right)^d\leq e$ completes the proof of the lemma.
-</p>
-</details>
-<p>
-	We can assume without loss of generality that for any $i\neq j$ that $$\Vert A_i\Vert_F=\Vert A_j\Vert_F=\beta.$$ This is because we can re-balance the matrices if necessary without effecting the cushion of the network. Therefore, for any $x\in\mathcal{X}$ we have $$\beta^d=\prod_{i=1}^d\left\Vert A^i\right\Vert_F\leq\frac{c\left\Vert x^1\right\Vert}{\Vert x\Vert\mu_1}\prod_{i=2}^d\left\Vert A^i\right\Vert_F\leq\frac{c\left\Vert x^2\right\Vert}{\Vert x\Vert\mu_1\mu_2}\prod_{i=3}^d\left\Vert A^i\right\Vert_F\leq\dots\leq\frac{c^d\left\Vert h_{\mathbf{w}}(x)\right\Vert}{\Vert x\Vert\prod_{i=1}^d\mu_i}.$$ Now for each layer matrix $A^i$ we can define the single layer network by $A^ix^{i-1}=x^{i-1}$ and so with $\epsilon=\min\left(\frac{1}{d},\frac{\gamma^2}{2\max\left\Vert A^ix^{i-1}\right\Vert_2^2}\right)$ we can deduce from Lemma 2.21.2 that with probability at least $1-\frac{\delta}{2}$ we have that $$\left\Vert\tilde{A}^i-A^i\right\Vert_F\leq\frac{1}{d}\left\Vert A^i\right\Vert.$$ Which implies that $\left\Vert\tilde{A}^i\right\Vert\leq\beta\left(1+\frac{1}{d}\right)$. Next we that as  $$\tilde{A}^i=\frac{1}{k}\sum_{l=1}^k\left\langle A^i,M_l\right\rangle M_{l},$$ if $\hat{A}^i$ are the approximations of $\tilde{A}^i$ with accuracy $\mu$ then $$\left\Vert\hat{A}^i-\tilde{A}^i\right\Vert_F\leq\sqrt{k} h\nu\leq\sqrt{q}h\nu$$ where $q$ is the total number of parameters. Therefore, by Lemma 2.21.4 we have that $$\begin{align*}\left\vert l_{\gamma}(h_{\tilde{w}}(x),y)-l_{\gamma}(h_{\hat{\mathbf{w}}}(x),y)\right\vert&\leq\frac{2e}{\gamma}\Vert x\Vert\left(\prod_{i=1}^d\left\Vert\tilde{A}^i\right\Vert\right)\sum_{i=1}^d\frac{\left\Vert\tilde{A}^i-\hat{A}^i\right\Vert_F}{\left\Vert\tilde{A}^i\right\Vert_F}\\&\leq\frac{e^2}{\gamma}\Vert x\Vert\beta^{d-1}\sum_{i=1}^d\left\Vert \tilde{A}^i-\hat{A}^i\right\Vert_F\\&\leq\frac{e^2c^d\left\Vert h_{\mathbf{w}}(x)\right\Vert\sum_{i=1}^d\left\Vert\tilde{A}^i-\hat{A}^i\right\Vert_F}{\gamma\beta\prod_{i=1}^d\mu_i}\\&\leq\frac{qn\nu}{\beta},\quad\text{By Lemma 2.21.3}:\frac{e^2d\left\Vert h_{\mathbf{w}}(x)\right\Vert}{\gamma\beta\prod_{i=1}^d\mu_i}\leq\sqrt{q}.\end{align*}$$ From Algorithm 3 we see that $$\beta=\left\Vert\hat{A}^i\right\Vert_F=\frac{1}{k}\sum_{l=1}^k\left\Vert Z_l\right\Vert_F\leq\frac{1}{k}\sum_{l=1}^kn\vert\langle A,M_l\rangle\vert$$ and so using $k\leq n^2$ we see that parameter $\langle A,M_l\rangle$ has absolute value at most $\beta n$. Therefore, to get an $\epsilon$-cover with $r$ choices for each parameter we require that $$\frac{qn\left(\frac{\beta n}{r}\right)}{\beta}=\frac{qn^2}{r}\leq\epsilon$$ which means that $r\geq\frac{qn^2}{\epsilon}$. We need these choices over $q$ parameters and so the covering number is given by $$\left(\frac{q\beta n^2}{\epsilon}\right)^q\leq\left(\frac{q\beta n}{\epsilon}\right)^{2q}.$$ Therefore, we can bound the Rademacher complexity by $$\epsilon+\sqrt{\frac{4q\log\left(\frac{q\beta n}{\epsilon}\right)}{m}}$$ from which we can deduce that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0\left(h_{\mathbf{w}}\right)\leq \hat{L}_0\left(h_{\tilde{\mathbf{w}}}\right)+\tilde{O}\left(\sqrt{\frac{q}{m}}\right)\right)\geq1-\delta.$$ By the construction of $\tilde{\mathbf{w}}$ we know that $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})$ which when combined with the above conclusion completes the proof of the theorem.
-</p>
-</detail>
-</body>
-</html>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h0 py-4 mt-3">Overview</h1>
+  </header>
+  <div class="col-4 sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+	<h1 id="pac">PAC Bounds</h1>
+	<h2 id="21-introducing-pac-bounds">2.1 Introducing PAC Bounds</h2>
+	<h3 id="211-notation">2.1.1 Notation</h3>
+	<p>
+		We will first introduce some basic notation that is for the most part consistent with (Alquier, 2023) and will remain constant throughout the report. Along the way, we will need to introduce some more specialized notation for the different sections. The problems we will concern ourselves most with will be supervised classification tasks. This means, we have a feature space $\mathcal{X}$ and a label space $\mathcal{Y}$ which combine to form the data space $\mathcal{Z}=\mathcal{X}\times\mathcal{Y}$ for which some unknown $\mathcal{D}$ is defined on. The challenge now is to learn a classifier $h:\mathcal{X}\to\mathcal{Y}$ that correctly labels samples from $\mathcal{X}$ according to $\mathcal{D}$. The training data $S=\{(x_i,y_i)\}_{i=1}^m$ consists of $m$ $\mathrm{i.i.d}$ samples from $\mathcal{D}$. As we are considering neural networks, a classifier will be parameterized by a weight vector $\mathbf{w}$ which we will denote $h_{\mathbf{w}}$. Let $\mathcal{W}$ denote the set of possible weights for a classifier and the set of all possible classifiers $\mathcal{H}$ will sometimes be referred to as the hypothesis set. We will often denote the set of probability distributions over $\mathcal{W}$ as $\mathcal{M}(\mathcal{W})$. To assess the quality of a classifier we define a measurable function $l:\mathcal{Y}\times\mathcal{Y}\to[0,\infty)$ called the loss function and we will assume that $0\leq l\leq C$. As our training data is just a sample from the underlying (unknown) distribution $\mathcal{D}$ there is the possibility that our classifier performs well on the training data, but performs poorly on the true distribution. Let the risk of our classifier be defined as $$R(h_{\mathbf{w}})=\mathbb{E}_{(x,y)\sim\mathcal{D}}\left(l(h(x),y)\right).$$ As our classifier is parameterized $\mathbf{w}$ we will instead write $R(\mathbf{w})$ for the risk of our classifier. Similarly, we define the empirical risk of our classifier to be $$\hat{R}(\mathbf{w})=\frac{1}{m}\sum_{i=1}^ml(h_{\mathbf{w}}(x_i),y_i).$$ Note that $\mathbb{E}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\right)=R(\mathbf{w})$.
+	</p>
+	<h3 id="212-pac-bounds">2.1.2 PAC Bounds</h3>
+	<p>
+		PAC bounds refer to a general class of bounds on the performance of a learned classifier. They aim to determine with high probability what the performance of a classifier will be like on the distribution $\mathcal{D}$ when trained on some training data taken from this distribution.
+	</p>
+	<p>
+		<strong>Theorem 2.1</strong>
+		Let $\vert\mathcal{W}\vert=M&lt;\infty$, $\delta\in(0,1)$, and $\mathbf{w}\in\mathcal{W}$ then it follows that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\geq 1-\delta.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Theorem 2.1.1 (Markov's Inequality)</strong>
+		For $X$ a non-negative random variable and $\alpha>0$ we have that $$\mathbb{P}\left(X\geq\alpha\right)\leq\frac{\mathbb{E}(X)}{\alpha}.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Define $Y$ as the indicator random variable $\mathbb{I}_{\{X\geq\alpha\}}$ so that $\mathbb{E}(Y)=\mathbb{P}\left(X\geq\alpha\right)$. It is clear that $\alpha Y\leq X$ which means that $\mathbb{E}(\alpha Y)\leq\mathbb{E}(X)$, which implies that $\alpha\mathbb{P}(X\geq\alpha)\leq\mathbb{E}(X)$. Using the fact that $\alpha>0$ we can re-arrange this expressions to complete the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Corollary 2.1.2 (Chernoff Bound)</strong>
+		For a random variable $X$, $t>0$ and $a\in\mathbb{R}$ we have that $$\mathbb{P}\left(X\geq a\right)=\mathbb{E}\left(\exp(tX)\right)\exp(-ta)$$ for $t>0$.
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		This follows from Markov's inequality due to the increasing, positivity and injectivity of $\exp(\cdot)$ in particular we have that $$\mathbb{P}\left(X\geq a\right)=\mathbb{P}\left(\exp(tX)\geq e^{ta}\right)\leq\frac{\mathbb{E}\left(\exp(tX)\right)}{e^{ta}},$$ which completes the proof. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Lemma 2.1.3</strong> (Scott, 2014) 
+		Let $U_1,\dots,U_n$ be independent random variables taking values in an interval $[a,b]$. Then for any $t>0$ we have that $$\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		For $s>0$ the function $x\mapsto e^{sx}$ is convex  so that $$e^{sx}\leq\frac{x-a}{b-a}e^{sb}+\frac{b-x}{b-a}e^{sa}.$$ Let $V_i=U_i-\mathbb{E}(U_i)$, then as $\mathbb{E}(V_i)=0$ it follows that $$\mathbb{E}\left(\exp(sV_i)\right)\leq\frac{b}{b-a}e^{sa}-\frac{a}{b-a}e^{sb}.$$ With $p=\frac{b}{b-a}$ and $u=(b-a)s$ consider $$\psi(u)=\log\left(pe^{sa}+(1-p)e^{sb}\right)=(p-1)u+\log\left(p+(1-p)e^u\right).$$ This is a smooth function so that by Taylor's theorem we have that for any $u\in\mathbb{R}$ there exists $\xi=\xi(u)\in\mathbb{R}$ such that $$\psi(u)=\psi(0)+\psi^\prime(0)u+\frac{1}{2}\psi^{\prime\prime}(\xi)u^2.$$ As $$\psi^\prime(u)=(p-1)+1-\frac{p}{p+(1-p)e^u}$$ we have that $\psi(0)=0$ and $\psi^\prime(0)=0$. Furthermore, as $$\psi^{\prime\prime}(u)=\frac{p(1-p)e^u}{(p+(1-p)e^u)^2},\text{ and }\psi^{(3)}(u)=\frac{p(1-p)e^u(p+(1-p)e^u)(p-(1-p)e^u)}{(p+(1-p)e^u)^2}$$ we see that $\psi^{\prime\prime}(u)$ has a stationary point at $u^*=\log\left(\frac{p}{p-1}\right)$. For $u$ slightly less than $u^*$ we have $\psi^{(3)}(u)>0$ and for $u$ slightly larger than $u^*$ we have $\psi^{(3)}(u)&lt;0$. Therefore, $u^*$ is a maximum point and so $$\psi^{\prime\prime}(u)\leq\psi^{\prime\prime}(u^*)=\frac{1}{4}.$$ Hence, $\psi(u)\leq\frac{u^2}{8}$ which implies that $$\log\left(\mathbb{E}\left(\exp(sV_i)\right)\right)\leq\frac{u^2}{8}=\frac{s^2(b-a)^2}{8}.$$ Therefore, $$\begin{align*}\mathbb{E}\left(\exp\left(t\sum_{i=1}^n\left(U_i-\mathbb{E}(U_i)\right)\right)\right)&=\prod_{i=1}^n\mathbb{E}\left(\exp\left(t(U_i-\mathbb{E}(U_i))\right)\right)\\&\leq\prod_{i=1}^n\exp\left(\frac{t^2(b-a)^2}{8}\right)\\&\leq\exp\left(\frac{nt^2(b-a)^2}{8}\right)\end{align*}$$ which completes the proof. $\square$
+	</p>
+	</details>
+	<p>
+		Recall that we have our random sample $S=\{(x_i,y_i)\}_{i=1}^m\sim\mathcal{D}^m$. If we fix $\mathbf{w}\in\mathcal{W}$ we can let $l_i(\mathbf{w})=l(h_{\mathbf{w}}(x_i),y_i)$. This is a random variable due to the randomness of $S$ and so we can apply Lemma 2.1.3 to $U_i=\mathbb{E}(l_i(\mathbf{w}))-l_i(\mathbf{w})$ to get that $$\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(tm\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)\leq\exp\left(\frac{mt^2C^2}{8}\right).$$ Therefore, for any $s>0$ we can apply Markov's Inequality to get that $$\begin{align*}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})>s\right)&=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)>\exp(mts)\right)\\&\leq\frac{\mathbb{E}_{S\sim\mathcal{D}^m}\left(\exp\left(mt\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)\right)\right)}{\exp(mts)}\\&\leq\exp\left(\frac{mt^2C^2}{8}-mts\right).\end{align*}$$ This bound is minimized for $t=\frac{4s}{C^2}$ so that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})>\hat{R}(\mathbf{w})+s\right)\leq\exp\left(-\frac{2ms^2}{C^2}\right).$$ The above bound holds for fixed $\mathbf{w}\in\mathcal{W}$ so develop a uniform bound we consider the following. $$\begin{align*}\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)>s\right)&=\mathbb{P}_{S\sim\mathcal{D}^m}\left(\bigcup_{\mathbf{w}\in\mathcal{W}}\left\{R(\mathbf{w})-\hat{R}(\mathbf{w})>s\right\}\right)\\&\leq\sum_{\mathbf{w}\in\mathcal{W}}\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})>\hat{R}(\mathbf{w})+s\right)\\&\leq M\exp\left(-\frac{2ms^2}{C^2}\right).\end{align*}$$ Now taking $\delta=M\exp\left(-\frac{2ms^2}{C^2}\right)$ we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left(R(\mathbf{w})-\hat{R}(\mathbf{w})\right)>C\sqrt{\frac{\log\left(\frac{M}{\delta}\right)}{2m}}\right)\leq\delta$$ which upon taking complements completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		Theorem 2.1 says that with arbitrarily high probability we can bound the performance of our trained classifier on the unknown distribution $\mathcal{D}$. However, there is nothing to guarantee that the bound is useful in practice. Note that requiring bounds to hold for greater precision involves sending $\epsilon$ to $0$ which increases the bound. If the bound exceeds $C$ then it is no longer useful as we know already that $R(\mathbf{w})\leq C$. It is important to note at this stage that are two ways in which PAC bounds can hold. One set of bounds holds in expectation whilst the other hold in probability. Risk is a concept that will develop bounds in expectation. In Section 2.3 we will introduce definitions that will let us work with bounds that hold in probability. There are two general forms of PAC bounds, we have uniform convergence bounds and algorithmic-dependent bounds (Viallard, 2021). Uniform convergence bounds have the general form $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\sup_{\mathbf{w}\in\mathcal{W}}\left\vert R(\mathbf{w})-\hat{R}(\mathbf{w})\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},\mathcal{W}\right)\right)\geq 1-\delta.$$ This can be considered as a worst-case analysis of hypothesis generalization, and so in practice will lead to vacuous bounds. Algorithmic-dependent bounds involve the details of a learning algorithm $A$ and take the form $$\mathbb{P}_{\mathcal{S}\sim\mathcal{D}^m}\left(\left\vert R\left(A(S)\right)-\hat{R}\left(A(S)\right)\right\vert\leq\epsilon\left(\frac{1}{\delta},\frac{1}{m},A\right)\right)\geq1-\delta.$$ These bounds can be seen as a refinement of the uniform convergence bounds as they are only required to hold for the output of the learning algorithm. It will be the subject of Section 5.1 to explore such bounds further.
+	</p>
+	<h3 id="213-occam-bounds">2.1.3 Occam Bounds</h3>
+	<p>
+		Occam bounds are derived under the assumption that $\mathcal{H}$ is countable and that we have some bias $\pi$ defined on the hypothesis space. Note that in our setup this does not necessarily mean that $\mathcal{W}$ is countable, as multiple weights may correspond to the same classifier. However, as the Occam bounds hold true for all $h\in\mathcal{H}$ it must also be the case that they hold for all classifiers corresponding to the weight $\mathbf{w}\in\mathcal{W}$. Using this we will instead assume that $\pi$ is defined over $\mathcal{W}$.
+	</p>
+	<p>
+		<strong>Theorem 2.2</strong> (McAllester, 2013)
+		Simultaneously for all $\mathbf{w}\in\mathcal{W}$ and $\delta\in(0,1)$ the following holds, $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\inf_{\lambda>\frac{1}{2}}\frac{1}{1-\frac{1}{2\lambda}}\left(\hat{R}(\mathbf{w})+\frac{\lambda C}{m}\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)\right)\right)\geq1-\delta.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Theorem 2.2.1 (Relative Chernoff Bound 1)</strong>
+		Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\left(\frac{e^{-\delta}}{(1-\delta)^{(1-\delta)}}\right)^{\mu}.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Using Markov's inequality we note that for $t&lt;0$ we have $$\begin{align*}\mathbb{P}\left(X\leq(1-\delta)\mu\right)&=\mathbb{P}\left(e^{tX}\geq e^{t(1-\delta)\mu}\right)\\&\leq\frac{\mathbb{E}\left(e^{tX}\right)}{e^{t(1-\delta)\mu}}\\&\leq\frac{\exp\left(\left(e^t-1\right)\mu\right)}{\exp\left(t(1-\delta)\mu\right)}.\end{align*}$$ Setting $t=\log(1-\delta)&lt;0$ we get that $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\left(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\right)^\mu.$$ which completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Corollary 2.2.2</strong> (Mitzenmacher 2005)
+		Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta\in(0,1)$ we have $$\mathbb{P}\left(X\leq(1-\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{2}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Consider $$f(\delta)=-\delta-(1-\delta)\log(1-\delta)+\frac{\delta^2}{2}$$ for $\delta\in(0,1)$. Note that $$f^\prime(\delta)=\log(1-\delta)+\delta\text{ and }f^{\prime\prime}(\delta)=-\frac{1}{1-\delta}+1.$$ Which shows that $f^{\prime\prime}(\delta)&lt;0$ for $\delta\in(0,1)$ and hence $f^{\prime}(0)=0$ implies that $f^{\prime}(\delta)\leq0$ in this range. Since, $f(0)=0$ we have that $f(\delta)\leq0$ when $\delta\in(0,1)$. Therefore, $$\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\leq\exp\left(-\frac{\delta^2}{2}\right),$$ which completes the proof of the corollary. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Theorem 2.2.3 (Union Bound)</strong>
+		Let $E_1,\dots, E_n$ be events. Then $\mathbb{P}\left(\bigcup_{l=1}^nE_l\right)\leq\sum_{l=1}^n\mathbb{P}(E_l).$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		This can be proved by induction on $n$. When $n=1$ the result holds clearly. Now suppose that for events $E_1,\dots, E_k$ we have that $\mathbb{P}\left(\cup_{l=1}^kE_l\right)\leq\sum_{l=1}^k\mathbb{P}(E_l)$. Then for events $E_1,\dots,E_k,E_{k+1}$ it follows that $$\begin{align*}\mathbb{P}\left(\bigcup_{l=1}^{k+1}E_l\right)&=\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)-\mathbb{P}\left(\left(\bigcup_{l=1}^kE_l\right)\cap E_{k+1}\right)\\&\leq\mathbb{P}\left(\bigcup_{l=1}^kE_l\right)+\mathbb{P}\left(E_{k+1}\right)\\&\leq\sum_{l=1}^k\mathbb{P}\left(E_l\right)+\mathbb{P}\left(E_{k+1}\right)\\&=\sum_{l=1}^{k+1}\mathbb{P}\left(E_l\right).\end{align*}$$ Therefore, by induction the result holds for all $n\in\mathbb{N}$ which completes the proof. $\square$
+	</p>
+	</details>
+	<p>
+		For the proof we consider the case when $C=1$, with the more general case following by rescaling the loss function. For $\mathbf{w}\in\mathcal{W}$ let $$\epsilon(\mathbf{w})=\sqrt{\frac{2R(\mathbf{w})\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}}.$$ Then Corollary 2.2.2 states that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(\hat{R}(\mathbf{w})\leq R(\mathbf{w})-\epsilon(\mathbf{w})\right)\leq\exp\left(-\frac{m\epsilon(\mathbf{w})^2}{2R(\mathbf{w})}\right)=\delta\pi(\mathbf{w}).$$ Summing over all $\mathbf{w}$ and applying the union bound we conclude that the probability that a $\mathbf{w}$ exists with the property that $R(\mathbf{w})>\hat{R}(\mathbf{w})+\epsilon(\mathbf{w})$ is $\delta$. Therefore, for all $\mathbf{w}$ $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\sqrt{R(\mathbf{w})\left(\frac{2\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)}\right)\geq1-\delta.$$ Using $\sqrt{ab}=\inf_{\lambda>0}\left(\frac{a}{2\lambda}+\frac{\lambda b}{2}\right)$ we get that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(R(\mathbf{w})\leq\hat{R}(\mathbf{w})+\frac{R(\mathbf{w})}{2\lambda}+\frac{\lambda\left(\log\left(\frac{1}{\pi(\mathbf{w})}\right)+\log\left(\frac{1}{\delta}\right)\right)}{m}\right)\geq1-\delta,$$ which upon rearrangement completes the proof. $\square$
+	</p>
+	</details>
+	<h2 id="22-expected-risk-minimization">2.2 Expected Risk Minimization</h2>
+	<p>
+		In light of Theorem 2.1 it may seem reasonable to want to identify the parameter value $\hat{\mathbf{w}}_{\mathrm{ERM}}$ that minimizes $\hat{R}(\cdot)$. This optimization process is known as Empirical Risk Minimization (ERM) and is formally defined as $$\hat{\mathbf{w}}_{\mathrm{ERM}}=\inf_{\mathbf{W}\in\mathcal{W}}\hat{R}(\mathbf{w}).$$
+	</p>
+	<h2 id="23-compression">2.3 Compression</h2>
+	<p>
+		We now show how PAC bounds can be used to bound the performance of a compressed neural network. In classical statistical theory only as many parameters as training samples are required to overfit. So in practice, neural networks would be able to overfit the training data as they have many more parameters than training samples. Although overfitting to the training sample will yield a low empirical risk, in practice neural networks do not overfit to the data. This suggests that there is some capacity of the network that is redundant in expressing the learned function. In (Arora, 2018) compression frameworks are constructed that aim to reduce the effective number of parameters required to express the function of a trained network whilst maintaining its performance. To do this (Arora, 2018) capitalize on how a neural network responds to noise added to its weights. We first introduce the compression techniques for linear classifiers and then proceed to work with fully connected ReLU neural networks.
+	</p>
+	<h3 id="231-establishing-the-notion-of-compression">2.3.1 Establishing the Notion of Compression</h3>
+	<p>
+		We are in a scenario where we have a learned classifier $h$ that achieves low empirical loss but is complex. In this case, we are considering $\mathcal{Y}=\mathbb{R}^k$ so that the output of $h$ in the $i^\text{th}$ can be thought of as a relative probability that the input belongs to class $i$. With this, we define the classification margin loss for $\gamma\geq0$ to be $$L_{\gamma}(h)=\mathbb{P}_{(x,y)\sim\mathcal{D}}\left(h(x)[y]\leq\gamma+\max_{j\neq y}h(x)[j]\right).$$ Similarly, we have the empirical classification margin loss defined as $$\hat{L}_{\gamma}(h)=\frac{1}{m}\left\vert\left\{x_i\in S:h(x_i)[y_i]\leq\gamma+\max_{j\neq y_i}f(x_i)[j]\right\}\right\vert.$$ We will sometimes use $L(\cdot)$ to denote $L_0(\cdot)$ and refer to it as the classification loss. Suppose that our neural network has $d$ fully connected layers and let $x^i$ be the vector before the activation at layer $i=0,\dots,d$ and as $x^0$ is the input denote it $x$. Let $A^i$ be the weight matrix of layer $i$ and let layer $i$ have $n_i$ hidden layers with $n=\max_{i=1}^dn_i$. The classifier calculated by the network will be denoted $h_\mathbf{w}(x)$, where $\mathbf{w}$ can be thought of as a vector containing the weights of the network. For layers $i\leq j$ the operator for composition of the layers will be denoted $M^{i,j}$, the Jacobian of the input $x$ will be denoted $J_x^{i,j}$ and $\phi(\cdot)$ will denote the component-wise ReLU. With these the following hold, $$x^i=A^i\phi\left(x^{i-1}\right),\;x^j=M^{i,j}\left(x^i\right),\text{ and }M^{i,j}\left(x^i\right)=J_{x^i}^{i,j}x^i.$$ For a matrix $B$, $\Vert B\Vert_F$ will be its Frobenius norm, $\Vert B\Vert_2$ its spectral norm and $\frac{\Vert B\Vert_F^2}{\Vert B\Vert_2^2}$ its stable rank.
+	</p>
+	<p>
+		<strong>Definition 2.3</strong>
+		Let $h$ be a classifier and $G_{\mathcal{W}}=\{g_{\mathbf{w}}:\mathbf{w}\in\mathcal{W}\}$ be a class of classifiers. We say that $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W}}$ if there exists $\mathbf{w}\in\mathcal{W}$ such that for any $x\in\mathcal{X}$, $$\left\vert h(x)[y]-g_{\mathbf{w}}(x)[y]\right\vert\leq\gamma$$ for all $y\in\{1,\dots,k\}$.
+	</p>
+	<p>
+		<strong>Definition 2.4</strong>
+		Suppose $G_{\mathcal{W},s}=\{g_{\mathbf{w},s}:\mathbf{w}\in\mathcal{W}\}$ is a class of classifiers indexed by trainable parameters $\mathbf{w}$ and fixed string $s$. A classifier $h$ is $(\gamma,S)$-compressible with respect to $G_{\mathcal{W},s}$ using helper string $s$ if there exists $\mathbf{w}\in\mathcal{W}$ such that for any $x\in \mathcal{X}$, $$\vert h(x)[y]-g_{\mathbf{w},s}(x)[y]\vert\leq\gamma$$ for all $y\in\{1,\dots,k\}$.
+	</p>
+	<p>
+		<strong>Theorem 2.5</strong>
+		Suppose $G_{\mathcal{W},s}=\{g_{\mathbf{w},s}:\mathbf{w}\in\mathcal{W}\}$ where $\mathbf{w}$ is a set of $q$ parameters each of which has at most $r$ discrete values and $s$ is a helper string. Let $S$ be a training set with $m$ samples. If the trained classifier $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W},s}$ with helper string $s$, then there exists $\mathbf{w}\in\mathcal{W}$ with high probably such that $$L_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+O\left(\sqrt{\frac{q\log(r)}{m}}\right)$$ over the training set.
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Theorem 2.5.1 (Hoeffding's Inequality)</strong> (Mitzenmacher, 2005) Let $X_1,\dots,X_n$ be independent random variables with range $[a,b]$ and $\mathbb{E}(X_i)=\mu$. Then for $\epsilon>0$ we have that $$(i)\quad\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^n X_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)\text{ and }(ii)\quad\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)&lt;\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Let $Z_i=X_i-\mathbb{E}(X_i)$ and $Z=\frac{1}{n}\sum_{i=1}^nZ_i$. Then for $\lambda>0$ we can apply Markov's inequality to deduce that $$\begin{align*}\mathbb{P}(Z\geq\epsilon)&=\mathbb{P}\left(e^{\lambda Z}\geq e^{\lambda\epsilon}\right)\\&\leq e^{-\lambda\epsilon}\mathbb{E}\left(e^{\lambda Z}\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\mathbb{E}\left(\exp\left({\frac{\lambda Z_i}{n}}\right)\right)\\&\leq e^{-\lambda\epsilon}\prod_{i=1}^n\exp\left(\frac{\lambda^2(b-a)^2}{n^2}\right)\quad\text{ Lemma 2.1.3}\\&\leq\exp\left(-\lambda\epsilon+\frac{\lambda^2(b-a)^2}{8n}\right).\end{align*}$$ Setting $\lambda=\frac{4n\epsilon}{(b-a)^2}$ gives $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\geq\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right).$$ Applying the same reasoning but for $\mathbb{P}\left(Z\leq-\epsilon\right)$ and $\lambda=-\frac{4n\epsilon}{(b-a)^2}$ give $$\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^nX_i-\mu\leq-\epsilon\right)\leq\exp\left(-\frac{2n\epsilon^2}{(b-a)^2}\right)$$ which completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		For $\mathbf{w}\in\mathcal{W}$, the empirical classification margin $\hat{L}_0(g_{\mathbf{w}})$ is the average of $m$ $\mathrm{i.i.d}$ Bernoulli random variables with parameter $L_0(g_{\mathbf{w}})$. Let $X_i\sim\mathrm{Bern}(L_0(g_{\mathbf{w}}))$ so that $\mu=\mathbb{E}(X_i)=L_0(g_{\mathbf{w}})$. It follows that $$\begin{align*}\mathbb{P}\left(L_0(g_{\mathbf{w}})-\hat{L}_0(g_{\mathbf{w}})\geq\tau\right)&=\mathbb{P}\left(L_0(g_{\mathbf{w}})-\frac{1}{m}\sum_{i=1}^nX_i\geq\tau\right)\\&=\mathbb{P}\left(\frac{1}{m}\sum_{i=1}^nX_i-\mu\leq-\tau\right)\\&\leq\exp\left(-2\tau^2m\right),\end{align*}$$ where Hoeffding's inequality $(i)$ has been applied. With $\tau=\sqrt{\frac{q\log(r)}{m}}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp(-2q\log(r)).$$ As there are only $r^q$ different $\mathbf{w}$, we can apply a union bound arguments to conclude that for all $\mathbf{w}\in\mathcal{W}$ we have that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\geq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\leq r^q\exp(-q\log(r))=\exp\left(q\log(r)-2q\log(r)\right)=\exp\left(-q\log(r)\right).$$ Which implies that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(g_{\mathbf{w}})\leq\hat{L}_0(g_{\mathbf{w}})+\sqrt{\frac{q\log(r)}{m}}\right)\geq1-\exp\left(-q\log(r)\right).$$ As $h$ is $(\gamma,S)$-compressible via $G_{\mathcal{W},S}$ then there exists a $\mathbf{w}\in\mathcal{W}$ such that for any $x\in\mathcal{X}$ and any $y$ we have $$\vert h(x)[y]-g_{\mathbf{w}}(x)[y]\vert\leq\gamma.$$ Therefore, as long as $h$ has a margin at least $\gamma$ the classifier $g_{\mathbf{w}}$ classifies the examples correctly so that $$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h).$$ Combining this with the previous observations completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Remark 2.6</strong>
+		Theorem 2.5 only gives a bound for $g_{\mathbf{w}}$ which is the compression of $h$. However, there are no requirements on the hypothesis class, assumptions are only made on $h$ and its properties on a finite training set.
+	</p>
+	<p>
+		<strong>Corollary 2.7</strong>
+		If the compression works for $1-\zeta$ fraction of the training sample, then with a high probability $$L_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\zeta+O\left(\sqrt{\frac{q\log r}{m}}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		The proof of this corollary proceeds in exactly the same ways as the proof of Theorem 2.5, however, in the last step we can use the upper-bound $$\hat{L}_0(g_{\mathbf{w}})\leq\hat{L}_{\gamma}(h)+\zeta.$$ Which arises as for the fraction of the training sample where the compression doesn't work we assume that the loss is maximized, which was assumed to be $1$.  
+	</p>
+	</details>
+	<h3 id="232-compression-of-a-linear-classifier">2.3.2 Compression of a Linear Classifier</h3>
+	<p>
+		We now develop an algorithm to compress the decision vector of a linear classifier. We will use linear classifiers to conduct binary classification, where the members of one class have label $1$ and the others have label $-1$. The linear classifiers will be parameterized by the weight vector $\mathbf{w}\in\mathbb{R}^d$ such that for $x\in\mathcal{X}$ we have $h_{\mathbf{w}}(x)=\mathrm{sgn}(\mathbf{w}^\top x)$. Define the margin, $\gamma>0$, of $\mathbf{w}$ to be such that $y\left(\mathbf{w}^\top x\right)\geq\gamma$ for all $(x,y)$ in the training set. In compressing $\mathbf{w}$, according to Algorithm 1, we end up with a linear classifier parameterized by the weight vector $\hat{\mathbf{w}}$ with some PAC bounds relating to its performance.
+	</p>
+	<p><font size="3"><strong>Algorithm 1 $(\gamma,\mathbf{w})$</strong></font></p>
+	<blockquote>
+	<p>
+		<strong>Require</strong>
+		vector $\mathbf{w}$ with $\Vert\mathbf{w}\Vert\leq 1$, $\eta$.<br>
+		<strong>Ensure</strong>
+		vector $\hat{\mathbf{w}}$ such that for any fixed vector $\Vert u\Vert\leq 1$, with probability at least $1-\eta$, $\left\vert\mathbf{w}^\top u-\hat{\mathbf{w}}^\top u\right\vert\leq\gamma$. Vector $\hat{\mathbf{w}}$ has $O\left(\frac{\log d}{\eta\gamma^2}\right)$ non-zero entries.<br>
+		<strong>for</strong> $i=1\to d$ <strong>do</strong><br>
+		----Let $z_i=1$ with probability $p_i=\frac{2w_i^2}{\eta\gamma^2}$ and $0$ otherwise.<br>
+		----Let $\hat{w}_i=\frac{z_iw_i}{p_i}$.<br>
+		<strong>end for</strong><br>
+		<strong>return</strong> $\hat{\mathbf{w}}$
+	</p>
+	</blockquote>
+	<p>
+		<strong>Theorem 2.8</strong>
+		For any number of samples $m$, Algorithm 1 generates a compressed vector $\hat{\mathbf{w}}$, such that $$L(\hat{\mathbf{w}})\leq\tilde{O}\left(\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Theorem 2.8.1 (Chebyshev's Inequality)</strong>
+		For a random variable $X$, with with variance $\sigma^2\in(0,\infty)$ and mean $\mu&lt;\infty$, then for $k>0$ we have that $$\mathbb{P}(\vert X-\mu\vert\geq k\sigma)\leq\frac{1}{k^2}.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		To prove Chebyshev's inequality we use Markov's inequality, $$\begin{align*}\mathbb{P}\left(\vert X-\mu\vert\geq k\sigma\right)&=\mathbb{P}\left(\vert X-\mu\vert^2\geq k^2\sigma^2\right)\\&\leq\frac{\mathbb{E}\left((X-\mu)^2\right)}{k^2\sigma^2}\\&=\frac{\sigma^2}{k^2\sigma^2}\\&=\frac{1}{k^2}\end{align*}$$ which completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Theorem 2.8.2 (Relative Chernoff Bound 2)</strong> (Mitzenmacher 2005)
+		Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta>0$ we have $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\left(\frac{e^{\delta}}{(1+\delta)^{(1+\delta)}}\right)^{\mu}.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Using Markov's inequality we note that for $t>0$ we have $$\begin{align*}\mathbb{P}\left(X\geq(1+\delta)\mu\right)&=\mathbb{P}\left(e^{tX}\geq e^{t(1+\delta)\mu}\right)\\&\leq\frac{\mathbb{E}\left(e^{tX}\right)}{e^{t(1+\delta)\mu}}\\&\leq\frac{\exp\left(\left(e^t-1\right)\mu\right)}{\exp\left(t(1+\delta)\mu\right)}.\end{align*}$$ Setting $t=\log(1+\delta)>0$ we get that $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\left(\frac{e^{\delta}}{(1+\delta)^{1+\delta}}\right)^\mu.$$ which completes the proof of the theorem. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Corollary 2.8.3</strong> (Mitzenmacher 2005)
+		Suppose $X_1,\dots, X_n$ are independent random variables with range $\{0,1\}$. Let $\mu=\sum_{i=1}^nX_i$. Then for $\delta>0$ we have $$\mathbb{P}\left(X\geq(1+\delta)\mu\right)\leq\exp\left(-\frac{\mu\delta^2}{3}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Consider $$f(\delta)=\delta-(1+\delta)\log(1+\delta)+\frac{\delta^2}{3}$$ for $\delta\in(0,1]$. Note that $$f^\prime(\delta)=-\log(1+\delta)+\frac{2}{3}\delta\text{ and }f^{\prime\prime}(\delta)=-\frac{1}{1+\delta}+\frac{2}{3}.$$ Which shows that $f^{\prime\prime}(\delta)&lt;0$ for $\delta\in\left[0,\frac{1}{2}\right)$ and $f^{\prime\prime}(\delta)&lt;0$ for $\delta>\frac{1}{2}$. Since $f^\prime(0)=0$ and $f^\prime(1)&lt;0$ we deduce that $f^\prime(\delta)\leq0$ in the interval $[0,1]$. Since, $f(0)=0$ we have that $f(\delta)\leq0$ when $\delta\in[0,1]$. Therefore, $$\frac{e^{\delta}}{(1+\delta)^{1+\delta}}\leq\exp\left(-\frac{\delta^2}{3}\right),$$ which completes the proof of the corollary. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Lemma 2.8.4</strong> 
+		Algorithm 1 $(\gamma,\mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that for any fixed $u$, with probability $1-\eta$, $\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma$. The vector $\hat{\mathbf{w}}$ has at most $O\left(\frac{\log d}{\eta\gamma^2}\right)$ non-zero entries with high probability.
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		By the construction of Algorithm 1 it is clear that for all $i$ we have $\mathbb{E}\left(\hat{w}_i\right)=w_i$. Similarly, we have that $$\mathrm{Var}\left(\hat{w}_i\right)=2p_i(1-p_i)\frac{w_i^2}{p_i^2}\leq\frac{2w_i^2}{p_i}=\eta\gamma^2.$$ Therefore, for $u$ independent of $\hat{\mathbf{w}}$ we have that $$\mathbb{E}\left(\hat{\mathbf{w}}^\top u\right)=\sum_{i=1}^d\mathbb{E}\left(\hat{w}_iu_i\right)=\sum_{i=1}^d\mathbb{E}\left(\hat{w}_i\right)u_i=\sum_{i=1}^dw_iu_i=\mathbf{w}^\top u,$$ and $$\mathrm{Var}\left(\hat{\mathbf{w}} u^\top\right)=\mathrm{Var}\left(\sum_{i=1}^d\hat{w}_iu_i\right)=\sum_{i=1}^d\mathrm{Var}(w_i)u_i^2\leq\eta\gamma^2\sum_{i=1}^du_i^2=\eta\gamma^2\Vert u\Vert^2\leq\eta\gamma^2.$$ Therefore, by Chebyshev's inequality we have that $$\mathbb{P}\left(\left\vert \hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\geq\gamma\right)\leq\eta.$$ To determine how we can bound the number of non-zero entries we analyze the behavior of the right-hand side of Theorem 2.8.2. For each entry we can define the indicator random variable $X_i$ which is $1$ when the entry is non-zero and $0$ otherwise. Note that $\mathbb{E}(X_i)=p_i$ and for $X=\sum_{i=1}^dX_i$ we have that $$\mu=\mathbb{E}(X)=\sum_{i=1}^dp_i=\frac{2\Vert\mathbf{w}\Vert^2}{\eta\gamma^2}\leq\frac{2}{\eta\gamma^2}.$$ Therefore, we need to find for what order function $f(\cdot)$ does $$\frac{e^{f(d)-1}}{f(d)^{f(d)}}\to0,\quad\text{ as }d\to\infty,$$ so that the number of non-zero elements is bounded by $O\left(\frac{f(d)}{\eta\gamma^2}\right)$ with high probability using Theorem 2.2.2. We observe that with $f(d)=\log(d)$ we get the desired convergence, and so this completes the proof of the lemma.
+	</p>
+	</details>
+	<p>
+		In the discrete case, a similar result holds. For a vector $\mathbf{w}\in\mathbb{R}^d$ and for a given pair $(\eta,\gamma)$ let its discrete version be $\hat{\mathbf{w}}$ where $$\hat{w}_i=\begin{cases}0&\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{d}\\\text{rounding to nearest multiple of }\frac{\gamma}{2\sqrt{d}}&\text{Otherwise.}\end{cases}$$ Let its capped version be $\mathbf{w}^*$ where $$w_i^*=\begin{cases}0&\vert\tilde{w}_i\vert\geq2\eta\gamma\sqrt{d}\\w_i&\text{Otherwise.}\end{cases}$$ Let its truncated version be $\mathbf{w}^\prime$ where $$w_i^\prime=\begin{cases}w_i&\vert w_i\vert\geq\frac{\gamma}{4\sqrt{d}}\\0&\text{otherwise.}\end{cases}$$
+	</p>
+	<p>
+		<strong>Lemma 2.8.5</strong>
+		Let Algorithm 1 $\left(\frac{\gamma}{2},\mathbf{w}\right)$ return the vector $\tilde{\mathbf{w}}$. Then for any fixed $u$ with probability at least $1-\eta$, we have that $$\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		First note that $$\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert^2=\sum_{i=1}^d\left\vert w^\prime_i-w_i\right\vert^2\leq\sum_{i=1}^d\frac{\gamma^2}{16d}=\frac{\gamma^2}{16},$$ which implies that $\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert\leq\frac{\gamma}{4}$. Similarly, $$\left\Vert\hat{\tilde{\mathbf{w}}}-\tilde{\mathbf{w}}^*\right\Vert^2=\sum_{i=1}^d\left\vert\hat{\tilde{w}}_i-\tilde{w}_i^*\right\vert^2\leq\sum_{i=1}^d\left(\frac{1}{2}\frac{\gamma}{2\sqrt{d}}\right)^2=\frac{\gamma^2}{16},$$ which implies that $\left\Vert\hat{\tilde{\mathbf{w}}}-\tilde{\mathbf{w}}^*\right\Vert\leq\frac{\gamma}{4}$. Now suppose Algorithm 2 $\left(\frac{\gamma}{2},\mathbf{w}^\prime\right)$ returns the capped vector $\mathbf{v}$. When $\vert w_i\vert\leq\frac{\gamma}{4\sqrt{d}}$ we have that $w_i^\prime=0$ so that $v_i=0$. We also have that, $\tilde{w_i}$ is either $0$ or $$\vert\tilde{w}_i\vert=\left\vert\frac{w_i}{\left(\frac{2w_i^2}{\eta\gamma^2}\right)}\right\vert=\left\vert\frac{\eta\gamma^2}{2w_i}\right\vert\geq\vert2\eta\gamma\sqrt{d}\vert$$ so that in any case we also have that $\tilde{w}^*_i=0$. If instead $\vert\tilde{w}_i\vert\geq 2\eta\gamma\sqrt{d}$ then $\tilde{w}^*_i=0$ and through similar computations we have that $\vert w_i\vert\leq\frac{\gamma}{4\sqrt{d}}$ and so $v_i=0$. It is clear that when either of these two conditions do not hold we have $\tilde{w}^*_i=v_i$ as $w_i=w^\prime_i$. Therefore, $\tilde{\mathbf{w}}^*=\mathbf{v}$ and so from Lemma 2.8.4 we conclude that with probability at least $1-\eta$ we have $\left\vert\left(\tilde{\mathbf{w}}^*\right)^\top u-(\mathbf{w}^\prime)^\top u\right\vert\leq\frac{\gamma}{2}$ for a fixed vector $u$ with $\Vert u\Vert\leq1$. Using these observation we deduce for a fixed vector $u$ with $\Vert u\Vert\leq1$ that $$\begin{align*}\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\mathbf{w}^\top u\right\vert&\leq\left\vert\hat{\tilde{\mathbf{w}}}^\top u-\left(\tilde{\mathbf{w}}^*\right)^\top u\right\vert+\left\vert\left(\hat{\mathbf{w}}^*\right)^\top u-\left(\mathbf{w}^\prime\right)^\top u\right\vert+\left\vert\left(\mathbf{w}^\prime\right)^\top u-\mathbf{w}^\top u\right\vert\\&\leq\left\Vert\hat{\tilde{\mathbf{w}}}^\prime-\tilde{\mathbf{w}}^*\right\Vert+\frac{\gamma}{2}+\left\Vert\mathbf{w}^\prime-\mathbf{w}\right\Vert\\&\leq\frac{\gamma}{4}+\frac{\gamma}{2}+\frac{\gamma}{4}=\gamma,\end{align*}$$ with probability at least $1-\eta$, which completes the proof of the lemma.$\square$
+	</p>
+	</details>
+	<p>
+		Now choose $\eta=\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}$. By Lemma 2.8.4 and Lemma 2.8.5 we know that Algorithm 1 works with probability $1-\eta$ and has at most $\tilde{O}\left(\frac{\log(d)}{\eta\gamma^2}\right)$ parameters each of which can take some finite number $r$ of discrete values. Using Corollary 2.7 we know that $$L\left(\hat{\mathbf{w}}\right)\leq O\left(\eta+\sqrt{\frac{\log(d)\log(r)}{\eta\gamma^2m}}\right)\leq\tilde{O}\left(\eta+\sqrt{\frac{1}{\eta\gamma^2m}}\right)\leq\tilde{O}\left(\left(\frac{1}{\gamma^2m}\right)^{\frac{1}{3}}\right)$$ which completes the proof of the theorem.
+	</p>
+	</details>
+	<p>
+		<strong>Remark 2.9</strong>
+		The rate is not optimal as it depends on $m^{1/3}$ and not $\sqrt{m}$. To resolve this we employ helper strings.
+	</p>
+	<p><font size="3"> <strong>Algorithm 2 $(\gamma,\mathbf{w})$</strong></font></p>
+	<blockquote>
+	<p>
+		<strong>Require:</strong>
+		vector $\mathbf{w}$ with $\Vert\mathbf{w}\Vert\leq 1$, $\eta$.<br>
+		<strong>Ensure</strong> vector $\hat{\mathbf{w}}$ such that for any fixed vector $\Vert u\Vert\leq 1$, with probability at least $1-\eta$, $\vert \mathbf{w}^\top u-\hat{\mathbf{w}}^\top u\vert\leq\gamma$.<br>
+		Let $k=\frac{16\log\left(\frac{1}{\eta}\right)}{\gamma^2}$.<br>
+		Sample the random vectors $v_1,\dots,v_k\sim\mathcal{N}(0,I)$.<br>
+		Let $z_i=\langle v_i,\mathbf{w}\rangle$.<br>
+		(In Discrete Case) Round $z_i$ to closes multiple of $\frac{\gamma}{2\sqrt{dk}}$.<br>
+		<strong>return</strong> $\hat{\mathbf{w}}=\frac{1}{k}\sum_{i=1}^kz_iv_i$
+	</p>
+	</blockquote>
+	<p>
+		<strong>Remark 2.10</strong>
+		The vectors $v_i$ of Algorithm 2 form the helper string.
+	</p>
+	<p>
+		<strong>Theorem 2.11</strong>
+		For any number of sample $m$, Algorithm 2 with the helper string generates a compressed vector $\hat{\mathbf{w}}$, such that $$L(\hat{\mathbf{w}})\leq\tilde{O}\left(\sqrt{\frac{1}{\gamma^2m}}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Lemma 2.11.1</strong>
+		For any fixed vector $u$, Algorithm 2 $(\gamma, \mathbf{w})$ returns a vector $\hat{\mathbf{w}}$ such that with probability at least $1-\eta$, we have $\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\leq\gamma$.
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		Observe that $$\hat{\mathbf{w}}^\top u=\frac{1}{k}\sum_{i=1}^k\langle v_i,\mathbf{w}\rangle\langle v_i,u\rangle.$$ Where, $$\mathbb{E}\left(\langle v_i,\mathbf{w}\rangle\langle v_i,u\rangle\right)=\mathbb{E}\left(\mathbf{w}^\top v_iv_i^\top u\right)=\mathbf{w}^\top\mathbb{E}\left(v_iv_i^\top\right)=\mathbf{w}^\top u$$ and $$\mathrm{Var}\left(\hat{\mathbf{w}}^\top u\right)\leq O\left(\frac{1}{k}\right).$$ Therefore, by standard concentration inequalities $$\begin{align*}\mathbb{P}\left(\left\vert\hat{\mathbf{w}}^\top u-\mathbf{w}^\top u\right\vert\geq\frac{\gamma}{2}\right)\leq\exp\left(\frac{-\gamma^2k}{16}\right)\leq\eta.\end{align*}$$ As with discretization the vector can only change by at most $\frac{\gamma}{2}$, the proof of the lemma is complete. $\square$
+	</p>
+	</details>
+	<p>
+		Choosing $\eta=\frac{1}{m}$ and applying Lemma 2.11.1 we see that with probability $1-\eta$, the compressed vector has at most $$O\left(\frac{\log(m)}{\gamma^2}\right)$$ parameters. As the number of parameters is finite we can assume that there is a finite number of discrete values, $r$, that each parameter can take. For example, if $M$ is the large absolute value of the parameter then we can take $r=2\frac{M}{\left(\frac{\gamma}{2\sqrt{dk}}\right)}+1$. Therefore, from Corollary 2.7 we know that $$L\left(\mathbf{w}\right)\leq O\left(\eta+\sqrt{\frac{\frac{\log(m)}{\gamma^2}\log(r)}{m}}\right)\leq\tilde{O}\left(\sqrt{\frac{1}{\gamma^2m}}\right)$$ which completes the proof of the theorem.
+	</p>
+	</details>
+	<h3 id="233-compression-of-a-fully-connected-network">2.3.3 Compression of a Fully Connected Network</h3>
+	<p>
+		In a similar way, the layer matrices of a fully connected network can be compressed in such a way as to maintain a reasonable level of performance. A similar compression algorithm on how to do this is detailed in Algorithm 3. Throughout we will let $\mathbf{w}$ parameterize our classifier. It can just be thought of as a list of layer matrices for our neural network.
+	</p>
+	<p><font size="3"> <strong>Algorithm 3 $(A,\epsilon,\eta)$</strong></font></p>
+	<blockquote>
+	<p>
+		<strong>Require</strong>
+		Layer matrix $A\in\mathbb{R}^{n_1\times n_2}$, error parameters $\epsilon,\eta$.<br>
+		<strong>Ensure</strong>
+		Returns $\hat{A}$ such that for all vectors $u,v$ we have that $$\mathbb{P}\left(\left\vert u^\top\hat{A}v-u^\top Av\right\vert\geq\epsilon\Vert A\Vert_F\Vert u\Vert\Vert v\Vert\right)\leq\eta$$<br>
+		Sample $k=\frac{\log(\frac{1}{\eta})}{\epsilon^2}$ random matrices $M_1,\dots,M_k$ with $\mathrm{i.i.d}$ entries $\pm1$.<br>
+		<strong>for</strong> $l=1\to k$ <strong>do</strong><br>
+		----Let $Z_{l}=\langle A,M_{l}\rangle M_{l}$<br>
+		<strong>end for</strong><br>
+		<strong>return</strong> $\hat{A}=\frac{1}{k}\sum_{l=1}^kZ_{l}$</p>
+	</blockquote>
+	<p>
+		<strong>Definition 2.12</strong>
+		If $M$ is a mapping from real-valued vectors to real-valued vectors, and $\mathcal{N}$ is a noise distribution. Then the noise sensitivity of $M$ at $x$ with respect to $\mathcal{N}$ is $$\psi_{\mathcal{N}}(M,x)=\mathbb{E}\left(\frac{\Vert M(x+\eta\Vert x\Vert)-M(x)\Vert^2}{\Vert M(x)\Vert^2}\right),$$ and $\psi_{\mathcal{N},S}(M)=\max_{x\in S}\psi_{\mathcal{N}}(M,x)$.
+	</p>
+	<p>
+		<strong>Remark 2.13</strong>
+		When $x\neq0$ and the noise distribution is the Gaussian distribution $\mathcal{N}(0,I)$ then the noise sensitivity of matrix $M$ is exactly $\frac{\Vert M\Vert_F^2}{\Vert Mx\Vert^2}$. Hence, it is at most the stable rank of $M$.
+	</p>
+	<p>
+		<strong>Definition 2.14</strong>
+		The layer cushion of layer $i$ is defined as the largest $\mu_i$ such that for any $x\in\mathcal{X}$ we have $$\mu_i\left\Vert A^i\right\Vert_F\left\Vert\phi\left(x^{i-1}\right)\right\Vert\leq\left\Vert A^i\phi\left(x^{i-1}\right)\right\Vert.$$
+	</p>
+	<p>
+		<strong>Remark 2.15</strong>
+		Note that $\frac{1}{\mu_i^2}$ is equal to the noise sensitivity of $A^i$ at $\phi\left(x^{i-1}\right)$ with respect to noise $\eta\sim\mathcal{N}(0,I)$.
+	</p>
+	<p>
+		<strong>Definition 2.16</strong>
+		For layers $i\leq j$ the inter-layer cushion $\mu_{i,j}$ is the largest number such that $$\mu_{i,j}\left\Vert J_{x^i}^{i,j}\right\Vert_F\left\Vert x^i\right\Vert\leq\left\Vert J_{x^i}^{i,j}x^i\right\Vert$$ for any $x\in\mathcal{X}$. Furthermore, let $\mu_{i\to}=\min_{i\leq j\leq d}\mu_{i,j}$.
+	</p>
+	<p>
+		<strong>Remark 2.17</strong>
+		Note that $J_{x^i}^{i,i}=I$ so that $$\frac{\left\Vert J_{x^i}^{i,i}x^i\right\Vert}{\left\Vert J_{x^i}^{i,j}\right\Vert_F\left\Vert x^i\right\Vert}=\frac{1}{\sqrt{h^i}}.$$ Furthermore, $\frac{1}{\mu_{i,j}^2}$ is the noise sensitivity of $J_x^{i,j}$ with respect to noise $\eta\sim\mathcal{N}(0,I)$.
+	</p>
+	<p>
+		<strong>Definition 2.18</strong>
+		The activation contraction $c$ is defined as the smallest number such that for any layer $i$ $$\left\Vert\phi\left(x^i\right)\right\Vert\geq\frac{\left\Vert x^i\right\Vert}{c}$$ for any $x\in\mathcal{X}$.
+	</p>
+	<p>
+		<strong>Definition 2.19</strong>
+		Let $\eta$ be the noise generated as a result of applying Algorithm 3 to some of the layers before layer $i$. Define the inter-layer smoothness $\rho_{\delta}$ to be the smallest number such that with probability $1-\delta$ and for layers $i&lt;j$ we have that $$\left\Vert M^{i,j}\left(x^i+\eta\right)-J_{x^i}^{i,j}\left(x^i+\eta\right)\right\Vert\leq\frac{\Vert\eta\Vert\left\Vert x^j\right\Vert}{\rho_{\delta}\left\Vert x^i\right\Vert}$$ for any $x\in\mathcal{X}$.
+	</p>
+	<p>
+		<strong>Remark 2.20</strong>
+		For a neural network let $x$ be the input, $A$ be the layer matrix and $U$ the Jacobian of the network output with respect to the layer input. Then the network output before compression is given by $UAx$ and after compression the output is given by $U\hat{A}x$.
+	</p>
+	<p>
+		<strong>Theorem 2.21</strong>
+		For any fully connected network $h_{{\mathbf{w}}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(h_{\tilde{{\mathbf{w}}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right)\right)\geq1-\delta.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		<strong>Lemma 2.21.1</strong>
+		For any $0&lt;\delta$ and $\epsilon\leq 1$ let $G=\left\{\left(U^i,x^i\right)\right\}_{i=1}^m$ be a set of matrix-vector pairs of size $m$ where $U\in\mathbb{R}^{k\times n_1}$ and $x\in\mathbb{R}^{n_2}$, let $\hat{A}\in\mathbb{R}^{n_1\times n_2}$ be the output of Algorithm 3 $\left(A,\epsilon,\eta=\frac{\delta}{mk}\right)$. With probability at least $1-\delta$ we have for any $(U,x)\in G$ that $\left\Vert U(\hat{A}-A)x\right\Vert\leq\epsilon \Vert A\Vert_F\Vert U\Vert_F\Vert x\Vert$.
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		For fixed vectors $u,v$ we have that $$u^\top\hat{A}v=\frac{1}{k}\sum_{l=1}^ku^\top Z_lv=\frac{1}{k}\sum_{l=1}^k\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle.$$ Furthermore, we have that $$\begin{align*}\mathbb{E}\left(\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle\right)&=\mathbb{E}\left(\mathrm{tr}\left(A^\top M_l\right)\mathrm{tr}\left(M_l^\top\left(uv^\top\right)\right)\right)\\&=\mathbb{E}\left(\left(\sum_{i,j}a_{ij}m_{ij}\right)\left(\sum_{i,j}m_{ij}u_{ij}\right)\right)\\&=\sum_{i,j}a_{ij}u_{ij}\\&=\left\langle A,uv^\top\right\rangle,\end{align*}$$ where we achieve the last equality as we note that $\mathbb{E}(m_{ij}m_{kl})$ is $1$ when $ij=kl$ and $0$ otherwise. By standard concentration inequalities we deduce that $$\mathbb{P}\left(\left\vert\frac{1}{k}\sum_{l=1}^k\langle A,M_l\rangle\left\langle uv^\top,M_l\right\rangle-\left\langle A,uv^\top\right\rangle\right\vert\geq\epsilon\Vert A\Vert_F\left\Vert uv^\top\right\Vert_F\right)\leq\exp\left(-k\epsilon^2\right).$$ Therefore, for the choice of $k$ from Algorithm 3 we know that $$\mathbb{P}\left(\left\vert u^\top\hat{A}v-u^\top Av\right\vert\geq\epsilon\Vert A\Vert_F\left\Vert u\right\Vert\left\Vert v\right\Vert\right)\leq\eta.$$ Let $(U,x)\in G$ and $u_i$ be the $i^\text{th}$ row of $U$. We can apply the above result with a union bound over the $mn$ rows $u_i$ in $G$ to get that $$\mathbb{P}\left(\left\vert u_i^\top\hat{A}v-u_i^\top Av\right\vert\leq\epsilon\Vert A\Vert_F\left\Vert u_i\right\Vert\left\Vert v\right\Vert\right)\geq1-\delta$$ for all $i$ simultaneously. Furthermore, $$\left\Vert U\left(\hat{A}-A\right)x\right\Vert^2=\sum_{i=1}^n\left(u_i^\top\left(\hat{A}-A\right)x\right)^2,\text{ and }\Vert U\Vert_F^2=\sum_{i=1}^n\Vert u_i\Vert^2$$ we see that with probability at least $1-\delta$ we have $$\begin{align*}\left\Vert U(\hat{A}-A)x\right\Vert^2&=\sum_{i=1}^n\left(u_i^\top\left(\hat{A}-A\right)x\right)^2\\&\leq\sum_{i=1}^n\epsilon^2\Vert A\Vert_F^2\Vert u_i\Vert^2\Vert x\Vert\\&=\epsilon^2\Vert A\Vert_F^2\Vert U\Vert^2\Vert x\Vert\end{align*}$$ which completes the proof of the lemma. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Lemma 2.21.2</strong>
+		For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any $0&lt;\epsilon\leq 1$, Algorithm 3 can generate weights $\tilde{\mathbf{w}}$ for a network with at most $$\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\epsilon^2}\cdot\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}$$ total parameters such that for any $x\in\mathcal{X}$ we have $$\mathbb{P}\left(\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{\mathbf{w}}}(x)\right\Vert\leq\epsilon\Vert h_{\mathbf{w}}(x)\Vert\right)\geq1-\frac{\delta}{2},$$ where $\mu_i,\mu_{i\to},c$ and $\rho_{\delta}$ are the layer cushion, inter-layer cushion, activation contraction and inter-layer smoother for the network. $\square$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		The proof of this lemma proceeds by induction. For $i\geq0$ let $\hat{x}_i^j$ be the output at layer $j$ if weights $A^1,\dots,A^i$ are replaced with $\tilde{A}^1,\dots,\tilde{A}^i$. We want to show for any $i$ if $j\geq i$ then $$\mathbb{P}\left(\left\Vert\hat{x}_i^j-x^j\right\Vert\leq\frac{i}{d}\epsilon\left\Vert x^j\right\Vert\right)\geq1-\frac{i\delta}{2d}.$$ For $i=0$ the result is clear as the weight matrices are unchanged. Suppose the result holds true for $i-1$. Let $\hat{A}^i$ be the result of applying Algorithm 3 to $A^i$ with $\epsilon_i=\frac{\epsilon\mu_i\mu_{i\to}}{4cd}$ and $\eta=\frac{\delta}{6d^2n^2m}$. Consider the set  $$G=\left\{\left(J_{x^i}^{i,j},x^i\right):x^i\in\mathcal{X},j\geq i\right\}$$ and let $\Delta^i=\hat{A}^i-A^i$. Note that $$\left\Vert\hat{x}_i^j-x^j\right\Vert\leq\left\Vert\hat{x}_i^j-\hat{x}_{i-1}^j\right\Vert+\left\Vert\hat{x}_{i-1}^j-x^j\right\Vert.$$ The second term is bounded by $\frac{(i-1)\epsilon\left\Vert x^j\right\Vert}{d}$ by inductive assumption. Therefore, it suffices to show that the first term is bounded by $\frac{\epsilon}{d}$ to complete the inductive step. First observe that, $$\left\Vert\hat{x}_i^j-\hat{x}_{i-1}^j\right\Vert\leq\left\Vert J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert+\left\Vert M^{i,j}\left(\hat{A}^i\phi\left(\hat{x}^{i-1}\right)\right)-M^{i,j}\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)-J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert.$$ The first term can be bounded as follows $$\begin{align*}\left\Vert J_{x^i}^{i,j}\left(\Delta^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert&\leq\frac{\epsilon\mu_i\mu_{i\to}}{6cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert\phi\left(\hat{x}^{i-1}\right)\right\Vert\quad\text{Lemma 2.21.1}\\&\leq\frac{\epsilon\mu_i\mu_{i\to}}{6cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert\hat{x}^{i-1}\right\Vert\quad\text{Lipschitz of $\phi$}\\&\leq\frac{\epsilon\mu_i\mu_{i\to}}{3cd}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\right\Vert_F\left\Vert x^{i-1}\right\Vert\quad\text{ Inductive Assumption}\\&\leq\frac{\epsilon\mu_{i\to}}{3d}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert A^i\phi\left(x^{i-1}\right)\right\Vert\\&\leq\frac{\epsilon\mu_{i\to}}{3d}\left\Vert J_{x^i}^{i,j}\right\Vert\left\Vert x^i\right\Vert\\&\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.\end{align*}$$ The second term can be split as $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(\hat{A}^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert+\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert,$$ which can be bounded by inter-layer smoothness. By inductive assumption $$\left\Vert A^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert\leq\frac{(a-1)\epsilon\left\Vert x^i\right\Vert}{d}\leq\epsilon\left\Vert x^i\right\Vert.$$ Then by inter-layer smoothness $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert\leq\frac{\left\Vert x^b\right\Vert\epsilon}{\rho_{\delta}}\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.$$ On the other hand, $$\left\Vert\hat{A}^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert\leq\left\Vert A^i\phi\left(\hat{x}^{i-1}\right)-x^i\right\Vert+\left\Vert\Delta^i\phi\left(\hat{x}^{i-1}\right)\right\Vert\leq\frac{(i-1)\epsilon}{d}+\frac{\epsilon}{3d}\leq\epsilon$$ so that $$\left\Vert\left(M^{i,j}-J_{x^i}^{i,j}\right)\left(A^i\phi\left(\hat{x}^{i-1}\right)\right)\right\Vert\leq\frac{\epsilon}{3d}\left\Vert x^j\right\Vert.$$ This completes the inductive step. To complete the proof we bound the total number of parameters. With the values of $\epsilon_i$ and $\eta$ used in the induction we see that the total number of parameters is $$\begin{align*}\sum_{i=1}^d\frac{\log\left(\frac{1}{\frac{\delta}{6d^2n^2m}}\right)}{\left(\frac{\epsilon\mu_i\mu_{i\to}}{4cd}\right)^2}&=\sum_{i=1}^d\frac{16c^2d^2\log\left(\frac{6d^2n^2m}{\delta}\right)}{\epsilon^2\mu_i\mu_{i\to}}\\&\leq\frac{16c^2d^2\log\left(\frac{d^2n^2m^2}{\delta^2}\right)}{\epsilon^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\\&\leq\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\epsilon^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2},\end{align*}$$ which completes the proof of the lemma. $\square$
+	</p>
+	</details>
+	<p>
+		<strong>Lemma 2.21.3</strong>
+		For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0<\delta\leq 1$ and any margin $\gamma>0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		In the first case suppose that $\gamma^2>2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2$, then $$\left\vert h_{\mathbf{w}}(x)[y]-\max_{j\neq y}h_{\mathbf{w}}(x)[j]\right\vert^2\leq 2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2\leq\gamma^2.$$ Therefore, the margin can be at most $\gamma$ which implies that $\hat{L}_{\gamma}(h_{\mathbf{w}})=1$ and so the statement holds in this case. If instead $\gamma^2\leq2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2$, then setting $\epsilon=\frac{\gamma^2}{2\max_{x\in\mathcal{X}}\left\Vert h_{\mathbf{w}}(x)\right\Vert_2^2}$ in Lemma 2.21.2 we conclude that $$\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{\mathbf{w}}}(x)\right\Vert\leq\frac{\gamma}{\sqrt{2}}$$ for any $x\in\mathcal{X}$. If for $(x,y)\in\mathcal{Z}$ we have that $$h_{\mathbf{w}}(x)[y]\leq\gamma+\max_{j\neq y}f_{\mathbf{w}}[j]$$ then for $h_{\tilde{\mathbf{w}}}$ the contribution of this data point to the empirical classification loss can only be less than or equal to its contribution to the empirical classification margin loss of $h_{\mathbf{w}}$. On the other hand, suppose that $$h_{\mathbf{w}}[y]>\gamma+\max_{j\neq y}h_{\mathbf{w}}[j],$$ so that the data point doesn't contribute to $\hat{L}_{\gamma}(h_{\mathbf{w}})$. For the data point's contribution to $\hat{L}_0(h_{\tilde{\mathbf{w}}})$ to be larger we need $$h_{\tilde{w}}\leq\max_{j\neq y}h_{\tilde{w}}(x)[y]$$ which would either require a change of more than $\gamma$ between two components of $h_{\mathbf{w}}(x)$ under compression to $h_{\tilde{\mathbf{w}}}(x)$. If this change occurs then the distance between $h_{\mathbf{w}}(x)$ and $h_{\tilde{\mathbf{w}}}(x)$ is minimized when only two components change by more than $\frac{\gamma}{2}$. Suppose that components the $i^\text{th}$ and $j^\text{th}$ components move sufficiently then, $$\begin{align*}\left\Vert h_{\mathbf{w}}(x)-h_{\tilde{w}}(x)\right\Vert^2&>\vert h_{\mathbf{w}}(x)[i]-h_{\tilde{\mathbf{w}}}(x)[i]\vert^2+\vert h_{\mathbf{w}}(x)[j]-h_{\tilde{\mathbf{w}}}(x)[j]\vert^2\\&>\frac{\gamma^2}{4}+\frac{\gamma^2}{4}\\&=\frac{\gamma^2}{2}\end{align*}$$ which contradicts the conclusion of Lemma 2.21.2. We now bound the number of total parameters. With our value for $\epsilon$ Lemma 2.21.2 tells us that the number of total parameters is at most $$\frac{32c^2d^2\log\left(\frac{mdn}{\delta}\right)}{\frac{\gamma^2}{2\max_{x\in\mathcal{X}}}}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2},$$ from which the required result follows and completes the proof of the lemma.
+	</p>
+	</details>
+	<p>
+		<strong>Lemma 2.21.4</strong> 
+		For any matrix $A$ let $\hat{A}$ be the truncated version of $A$ where singular values that are smaller than $\delta\left\Vert A\right\Vert_2$.Let $h_{\mathbf{w}}$ be a $d$-layer network with weights $A=\left\{A^1,\dots,A^d\right\}$. Then for any input $x$, weights $A$ and $\hat{A}$, if for any layer $i$, $\left\Vert A^i-\hat{A}^i\right\Vert\leq\frac{1}{d}\Vert A^i\Vert$, then $$\Vert h_\mathbf{w}(x)-h_{\hat{\mathbf{w}}}(x)\Vert\leq e\Vert x\Vert\left(\prod_{i=1}^d\left\Vert A^i\right\Vert_2\right)\sum_{i=1}^d\frac{\left\Vert\hat{A}^i-A^i\right\Vert_2}{\Vert A^i\Vert_2}.$$
+	</p>
+	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
+	<summary>Proof</summary>
+	<br>
+	<p>
+		For $x\in\mathcal{X}$ recall that $x^i$ is the vector before activation at layer $i$. Now we also consider $\hat{x}^i$ as the vector before activation for the network with weights $\hat{A}$. For the lemma $x\in\mathcal{X}$ is fixed so let $\xi_i=\left\vert\hat{x}^i-x^i\right\vert$. Now proceed by induction on the statement $$\xi_i\leq\left(1+\frac{1}{d}\right)^i\Vert x\Vert\left(\prod_{j=1}^i\left\Vert A^j\right\Vert_2\right)\sum_{j=1}^i\frac{\left\Vert A^j-\hat{A}^j\right\Vert_2}{\left\Vert A^j\right\Vert_2}.$$ The base case clearly holds as $\xi_0=0$. Therefore, for $i\geq1$ we proceed as follows, $$\begin{align*}\xi_{i+1}&=\left\vert\hat{A}^{i+1}\phi\left(\hat{x}^i\right)-A^{i+1}\phi\left(x^i\right)\right\vert_2\\&=\left\vert\hat{A}^i\left(\phi\left(\hat{x}^i\right)-\phi\left(x^i\right)\right)+\left(\hat{A}^i-A^i\right)\phi\left(x^i\right)\right\vert_2\\&\leq\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\left\vert\phi\left(\hat{x}^i\right)-\phi\left(x^i\right)\right\vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert\phi\left(x^i\right)\right\vert_2\\&\leq\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\left\vert\hat{x}^i-x^i\right\vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert x^i\right\vert_2\\&=\left(\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}+A^{i+1}\right\Vert_2\right)\xi_i+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\left\vert x^i\right\vert_2,\end{align*}$$ note how the second arises as a specific property of the ReLU activation function. By the assumption of the lemma and the inductive assumption it therefore follows that $$\begin{align*}\xi_{i+1}&\leq\xi_i\left(1+\frac{1}{d}\right)\left\Vert A^{i+1}\right\Vert_2+\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2\Vert x\Vert_2\prod_{j=1}^i\left\Vert A^j\right\Vert_2\\&\leq\left(1+\frac{1}{d}\right)^{i+1}\left(\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\right)\Vert x\Vert_2\sum_{j=1}^i\frac{\left\Vert\hat{A}^j-A^j\right\Vert_2}{\left\Vert A^j\right\Vert_2}+\frac{\left\Vert\hat{A}^{i+1}-A^{i+1}\right\Vert_2}{\left\Vert A^{i+1}\right\Vert_2}\Vert x\Vert_2\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\\&\leq\left(1+\frac{1}{d}\right)^{i+1}\left(\prod_{j=1}^{i+1}\left\Vert A^j\right\Vert_2\right)\Vert x\Vert_2\sum_{j=1}^{i+1}\frac{\left\Vert\hat{A}^j-A^j\right\Vert_2}{\left\Vert A^j\right\Vert_2},\end{align*}$$ then using the fact that $\left(1+\frac{1}{d}\right)^d\leq e$ completes the proof of the lemma.
+	</p>
+	</details>
+	<p>
+		We can assume without loss of generality that for any $i\neq j$ that $$\Vert A_i\Vert_F=\Vert A_j\Vert_F=\beta.$$ This is because we can re-balance the matrices if necessary without effecting the cushion of the network. Therefore, for any $x\in\mathcal{X}$ we have $$\beta^d=\prod_{i=1}^d\left\Vert A^i\right\Vert_F\leq\frac{c\left\Vert x^1\right\Vert}{\Vert x\Vert\mu_1}\prod_{i=2}^d\left\Vert A^i\right\Vert_F\leq\frac{c\left\Vert x^2\right\Vert}{\Vert x\Vert\mu_1\mu_2}\prod_{i=3}^d\left\Vert A^i\right\Vert_F\leq\dots\leq\frac{c^d\left\Vert h_{\mathbf{w}}(x)\right\Vert}{\Vert x\Vert\prod_{i=1}^d\mu_i}.$$ Now for each layer matrix $A^i$ we can define the single layer network by $A^ix^{i-1}=x^{i-1}$ and so with $\epsilon=\min\left(\frac{1}{d},\frac{\gamma^2}{2\max\left\Vert A^ix^{i-1}\right\Vert_2^2}\right)$ we can deduce from Lemma 2.21.2 that with probability at least $1-\frac{\delta}{2}$ we have that $$\left\Vert\tilde{A}^i-A^i\right\Vert_F\leq\frac{1}{d}\left\Vert A^i\right\Vert.$$ Which implies that $\left\Vert\tilde{A}^i\right\Vert\leq\beta\left(1+\frac{1}{d}\right)$. Next we that as  $$\tilde{A}^i=\frac{1}{k}\sum_{l=1}^k\left\langle A^i,M_l\right\rangle M_{l},$$ if $\hat{A}^i$ are the approximations of $\tilde{A}^i$ with accuracy $\mu$ then $$\left\Vert\hat{A}^i-\tilde{A}^i\right\Vert_F\leq\sqrt{k} h\nu\leq\sqrt{q}h\nu$$ where $q$ is the total number of parameters. Therefore, by Lemma 2.21.4 we have that $$\begin{align*}\left\vert l_{\gamma}(h_{\tilde{w}}(x),y)-l_{\gamma}(h_{\hat{\mathbf{w}}}(x),y)\right\vert&\leq\frac{2e}{\gamma}\Vert x\Vert\left(\prod_{i=1}^d\left\Vert\tilde{A}^i\right\Vert\right)\sum_{i=1}^d\frac{\left\Vert\tilde{A}^i-\hat{A}^i\right\Vert_F}{\left\Vert\tilde{A}^i\right\Vert_F}\\&\leq\frac{e^2}{\gamma}\Vert x\Vert\beta^{d-1}\sum_{i=1}^d\left\Vert \tilde{A}^i-\hat{A}^i\right\Vert_F\\&\leq\frac{e^2c^d\left\Vert h_{\mathbf{w}}(x)\right\Vert\sum_{i=1}^d\left\Vert\tilde{A}^i-\hat{A}^i\right\Vert_F}{\gamma\beta\prod_{i=1}^d\mu_i}\\&\leq\frac{qn\nu}{\beta},\quad\text{By Lemma 2.21.3}:\frac{e^2d\left\Vert h_{\mathbf{w}}(x)\right\Vert}{\gamma\beta\prod_{i=1}^d\mu_i}\leq\sqrt{q}.\end{align*}$$ From Algorithm 3 we see that $$\beta=\left\Vert\hat{A}^i\right\Vert_F=\frac{1}{k}\sum_{l=1}^k\left\Vert Z_l\right\Vert_F\leq\frac{1}{k}\sum_{l=1}^kn\vert\langle A,M_l\rangle\vert$$ and so using $k\leq n^2$ we see that parameter $\langle A,M_l\rangle$ has absolute value at most $\beta n$. Therefore, to get an $\epsilon$-cover with $r$ choices for each parameter we require that $$\frac{qn\left(\frac{\beta n}{r}\right)}{\beta}=\frac{qn^2}{r}\leq\epsilon$$ which means that $r\geq\frac{qn^2}{\epsilon}$. We need these choices over $q$ parameters and so the covering number is given by $$\left(\frac{q\beta n^2}{\epsilon}\right)^q\leq\left(\frac{q\beta n}{\epsilon}\right)^{2q}.$$ Therefore, we can bound the Rademacher complexity by $$\epsilon+\sqrt{\frac{4q\log\left(\frac{q\beta n}{\epsilon}\right)}{m}}$$ from which we can deduce that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0\left(h_{\mathbf{w}}\right)\leq \hat{L}_0\left(h_{\tilde{\mathbf{w}}}\right)+\tilde{O}\left(\sqrt{\frac{q}{m}}\right)\right)\geq1-\delta.$$ By the construction of $\tilde{\mathbf{w}}$ we know that $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})$ which when combined with the above conclusion completes the proof of the theorem.
+	</p>
+	</detail>
+</article>

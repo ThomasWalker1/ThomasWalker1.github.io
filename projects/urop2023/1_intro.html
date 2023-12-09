@@ -1,320 +1,86 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Introduction</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-	margin-left: 25px;
-	margin-right: 25px;
-	margin-bottom: 15px;
-	margin-top: 15px;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
-<h1 id="introduction">Introduction</h1>
-<p>
-	A great resource for introducing the field of Probably Approximately Correct (PAC) learning theory is given in (Alquier, 2023). It details the progression of results in the field and motivates the various research avenues. PAC learning theory is a general framework for studying learning algorithms, and my aim here is to illustrate how this theory is being contextualized within machine learning, with a specific focus on neural networks. With this report, I want to introduce the theory and detail some applications, as well as provide some recent extensions. The main product of PAC learning theory is bounds on the performance of the output of learning algorithms, termed PAC bounds. This report will not provide an exhaustive list of the various PAC bounds being applied to neural networks. I will instead provide some well-known results in the literature and how some of them manifest in applications. For a comprehensive introduction to the field of PAC, the reader is recommended to refer to (Alquier, 2023). Nevertheless, this report will be mostly self-contained, with proofs for the major results and elaboration on the implementations of PAC theory.
-</p>
-<h2 id="contents">Contents</h2>
-<ul>
-<li><a href="/urop2023/2_PAC.html">Chapter 2 - PAC Bounds</a></li>
-<ul>
-	<li>Introducing PAC Bounds</li>
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h0 py-4 mt-3">Overview</h1>
+  </header>
+  <div class="col-4 sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+	<h1 id="introduction">Introduction</h1>
+	<p>
+		A great resource for introducing the field of Probably Approximately Correct (PAC) learning theory is given in (Alquier, 2023). It details the progression of results in the field and motivates the various research avenues. PAC learning theory is a general framework for studying learning algorithms, and my aim here is to illustrate how this theory is being contextualized within machine learning, with a specific focus on neural networks. With this report, I want to introduce the theory and detail some applications, as well as provide some recent extensions. The main product of PAC learning theory is bounds on the performance of the output of learning algorithms, termed PAC bounds. This report will not provide an exhaustive list of the various PAC bounds being applied to neural networks. I will instead provide some well-known results in the literature and how some of them manifest in applications. For a comprehensive introduction to the field of PAC, the reader is recommended to refer to (Alquier, 2023). Nevertheless, this report will be mostly self-contained, with proofs for the major results and elaboration on the implementations of PAC theory.
+	</p>
+	<h2 id="contents">Contents</h2>
 	<ul>
-		<li>Notation</li>
-		<li>PAC Bounds</li>
-		<li>Occam Bounds</li>
-	</ul>
-	<li>Expected Risk Minimization</li>
-	<li>Compression</li>
+	<li><a href="/urop2023/2_PAC.html">Chapter 2 - PAC Bounds</a></li>
 	<ul>
-		<li>Establishing the Notion of Compression</li>
-		<li>Compression of a Linear Classifier</li>
-		<li>Compression of a Fully Connected Network</li>
+		<li>Introducing PAC Bounds</li>
+		<ul>
+			<li>Notation</li>
+			<li>PAC Bounds</li>
+			<li>Occam Bounds</li>
+		</ul>
+		<li>Expected Risk Minimization</li>
+		<li>Compression</li>
+		<ul>
+			<li>Establishing the Notion of Compression</li>
+			<li>Compression of a Linear Classifier</li>
+			<li>Compression of a Fully Connected Network</li>
+		</ul>
 	</ul>
-</ul>
-<li><a href="/urop2023/3_Empirical_PAC_Bayes.html">Chapter 3 - Empirical PAC-Bayes Bounds</a></li>
-<ul>
-	<li>Introduction to PAC-Bayes Theory</li>
+	<li><a href="/urop2023/3_Empirical_PAC_Bayes.html">Chapter 3 - Empirical PAC-Bayes Bounds</a></li>
 	<ul>
-		<li>Bayesian Machine Learning</li>
-		<li>Notations and Definitions</li>
-		<li>PAC-Bayes Bounds</li>
+		<li>Introduction to PAC-Bayes Theory</li>
+		<ul>
+			<li>Bayesian Machine Learning</li>
+			<li>Notations and Definitions</li>
+			<li>PAC-Bayes Bounds</li>
+		</ul>
+		<li>Optimizing PAC-Bayes Bounds via SGD</li>
 	</ul>
-	<li>Optimizing PAC-Bayes Bounds via SGD</li>
-</ul>
-<li><a href="/urop2023/4_Oracle_PAC_Bayes.html">Chapter 4 - Oracle PAC-Bayes Bounds</a></li>
-<ul>
-	<li>Theory of Oracle PAC-Bayes Bounds</li>
+	<li><a href="/urop2023/4_Oracle_PAC_Bayes.html">Chapter 4 - Oracle PAC-Bayes Bounds</a></li>
 	<ul>
-		<li>Oracle PAC-Bayes Bounds in Expectation</li>
-		<li>Oracle PAC-Bayes Bounds in Probability</li>
-		<li>Bernstein's Assumption</li>
+		<li>Theory of Oracle PAC-Bayes Bounds</li>
+		<ul>
+			<li>Oracle PAC-Bayes Bounds in Expectation</li>
+			<li>Oracle PAC-Bayes Bounds in Probability</li>
+			<li>Bernstein's Assumption</li>
+		</ul>
+		<li>Data Driven PAC-Bayes Bounds</li>
+		<ul>
+			<li>Implementing Data-Dependent Priors</li>
+		</ul>
 	</ul>
-	<li>Data Driven PAC-Bayes Bounds</li>
+	<li><a href="/urop2023/5_Extensions_PAC_Bayes.html">Chapter 5 - Extensions of PAC-Bayes Bounds</a></li>
 	<ul>
-		<li>Implementing Data-Dependent Priors</li>
+		<li>Disintegrated PAC-Bayes Bounds</li>
+		<ul>
+			<li>Application to Neural Network Classifiers</li>
+		</ul>
+		<li>PAC-Bayes Compression Bounds</li>
 	</ul>
-</ul>
-<li><a href="/urop2023/5_Extensions_PAC_Bayes.html">Chapter 5 - Extensions of PAC-Bayes Bounds</a></li>
-<ul>
-	<li>Disintegrated PAC-Bayes Bounds</li>
+	<li><a href="/urop2023/6_appendix.html">Chapter 6 - Appendix</a></li>
 	<ul>
-		<li>Application to Neural Network Classifiers</li>
+		<li>Extensions to Convolutional Neural Networks</li>
+		<li>Current State of the Art PAC-Bayes Bounds</li>
+		<ul>
+			<li>The PAC-Bayes Foundations</li>
+			<li>Finding Random Subspaces</li>
+			<li>Quantization and Training</li>
+			<li>Optimization</li>
+		</ul>
+		<li>Rademacher Complexity</li>
 	</ul>
-	<li>PAC-Bayes Compression Bounds</li>
-</ul>
-<li><a href="/urop2023/6_appendix.html">Chapter 6 - Appendix</a></li>
-<ul>
-	<li>Extensions to Convolutional Neural Networks</li>
-	<li>Current State of the Art PAC-Bayes Bounds</li>
-	<ul>
-		<li>The PAC-Bayes Foundations</li>
-		<li>Finding Random Subspaces</li>
-		<li>Quantization and Training</li>
-		<li>Optimization</li>
+	<li><a href="/urop2023/References.html">References</a></li>
 	</ul>
-	<li>Rademacher Complexity</li>
-</ul>
-<li><a href="/urop2023/References.html">References</a></li>
-</ul>
 
-<h2 id="downloads">Downloads</h2>
-<ul>
-	<li><a id="simple" href="/download_docs/urop2023/guide_to_PAC_simple.pdf">Simple version where proofs are omitted.</a></li>
-	<li><a id="detailed" href="/download_docs/urop2023/guide_to_PAC_detailed.pdf">Detailed version where proofs are included.</a></li>
-	<li><a id="pac_rl" href="/download_docs/urop2023/pac_rl.pdf">A digression into PAC bounds for Reinforcement Learning (RL).</a></li>
-	<li><a id="pac_rl" href="/download_docs/urop2023/pac_gnn.pdf">A digression into PAC bounds for Graph Neural Networks (GNNs).</a></li>
-</ul>
-</body>
-</html>
+	<h2 id="downloads">Downloads</h2>
+	<ul>
+		<li><a id="simple" href="/download_docs/urop2023/guide_to_PAC_simple.pdf">Simple version where proofs are omitted.</a></li>
+		<li><a id="detailed" href="/download_docs/urop2023/guide_to_PAC_detailed.pdf">Detailed version where proofs are included.</a></li>
+		<li><a id="pac_rl" href="/download_docs/urop2023/pac_rl.pdf">A digression into PAC bounds for Reinforcement Learning (RL).</a></li>
+		<li><a id="pac_rl" href="/download_docs/urop2023/pac_gnn.pdf">A digression into PAC bounds for Graph Neural Networks (GNNs).</a></li>
+	</ul>
+</article>
