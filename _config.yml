@@ -1,8 +1,10 @@
 title: Thomas Walker
 description: Imperial College London - BSc Mathematics.
 logo: /assets/picture_newtons_apple_tree.jpg
-github_repo: 
-#remote_theme: pages-themes/minimal@v0.2.0
+
+baseurl: https://thomaswalker1.github.io/
+pages: []
+
 remote_theme: ThomasWalker1/swiss
 theme_color: black
 plugins:
