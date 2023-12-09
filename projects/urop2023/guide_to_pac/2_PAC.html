@@ -353,7 +353,7 @@ layout: default
 	</p>
 	<p>
 		<strong>Theorem 2.21</strong>
-		For any fully connected network $h_{{\mathbf{w}}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(h_{\tilde{{\mathbf{w}}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right)\right)\geq1-\delta.$$
+		For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq3d$, any probability $0&lt;delta\leq 1$ and any margin $\gamma$. Algorithm 3 generates weights $\tilde{{\mathbf{w}}}$ such that $$\mathbb{P}_{S\sim\mathcal{D}^m}\left(L_0(h_\tilde{{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_{\mathbf{w}})+\tilde{O}\left(\sqrt{\frac{c^2d^2\max_{x\in S}\Vert h_{\mathbf{w}}(x)\Vert_2^2\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}}{\gamma^2m}}\right)\right)\geq1-\delta.$$
 	</p>
 	<details style="border:rgb(59, 62, 62); border-width:2px; border-style:solid;">
 	<summary>Proof</summary>
@@ -382,7 +382,7 @@ layout: default
 	</details>
 	<p>
 		<strong>Lemma 2.21.3</strong>
-		For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0<\delta\leq 1$ and any margin $\gamma>0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$
+		For any fully connected network $h_{\mathbf{w}}$ with $\rho_{\delta}\geq 3d$, any probability $0&lt;\delta\leq 1$ and any margin $\gamma>0$, $h_{\mathbf{w}}$ can be compressed (with respect to a random string) to another fully connected network $h_{\mathbf{w}}$ such that for $x\in\mathcal{X}$, $\hat{L}_0(h_{\tilde{\mathbf{w}}})\leq\hat{L}_{\gamma}(h_\mathbf{w})$ and the number of parameters in $h_{\tilde{\mathbf{w}}}$ is at most $$\tilde{O}\left(\frac{c^2d^2\max_{x\in\mathcal{X}}\Vert h_{\mathbf{w}}(x)\Vert_2^2}{\gamma^2}\sum_{i=1}^d\frac{1}{\mu_i^2\mu_{i\to}^2}\right).$$
 	</p>
 	<details style="border:rgb(59, 62, 62); border-width:1px; border-style:solid;">
 	<summary>Proof</summary>
