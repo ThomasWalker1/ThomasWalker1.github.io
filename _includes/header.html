@@ -4,18 +4,14 @@
       <a class="align-middle link-primary text-accent" href="{{ site.baseurl }}/">{{ site.title }}</a>
     </div>
     <ul class="list-reset right py-1 header-text font-smoothing">
-      <li class="inline-block">
-        <a class="align-middle link-primary header-link mr-2" href="/projects.html">Projects</a>
-      </li>
-      <li class="inline-block">
-        <a class="align-middle link-primary header-link mr-2" href="/presentations.html">Presentations</a>
-      </li>
-      <li class="inline-block">
-        <a class="align-middle link-primary header-link mr-2" href="/blog.html">Blog</a>
-      </li>
-      <li class="inline-block">
-        <a class="align-middle link-primary header-link mr-2" href="/notes.html">Notes</a>
-      </li>
+      <label for="navigation_bar">Navigate</label> 
+      <select name="pages" id="pages"> 
+          <option value="/projects.html">Projects</option> 
+          <option value="/presentations.html">Presentations</option> 
+          <option value="/blog.html">Blog</option> 
+          <option value="/notes.html">Notes</option> 
+      </select>
+
   </ul>
     <div style="padding-top: 8px;padding-left: 20px;">
     <a href="/documents/Thomas_Walker_CV.pdf"><img src="/assets/cv_icon.png" style="width:25px;height:25px;"></img></a>
