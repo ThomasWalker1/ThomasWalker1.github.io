@@ -140,9 +140,9 @@ code {
 }
 /* Dropdown Button */
 .dropbtn {
-  background-color: #3498DB;
-  color: white;
-  padding: 16px;
+  background-color: #494444;
+  color: #E74727;
+  padding: 4px;
   font-size: 16px;
   border: none;
   cursor: pointer;
@@ -150,7 +150,7 @@ code {
 
 /* Dropdown button on hover & focus */
 .dropbtn:hover, .dropbtn:focus {
-  background-color: #2980B9;
+  background-color: #494444;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -163,7 +163,7 @@ code {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #f1f1f1;
+  background-color: #494444;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -171,7 +171,7 @@ code {
 
 /* Links inside the dropdown */
 .dropdown-content a {
-  color: black;
+  color: #E74727;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
