@@ -1,5 +1,6 @@
 <header class="header-background">
-  <div class="dropdown">
+  <div class="clearfix px-2 header-border">
+    <div class="dropdown">
       <button onclick="myFunction()" class="dropbtn">Navigate</button>
       <div id="myDropdown" class="dropdown-content">
         <a href="/projects.html">Projects</a>
@@ -9,13 +10,9 @@
       </div>
     </div>
     <script>
-      /* When the user clicks on the button, 
-      toggle between hiding and showing the dropdown content */
       function myFunction() {
         document.getElementById("myDropdown").classList.toggle("show");
       }
-      
-      // Close the dropdown if the user clicks outside of it
       window.onclick = function(event) {
         if (!event.target.matches('.dropbtn')) {
           var dropdowns = document.getElementsByClassName("dropdown-content");
@@ -28,16 +25,15 @@
           }
         }
       }
-      </script>
-  <div class="clearfix px-2 header-border">
+    </script>
     <div class="left sm-width-full py-1 mt-1 mt-lg-0">
       <a class="align-middle link-primary text-accent" href="{{ site.baseurl }}/">{{ site.title }}</a>
     </div>
     <div class="center" style="width: 150px">
-    <a href="/documents/Thomas_Walker_CV.pdf"><img src="/assets/cv_icon.png" style="width:25px;height:25px;"></img></a>
-    <a href="https://www.linkedin.com/in/thomas-walker-706854189/"><img src="/assets/linkedin_icon.png" style="width:25px;height:25px;"></img></a>
-    <a href="https://github.com/ThomasWalker1"><img src="/assets/github_icon.png" style="width:25px;height:25px;"></img></a>
-    <a href="https://thomaswalker1.substack.com/"><img src="/assets/blog_icon.png" style="width:25px;height:25px;"></img></a>
+      <a href="/documents/Thomas_Walker_CV.pdf"><img src="/assets/cv_icon.png" style="width:25px;height:25px;"></img></a>
+      <a href="https://www.linkedin.com/in/thomas-walker-706854189/"><img src="/assets/linkedin_icon.png" style="width:25px;height:25px;"></img></a>
+      <a href="https://github.com/ThomasWalker1"><img src="/assets/github_icon.png" style="width:25px;height:25px;"></img></a>
+      <a href="https://thomaswalker1.substack.com/"><img src="/assets/blog_icon.png" style="width:25px;height:25px;"></img></a>
     </div>
   </div>
 </header>
