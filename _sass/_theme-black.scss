@@ -1,21 +1,21 @@
 // Default black theme
 
 // Color variables
-$black: #181818;
-$red: #E74727;
-$red-small: #DC3918;
+$blue: #009DDB;
+$blue-small: #007AB3;
+$gray: #45474A;
 $white: #fff;
 
 // Config
-$color-background: $black !default;
-$color-dot-accent: $red !default;
+$color-background: $gray !default;
+$color-dot-accent: $blue !default;
 $color-foreground: $white !default;
-$color-title: $white !default;
-$color-body-text: $black !default;
-$color-text-accent: $red !default;
-$color-code: $red-small !default;
-$color-nav-link: $red !default;
-$color-primary-link: $red !default;
+$color-title: $blue !default;
+$color-body-text: $gray !default;
+$color-text-accent: $blue !default;
+$color-code: $blue-small !default;
+$color-nav-link: $blue !default;
+$color-primary-link: $blue !default;
 
 .font-smoothing {
   -webkit-font-smoothing: antialiased;
