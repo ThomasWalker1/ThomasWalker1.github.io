@@ -58,46 +58,6 @@
         <p>
           From my exploration of these ideas, I have also developed a broad interest in psychology, morality and theory of mind.
         </p>
-        <h3>Research Ideas</h3>
-        <details>
-        <summary>PAC Bounds for Graph Neural Networks</summary>
-        <br>
-        <p>
-          The practical applications of machine learning over recent years have amassed a lot of success. The emergent power of machine learning techniques has mainly come from increased access to computing and memory resources, facilitating the training and deployment of larger architectures with access to an ever-increasing amount of data. Consequently, there has been a widening gap between theory and application, which has resulted in largely unexplained phenomena such as generalisation. Pure mathematical frameworks have generated theoretical advances, such as geometric deep learning, to close the gap. Subsequent innovations in algorithmic design and understanding are constantly manifesting.
-        </p>
-        <p>
-          Currently, statistical guarantees on the performance of machine learning models rely on the Probably Approximately Correct (PAC) learning framework. The framework was formulated in 1998 by McAllester [1] and led to the derivation of bounds that were mainly theoretical tools to elucidate the components impacting a model’s capacity to generalise. In [2], bounds were successfully contextualised to neural networks to provide non-vacuous statistical guarantees on the error of a trained network. Since then, similar efforts have tightened these bounds by appealing to their different components. Of particular interest to me was the work done by [3] that used the structure of neural networks to derive PAC compression bounds. This work reinforces the intuition that compression and generalizability are essentially equivalent concepts; being able to extrapolate correctly from a small set of data is analogous to an effective compressed representation of the data. It would be interesting to investigate whether the formalisation of neural network architectures provided by geometric deep learning could augment the ideas of [3] to further enlighten the phenomena of generalisation.
-        </p>
-        <p>
-          The above remarks were motivated by an undergraduate research project I conducted in the summer of 2023, and my desire to advance reliable machine learning techniques. However, [4] have already attempted to apply the PAC-Bayes framework to graph convolutional networks and message-passing graph neural networks. Although recognising the work of [3], they note they have not fully explored the compression techniques in their approach. Furthermore, they acknowledge the looseness of their bounds and the need for subsequent work to realise its practicalities. As graph neural networks are well-suited to visual and signal perception, it would also be interesting to see whether the work of [4] can be effectively contextualised to visual perception.
-        </p>
-        <h3>References</h3>
-        <ol>
-          <li>
-            David A. McAllester. “Some PAC-Bayesian theorems”. In: Proceedings of the eleventh annual conference on Computational learning theory. COLT’ 98. New York, NY, USA: Association for Computing Machinery, July 1998, pp. 230–234. isbn: 978-1-58113-057-7. doi: 10.1145/279943.279989. url: https://dl.acm.org/doi/10.1145/279943.279989
-          </li>
-          <li>
-            Gintare Karolina Dziugaite and Daniel M. Roy. Computing Nonvacuous Generalization Bounds for Deep (Stochastic) Neural Networks with Many More Parameters than Training Data. arXiv:1703.11008 [cs]. Oct. 2017. doi: 10 . 48550 / arXiv . 1703 . 11008. url: http://arxiv.org/abs/1703.11008
-          </li>
-          <li>
-            Sanjeev Arora, Rong Ge, Behnam Neyshabur, and Yi Zhang. Stronger generalization bounds for deep nets via a compression approach. arXiv:1802.05296 [cs]. Nov. 2018. doi: 10.48550/arXiv.1802.05296. url: http://arxiv.org/abs/1802.05296
-          </li>
-          <li>
-            Renjie Liao, Raquel Urtasun, and Richard Zemel. A PAC-Bayesian Approach to Generalization Bounds for Graph Neural Networks. arXiv:2012.07690 [cs]. Dec. 2020. doi: 10 . 48550 / arXiv . 2012 . 07690. url: http://arxiv.org/abs/2012.07690
-          </li>
-        </ol>
-        </details>
-        <details>
-          <summary>Using Topology for Interpretability</summary>
-          <br>
-          <p>
-          </p>
-          <h3>References</h3>
-          <ol>
-            <li>
-            </li>
-          </ol>
-          </details>
       </div>
     </article>
     {% include footer.html %}
