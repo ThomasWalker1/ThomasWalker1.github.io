@@ -15,6 +15,10 @@ code {
     padding: 1px 0px;
 }
 
+details > summary {
+  font-size: $body-font-size;
+}
+
 .center {
   margin: auto;
   padding: 10px;
