@@ -15,6 +15,10 @@ code {
     padding: 1px 0px;
 }
 
+details {
+  font-size: $prose-font-size;
+}
+
 details > summary {
   font-size: $prose-font-size;
 }
