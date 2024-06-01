@@ -59,6 +59,20 @@
           From my exploration of these ideas, I have also developed a broad interest in psychology, morality and theory of mind.
         </p>
       </div>
+      <h1>Research Ideas</h1>
+      <details>
+        <summary>PAC Bounds for Graph Neural Networks</summary>
+        <br>
+        <p>
+          The practical applications of machine learning over recent years have amassed a lot of success. The emergent power of machine learning techniques has mainly come from increased access to computing and memory resources, facilitating the training and deployment of larger architectures with access to an ever-increasing amount of data. Consequently, there has been a widening gap between theory and application, which has resulted in largely unexplained phenomena such as generalisation. Pure mathematical frameworks have generated theoretical advances, such as geometric deep learning, to close the gap. Subsequent innovations in algorithmic design and understanding are constantly manifesting.
+        </p>
+        <p>
+          Currently, statistical guarantees on the performance of machine learning models rely on the Probably Approximately Correct (PAC) learning framework. The framework was formulated in 1998 by McAllester \cite{mcallester_pac-bayesian_1998} and led to the derivation of bounds that were mainly theoretical tools to elucidate the components impacting a model’s capacity to generalise. In \cite{dziugaite_computing_2017}, bounds were successfully contextualised to neural networks to provide non-vacuous statistical guarantees on the error of a trained network. Since then, similar efforts have tightened these bounds by appealing to their different components. Of particular interest to me was the work done by \cite{arora_stronger_2018} that used the structure of neural networks to derive PAC compression bounds. This work reinforces the intuition that compression and generalizability are essentially equivalent concepts; being able to extrapolate correctly from a small set of data is analogous to an effective compressed representation of the data. It would be interesting to investigate whether the formalisation of neural network architectures provided by geometric deep learning could augment the ideas of \cite{arora_exact_2019} to further enlighten the phenomena of generalisation.
+        </p>
+        <p>
+          The above remarks were motivated by an undergraduate research project I conducted in the summer of 2023, and my desire to advance reliable machine learning techniques. However, \cite{liao_pac-bayesian_2020} have already attempted to apply the PAC-Bayes framework to graph convolutional networks and message-passing graph neural networks. Although recognising the work of \cite{arora_stronger_2018}, they note they haven’t fully explored the compression techniques in their approach. Furthermore, they acknowledge the looseness of their bounds and the need for subsequent work to realise its practicalities. As graph neural networks are well-suited to visual and signal perception, it would also be interesting to see whether the work of \cite{liao_pac-bayesian_2020} can be effectively contextualised to visual perception.
+        </p>
+        </details>
     </article>
     {% include footer.html %}
   </body>
