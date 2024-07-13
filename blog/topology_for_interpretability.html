@@ -9,48 +9,48 @@ layout: default
     </div>
     <div class="prose mb-4 py-4">
     <p>
-        I feel that the geometric component of interpretability methods is underdeveloped. Although analytic analyses are sometimes interpreted geometrically \cite{humayun_splinecam_2023}, I am unsure whether there are developed frameworks that apriori work under geometric ideas. More specifically, I am curious about the application of topology for interpretability.
+        I feel that the geometric component of interpretability methods is underdeveloped. Although analytic analyses are sometimes interpreted geometrically [5], I am unsure whether there are developed frameworks that apriori work under geometric ideas. More specifically, I am curious about the application of topology for interpretability.
     </p>
     <p>
-        The work \cite{naitzat_topology_2020} explores the Betti number of data structures as they are propagated through a neural network. Loosely speaking the Betti number identifies the number of one-dimensional holes in a data structure. What intrigued me about this paper was that using this analysis they could argue for and against the use of different activation functions and neural network architectures. By understanding how topological properties of data are manipulated by the neural network, one can understand how different components work to disentangle the features of the data. I do not see why a similar approach cannot be taken to investigate the activation patterns for neural networks. For example, using curated data sets one could potentially identify circuits by observing at what stages in the neural network the topological properties of the data changes.
+        The work [3] explores the Betti number of data structures as they are propagated through a neural network. Loosely speaking the Betti number identifies the number of one-dimensional holes in a data structure. What intrigued me about this paper was that using this analysis they could argue for and against the use of different activation functions and neural network architectures. By understanding how topological properties of data are manipulated by the neural network, one can understand how different components work to disentangle the features of the data. I do not see why a similar approach cannot be taken to investigate the activation patterns for neural networks. For example, using curated data sets one could potentially identify circuits by observing at what stages in the neural network the topological properties of the data changes.
     </p>
     <p>
-        Working geometrically is challenging due to the high-dimensionality of neural networks, however, the study of algebraic topology was largely motivated by the desire to study the shape of high-dimensional objects. Currently, a lot of the work in applying topological ideas to study neural networks has come in the form of topological data analysis. I instead propose the investigation of neural network activations with these techniques. For example, \cite{gabrielsson_exposition_2019} uses topological features of activation patterns to understand the function of the components of a convolutional neural network.
+        Working geometrically is challenging due to the high-dimensionality of neural networks, however, the study of algebraic topology was largely motivated by the desire to study the shape of high-dimensional objects. Currently, a lot of the work in applying topological ideas to study neural networks has come in the form of topological data analysis. I instead propose the investigation of neural network activations with these techniques. For example, [1] uses topological features of activation patterns to understand the function of the components of a convolutional neural network.
     </p>
     <p>
-        The authors of \cite{bruel-gabrielsson_topology_2020} demonstrate how topology can be used to improve the performance of generative models by eliminating topological noise from their outputs with a topology informed loss function. \cite{cunningham_sparse_2023} details how to extract interpretable features from the inner workings of a neural network. \cite{makelov_towards_2024} outlines how we can compare the representation of features obtained through the application of sparse autoencoders. Therefore, I think it is worth investigating if topological fine-tuning on generative models improves the fidelity of the internal representations learned by the sparse autoencoders.
+        The authors of [2] demonstrate how topology can be used to improve the performance of generative models by eliminating topological noise from their outputs with a topology informed loss function. [4] details how to extract interpretable features from the inner workings of a neural network. [6] outlines how we can compare the representation of features obtained through the application of sparse autoencoders. Therefore, I think it is worth investigating if topological fine-tuning on generative models improves the fidelity of the internal representations learned by the sparse autoencoders.
     </p>
     <p>
-        I have already sought to explore some of these ideas <a href="/blog/cav.html">here</a>.
+        I have already sought to explore some of these ideas <a href="/projects/paper_recreation/cav.html">here</a>.
     </p>
     <h3>References</h3>
     <p>
-        [1]    Rickard Brüel Gabrielsson and Gunnar Carlsson. Exposition and Interpretation of the Topology of Neural
+        [1] Rickard Brüel Gabrielsson and Gunnar Carlsson. Exposition and Interpretation of the Topology of Neural
         Networks. arXiv:1810.03234 [cs]. Oct. 2019. doi: 10.48550/arXiv.1810.03234. url: http://arxiv.
         org/abs/1810.03234
     </p>
     <p>
-        [2]    Rickard Brüel-Gabrielsson, Bradley J. Nelson, Anjan Dwaraknath, Primoz Skraba, Leonidas J. Guibas, and
+        [2] Rickard Brüel-Gabrielsson, Bradley J. Nelson, Anjan Dwaraknath, Primoz Skraba, Leonidas J. Guibas, and
         Gunnar Carlsson. A Topology Layer for Machine Learning. arXiv:1905.12200 [cs, math, stat]. Apr. 2020. doi:
         10.48550/arXiv.1905.12200. url: http://arxiv.org/abs/1905.12200
     </p>
     <p>
-        [3]    Gregory Naitzat, Andrey Zhitnikov, and Lek-Heng Lim. Topology of deep neural networks. arXiv:2004.06093
+        [3] Gregory Naitzat, Andrey Zhitnikov, and Lek-Heng Lim. Topology of deep neural networks. arXiv:2004.06093
         [cs, math, stat]. Apr. 2020. doi: 10.48550/arXiv.2004.06093. url: http://arxiv.org/abs/2004.
         06093
     </p>
     <p>
-        [4]    Hoagy Cunningham, Aidan Ewart, Logan Riggs, Robert Huben, and Lee Sharkey. Sparse Autoencoders Find
+        [4] Hoagy Cunningham, Aidan Ewart, Logan Riggs, Robert Huben, and Lee Sharkey. Sparse Autoencoders Find
         Highly Interpretable Features in Language Models. arXiv:2309.08600 [cs]. Oct. 2023. doi: 10.48550/arXiv.
         2309.08600. url: http://arxiv.org/abs/2309.08600
     </p>
     <p>
-        [5]    Ahmed Imtiaz Humayun, Randall Balestriero, Guha Balakrishnan, and Richard Baraniuk. SplineCam: Exact
+        [5] Ahmed Imtiaz Humayun, Randall Balestriero, Guha Balakrishnan, and Richard Baraniuk. SplineCam: Exact
         Visualization and Characterization of Deep Network Geometry and Decision Boundaries. arXiv:2302.12828
         [cs]. Feb. 2023. doi: 10.48550/arXiv.2302.12828. url: http://arxiv.org/abs/2302.12828
     </p>
     <p>
-        [6]    Aleksandar Makelov, George Lange, and Neel Nanda. Towards Principled Evaluations of Sparse Autoencoders
+        [6] Aleksandar Makelov, George Lange, and Neel Nanda. Towards Principled Evaluations of Sparse Autoencoders
         for Interpretability and Control. arXiv:2405.08366 [cs]. May 2024. doi: 10.48550/arXiv.2405.08366. url:
         http://arxiv.org/abs/2405.08366
     </p>
