@@ -9,7 +9,33 @@ layout: default
     </div>
     <div class="prose mb-4 py-4">
 	<p>
-        
+        <a href="https://arxiv.org/abs/1711.11279">Concept activation vectors</a> introduced are constructed to summarise the representation of a concept in the latent representation of a model. Intuitively they can be thought of as a vector pointing into the space occupied by the activations of the concept. The concept activation vector for a particular concept is obtained from a linear classifier trained to distinguish between activation vectors corresponding to the concept, and the activation vectors corresponding to other concepts. 
     </p>
+    <p>
+        Concept activation vectors are a supervised approach to extracting features from the learned representations of a neural network. The utilisation of sparse autoencoders on the other hand is an unsupervised approach for feature extraction. Essentially, the idea here is to train an autoencoder model to reconstruct the activation vectors of training samples. By giving the autoencoder a large capacity, one expects that the autoencoder can identify sparse features that fruitful contribute to the reconstruction of the activation vectors. In theory these sparse features would correspond to particular concepts. Indeed this claim has been verified for <a href="https://arxiv.org/abs/2309.08600">language transformer models</a> and <a href="https://www.lesswrong.com/posts/bCtbuWraqYTDtuARg/towards-multimodal-interpretability-learning-sparse-2#Training_Performance">vision transformer models.</a> We further empirically verify this claim with our own experiments, such that we can investigate the relationship between these features and the concept activation vectors.
+    </p>
+    <p>
+        Specifically we consider an <a href="https://arxiv.org/abs/2010.11929">vision transformer model</a> <a href="https://huggingface.co/aaraki/vit-base-patch16-224-in21k-finetuned-cifar10">fine-tuned on the CIFAR10 dataset</a>. We obtain the concept activation vectors from the class-token at each layer and for each of the ten categories in the CIFAR10 dataset. Then we train a sparse autoencoder on the set of activation vectors and investigate the features obtained.
+    </p>
+    <p>
+        Through the layers, the training loss for the concept activation vector decreases. Suggesting the model is increasingly separating the concepts.
+    </p>
+    <img src="/cav_assets/cav_losses.png" alt="cav_losses" style="width:300px;height:400px;">
+    <p>
+        Moreover, we qualitatively see that through the layers the sparse autoencoder obtains more salient features.
+    </p>
+    <img src="/cav_assets/frequently_max_firing_layer3.png" alt="frequently_max_firing_layer3" style="width:300px;height:400px;">
+    <img src="/cav_assets/frequently_max_firing_layer11.png" alt="frequently_max_firing_layer11" style="width:300px;height:400px;">
+    <p>
+        Now using the cosine similarity we can observe which features are most similar to the concept activation vectors, as well as those that are least similar.
+    </p>
+    <img src="/cav_assets/most_similar_cav_features_frog_layer11.png" alt="most_similar_cav_features_frog_layer11" style="width:300px;height:400px;">
+    <p>
+        Interestingly, we see that feature 1432 is similar to the concept of frog. From the corresponding images we observe that feature 1432 is perhaps encoding for the colour of the frog.
+    </p>
+    <p>
+        On the other hand, if we investigate the features that are least similar to dog we see that we get features that correspond to the other animals present in the dataset. Suggesting that the model is actively separating animals in its latent space representation since they are similar concepts and so could easily become misclassified by the model.
+    </p>
+    <img src="/cav_assets/least_similar_cav_features_dog_layer11.png" alt="least_similar_cav_features_dog_layer11" style="width:300px;height:400px;">
     </div>
 </article>
