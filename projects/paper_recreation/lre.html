@@ -8,6 +8,26 @@ layout: default
     <div class="sm-width-full border-top-thin">
     </div>
     <div class="prose mb-4 py-4">
-
+      <p>
+        It was shown in (1) that subject-object relationships in transformers are linearly decodable from intermediate layers. More specifically, we consider a prompt containing a subject, say a city, whose next token is an object, say country. For instance, for the 'City in Country' relationships we could have the prompt 'New York City is part of' since the next token is the 'United States'. In this example 'New York City' is the subject and 'United States' is the object. This relationship is said to be linear decodable from an intermediate layer if we can take the subject token activation vector from the intermediate layer, and linearly transform it onto the vocabulary of the model such that the token with the highest values is the corresponding object token. 
+      </p>
+      <p>
+        (1) considers multiple examples of these subject-object prompts and uses the Jacobian of the model between an intermediate layer and the output layer to construct a candidate for this linear relationship. This construction of a linear relationship is referred to as the Linear Relational Embedding (LRE). The faithfulness of the LRE is defined as the proportion of these prompts for which the linear relationship provides the correct completion. The paper concludes that these subject-object relationships are linearly decodable as it observe that many of these candidate relationships are highly faithful. 
+      </p>
+      <p>
+        We can replicate the results of (1) with GPT2.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top1.png" alt="faithfulness_plot_beta1_top1">
+      <p>
+        In the above plot, the heigh of the bar gives the faithfulness of the subject-object relationship delineated on the horizontal axis. The bracketed number gives the layer at which the maximum faithfulness scores is attained at, with the lines across each of the bars representing the faithfulness scores for the relationship at other intermediate layers.
+      </p>
+      <p>
+        Similar to (1) we observe that the faithfulness of the LRE is improved by scaling by a constant greater than one.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta3_top1.png" alt="faithfulness_plot_beta3_top1">
+      <p>
+        What we see is that the relationship between activations in intermediate layers to the output layer is roughly linear. What's more, if we the relax the definition of faithfulness to allow the target token to appear in the top 2 predicted tokens, faithfulness scores significantly increase. Which provides further evidence for this linear relationship.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top2.png" alt="faithfulness_plot_beta1_top2">
     </div>
 </article>
