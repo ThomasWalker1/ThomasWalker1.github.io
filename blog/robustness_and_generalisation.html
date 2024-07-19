@@ -1,0 +1,54 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h2 class="h1 py-4 mt-3">Robustness and Generalisation</h2>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+    <p>
+        The generalisation property of a neural network is its capacity to transfer good performance on a training set to a test set. On the other hand, a neural network is robust if its outputs are not drastically influenced by perturbations to its inputs. 
+    </p>
+    <p>
+        Intuitively, for me at least, it seems as though these properties of a neural network are inherently linked, if not equivalent. Theoretically, it is shown in [1] that in the limit of dataset size, a learning algorithm generalises if and only if it is robust against perturbations to the inputs.
+    </p>
+    <p>
+        We can test this intuition by investigating a neural network that undergoes grokking. Grokking is a phenomena first exhibited by neural networks in [2] where it was shown that neural networks can be made to achieve high training accuracy within the initial optimization steps, and then experience an extensive delay before saturating a test set. At a high level grokking can be explained as the transition of a neural network from memorisation to generalisation [3]. Essentially, at the beginning of the optimisation process the neural network is memorising the training set. As the neural network continues to train it slowly replaces this memorisation with a more algorithmic representation of the data. Consequently, its learned representation of the data is more general meaning that it performs well on the test set as well as the training set. 
+    </p>
+    <p>
+        Grokking has subsequently been replicated on neural networks trained on the MNIST dataset after realising that the initialisation and decay of the neural network parameters influences the propensity for grokking [4]. 
+    </p>
+    <p>
+        The evolution of training and test discrepancy throughout the training of a neural network offers an opportunity to investigate the relationship between robustness and generalisation. More specifically, to validate the intuition that robustness and generalisation are inherently linked we would expect to observe a grokked network to have low robustness at the beginning of training and a higher robustness once the test accuracy increases. 
+    </p>
+    <p>
+        We can replicate the results of [4], and save the model state when training accuracy first reaches 99% and then again when the validation accuracy increases to above 85%.
+    </p>
+    <img src="/blog/assets/train_test_acc_init_8.0.png" alt="train_test_acc_init_8.0">
+    <p>
+        We can then gauge the robustness of these models by determining under what amplitude of perturbation the model cannot correctly classify five randomly perturbed images of that amplitude. 
+    </p>
+    <img src="/blog/assets/verification_histogram_8.0.png" alt="verification_histogram_8.0">
+    <p>
+        What we observe is that the model obtained from the beginning of the optimisation process is significantly less *robust* than the model obtained once test accuracy has increased.
+    </p>
+    <p>
+        Code for these figures can be found <a href="https://github.com/ThomasWalker1/expositions/tree/main/robustness_and_generalisation">here.</a>
+    </p>
+    <h3>References</h3>
+    <p>
+        [1] Xu, Huan, and Shie Mannor. Robustness and Generalization. arXiv:1005.2243, arXiv, 12 May 2010. arXiv.org, http://arxiv.org/abs/1005.2243.
+    </p>
+    <p>
+        [2] Power, Alethea, et al. Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets. arXiv:2201.02177, arXiv, 6 Jan. 2022. arXiv.org, http://arxiv.org/abs/2201.02177.
+    </p>
+    <p>
+        [3] Nanda, Neel, et al. Progress Measures for Grokking via Mechanistic Interpretability. arXiv:2301.05217, arXiv, 19 Oct. 2023. arXiv.org, http://arxiv.org/abs/2301.05217.
+    </p>
+    <p>
+        [4] Liu, Ziming, et al. Omnigrok: Grokking Beyond Algorithmic Data. arXiv:2210.01117, arXiv, 23 Mar. 2023. arXiv.org, http://arxiv.org/abs/2210.01117.
+    </p>
+    </div>
+</article>
