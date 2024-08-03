@@ -28,33 +28,31 @@ layout: default
       <p>
         For some simple datasets we observe that DeepDIG can successfully identify instances at the classification boundary between classes.
       </p>
-      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Linear Dataset_013_013.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;">
-      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Vee-Shaped Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;">
-      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Curved Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;">
-      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Circles Dataset_0038_0076.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Linear Dataset_013_013.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Vee-Shaped Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Curved Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/Circles Dataset_0038_0076.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
       <p>
         With these identified borderline instances we can investigate the geometry of the classification boundary. In [1] it is suggested to train a linear classifier on the original class instances and then observe its accuracy on the borderline instances. [1] refers to this as the EDC2 metric and suggests that it having a higher value indicates that the decision boundary is more complex. On the other hand, I propose an alternative metric, namely the boundary divergence metric. For this metric we sample points from the bounder line instances, and compute the cosine similarities between the vectors connecting these points. The intuition here is that a linear classification boundary will see many of these cosine similarities be plus or minus one, whereas a more complicated decision boundary may see more cosines similarities concentrated around zero. We perform this random sampling for many points, and observe one minus the average cosine similarity such that a high boundary divergence value corresponds to a more complex decision boundary.
       </p>
-      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/bar_chart_boundary_metrics.png" alt="faithfulness_plot_beta1_top1" style="width:300px;height:300px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_1/bar_chart_boundary_metrics.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
       <p>
         As expected we get boundary metric values that reflect the complexities of the corresponding decision boundaries. However, one observation is that the EDC2 values remain concentrated around 0.5.
       </p>
       <p>
         The values of these boundary metrics can be significantly influenced by the hyper-parameter selection we discussed earlier. For example, if the hyper-parameter is too large then the borderline instances tend to concentrate. Therefore, one the one hand a linear classifier trained on the original instances will not be reflective of the geometry of the borderline instances as they have diverged too far away from the original instances. On the other hand, if the borderline instances concentrate, then their geometry simplifies and no longer reflect the geometry of the entire boundary.
       </p>
-      <div>
-        <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Linear Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;float:left;">
-        <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Vee-Shaped Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;float:left;">
-        <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Curved Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;float:right;">
-        <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Circles Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:200px;height:200px;float:right;">
-       </div>
-       <p>
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Linear Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Vee-Shaped Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Curved Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_2/Circles Dataset_1_1.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
+      <p>
         The EDC2 metric seems to concentrate around 0.5, and the boundary divergence metric represents more linear boundaries as the concentration of borderline line instances means that classification boundary looks linear.
-       </p>
-       <img src="/projects/paper_recreation/deepdig_assets/experiment_2/bar_chart_boundary_metrics.png" alt="faithfulness_plot_beta1_top1" style="width:300px;height:300px;">
+      </p>
+      <img src="/projects/paper_recreation/deepdig_assets/experiment_2/bar_chart_boundary_metrics.png" alt="faithfulness_plot_beta1_top1" style="width:400px;height:400px;">
       <h3>References</h3>
       <p>
-        [1] Karimi H, Derr T, Tang J. Characterizing the Decision Boundary of Deep Neural Networks [Internet]. arXiv; 2020. Available from: http://arxiv.org/abs/1912.11460
+        [1] Karimi, H., Derr, T. and Tang, J. (2020) ‘Characterizing the Decision Boundary of Deep Neural Networks’. arXiv. Available at: https://doi.org/10.48550/arXiv.1912.11460.
       </p>
     </div>
 </article>
