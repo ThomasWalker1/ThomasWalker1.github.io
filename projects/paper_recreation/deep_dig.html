@@ -1,0 +1,59 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h2 class="h1 py-4 mt-3">Characterizing the Decision Boundary of Deep Neural Networks</h2>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+      <p>
+        Given a train neural network, DeepDIG [1] is a framework for generating instances along a classification boundary that are as closes as possible to the boundary whilst still being similar to instances of the classes. Given data for the two classes, say a positive and negative class, whose decision boundary you want to investigate, the DeepDIG framework works in three-steps.
+        <ol>
+            <li>
+                Train an autoencoder to reconstruct the positive class instances, whilst regularizing the reconstructions to be re-classified as the negative class.
+            </li>
+            <li>
+                Train a second autoencoder to reconstruct the reconstructions of the first autoencoder, however, now regularize the re-reconstructions to be classified as the positive class.
+            </li>
+            <li>
+                Run a binary search algorithm on the a reconstruction from the first autoencoder and its reconstruction under the second encoder to arrive at instance close to the decision boundary.
+            </li>
+        </ol>
+      </p>
+      <p>
+        There is a separate hyper-parameters at steps 1 and 2 which control the extent to which the autoencoder is regularized to change the the classification output of the instance. In practice I find that determining the value of this hyper-parameter is challenging, as the behavior of autonecoders seems to be sensitively dependent on it. Ideally, this hyper-parameter would be as low as possible to ensure the borderline instances remain close to the original instances. However, if it is too low then the instances will not be re-classified by the model, and so the subsequent steps of the DeepDIG framework suffer.
+      </p>
+      <p>
+        For some simple datasets we observe that DeepDIG can successfully identify instances at the classification boundary between classes.
+      </p>
+      <div>
+        <img src="/projects/paper_recreation/deepdig_assets/Linear Dataset_013_013.png" alt="faithfulness_plot_beta1_top1" style="width:100px;height:100px;">
+        <img src="/projects/paper_recreation/deepdig_assets/Vee-Shaped Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:100px;height:100px;">
+      </div>
+      <div>
+        <img src="/projects/paper_recreation/deepdig_assets/Curved Dataset_0079_0096.png" alt="faithfulness_plot_beta1_top1" style="width:100px;height:100px;">
+        <img src="/projects/paper_recreation/deepdig_assets/Circles Dataset_0038_0076.png" alt="faithfulness_plot_beta1_top1" style="width:100px;height:100px;">
+      </div>
+      <p>
+        We can replicate the results of [1] with GPT2.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top1.png" alt="faithfulness_plot_beta1_top1">
+      <p>
+        In the above plot, the heigh of the bar gives the faithfulness of the subject-object relationship delineated on the horizontal axis. The bracketed number gives the layer at which the maximum faithfulness scores is attained at, with the lines across each of the bars representing the faithfulness scores for the relationship at other intermediate layers.
+      </p>
+      <p>
+        Similar to [1] we observe that the faithfulness of the LRE is improved by scaling by a constant greater than one.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta3_top1.png" alt="faithfulness_plot_beta3_top1">
+      <p>
+        What we see is that the relationship between activations in intermediate layers to the output layer is roughly linear. What's more, if we the relax the definition of faithfulness to allow the target token to appear in the top 2 predicted tokens, faithfulness scores significantly increase. Which provides further evidence for this linear relationship.
+      </p>
+      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top2.png" alt="faithfulness_plot_beta1_top2">
+      <h3>References</h3>
+      <p>
+        [1] Hernandez, Evan, Arnab Sen Sharma, Tal Haklay, Kevin Meng, Martin Wattenberg, Jacob Andreas, Yonatan Belinkov, and David Bau. ‘Linearity of Relation Decoding in Transformer Language Models’. arXiv, 15 February 2024. https://doi.org/10.48550/arXiv.2308.09124.
+      </p>
+    </div>
+</article>
