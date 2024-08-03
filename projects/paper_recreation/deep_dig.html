@@ -37,20 +37,8 @@ layout: default
         <img src="/projects/paper_recreation/deepdig_assets/Circles Dataset_0038_0076.png" alt="faithfulness_plot_beta1_top1" style="width:100px;height:100px;">
       </div>
       <p>
-        We can replicate the results of [1] with GPT2.
+        With these identified borderline instances we can investigate the geometry of the classification boundary. In [1] it is suggested to train a linear classifier on the original class instances and then observe its accuracy on the borderline instances. [1] refers to this as the EDC2 metric and suggests that it having a higher value indicates that the decision boundary is more complex. On the other hand, I propose an alternative metric, namely the boundary divergence metric. For this metric we sample points from the bounder line instances, and compute the cosine similarities between the vectors connecting these points. The intuition here is that a linear classification boundary will see many of these cosine similarities be plus or minus one, whereas a more complicated decision boundary may see more cosines similarities concentrated around zero. We perform this random sampling for many points, and observe one minus the average cosine similarity such that a high boundary divergence value corresponds to a more complex decision boundary.
       </p>
-      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top1.png" alt="faithfulness_plot_beta1_top1">
-      <p>
-        In the above plot, the heigh of the bar gives the faithfulness of the subject-object relationship delineated on the horizontal axis. The bracketed number gives the layer at which the maximum faithfulness scores is attained at, with the lines across each of the bars representing the faithfulness scores for the relationship at other intermediate layers.
-      </p>
-      <p>
-        Similar to [1] we observe that the faithfulness of the LRE is improved by scaling by a constant greater than one.
-      </p>
-      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta3_top1.png" alt="faithfulness_plot_beta3_top1">
-      <p>
-        What we see is that the relationship between activations in intermediate layers to the output layer is roughly linear. What's more, if we the relax the definition of faithfulness to allow the target token to appear in the top 2 predicted tokens, faithfulness scores significantly increase. Which provides further evidence for this linear relationship.
-      </p>
-      <img src="/projects/paper_recreation/lre_assets/faithfulness_plot_beta1_top2.png" alt="faithfulness_plot_beta1_top2">
       <h3>References</h3>
       <p>
         [1] Hernandez, Evan, Arnab Sen Sharma, Tal Haklay, Kevin Meng, Martin Wattenberg, Jacob Andreas, Yonatan Belinkov, and David Bau. ‘Linearity of Relation Decoding in Transformer Language Models’. arXiv, 15 February 2024. https://doi.org/10.48550/arXiv.2308.09124.
