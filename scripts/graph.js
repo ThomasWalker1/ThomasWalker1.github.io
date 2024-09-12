@@ -49,7 +49,7 @@ function updateGraph() {
     addCell(headerRow, 'Description');
     edges.forEach(function(edge) {
         var row = table.insertRow();
-        addCell(row, edge.from);
+        addCell(row, 'edge');
         addCell(row, edge.to);
         addCell(row, edge.title)
     
