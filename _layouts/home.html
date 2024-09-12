@@ -42,17 +42,22 @@
       </div>
     </article>
     <h3>Interests Network</h3>
-    <div id="main-container">
+    <div id="main-container mx-auto">
       <div id="graph-container"></div>
       <div class="panel">
         <h3>Edge Suggestions</h3>
         <form action="https://formspree.io/f/mwpejlpd" method="POST">
         <label>Your name:<input name="name"></label>
-        <label for="fromNode">From node:</label>
-        <input type="number" id="fromNode" name="fromNode" required>
+        <br>
+        <label>From node:</label>
+        <input type="hidden" id="fromNode" name="fromNode">
+        <br>
         <label for="toNode">To Node:</label>
-        <input type="number" id="toNode" name="toNode" required>
-        <!-- your other form fields go here -->
+        <input type="hidden" id="toNode" name="toNode">
+        <br>
+        <label for="descriptionEdge">Edge Description:</label>
+        <textarea rows="3" name="descriptionEdge"></textarea>
+        <input type="hidden" id="descriptionEdge" name="descriptionEdge">
         <button type="submit" id="submitEdgeBtn">Submit</button>
       </form>
     </div>
