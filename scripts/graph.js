@@ -47,8 +47,9 @@ function updateGraph() {
     addCell(headerRow, 'From Node');
     addCell(headerRow, 'To Node');
     addCell(headerRow, 'Description');
-    edges.forEach(function(edge) {
-        var row = table.insertRow();
+    var tbody = table.createTBody()
+    edges.forEach(function (edge) {
+        var row = tbody.insertRow();
         addCell(row, 'edge');
         addCell(row, edge.to);
         addCell(row, edge.title)
@@ -63,3 +64,5 @@ function updateGraph() {
 }
 
 setTimeout(updateGraph,500);
+
+console.log("Updated table");
