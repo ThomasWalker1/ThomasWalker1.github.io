@@ -54,11 +54,11 @@ function updateGraph() {
         addCell(row, edge.to);
         addCell(row, edge.title)
     
-        row.addEventListener('mouseenter', function() {
-        network.selectEdges([edge.id]);
-        });
-        row.addEventListener('mouseleave', function() {
-        network.unselectAll();
+        row.addEventListener('click', function() {
+            if (network.getSelectedEdges().includes(edge.id))
+                network.unselectAll();
+            else
+                network.selectEdges([edge.id]);
         });
     });
 }
