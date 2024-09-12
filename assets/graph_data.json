@@ -139,6 +139,86 @@
         "face": "Arial"
       },
       "borderWidth": 3
+    },
+    {
+      "id": "Relativistic Thinking Mode",
+      "label": "Relativistic Thinking Mode",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Concept Activation Vectors",
+      "label": "Concept Activation Vectors",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Mechanistic Interpretability",
+      "label": "Mechanistic Interpretability",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Ancient Greek Philosophy",
+      "label": "Ancient Greek Philosophy",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
     }
   ],
   "edges": [
@@ -177,6 +257,36 @@
       "to": "Formal Verification",
       "title": "Combining formal verification and influence functions, we may be able to derive guarantees for the behaviour of models based on their training data.",
       "id": "3fad45c6-ccc9-4880-b56c-41c35072e680"
+    },
+    {
+      "from": "Relativistic Thinking Mode",
+      "to": "Concept Activation Vectors",
+      "title": "We can identify how concepts are encoded in LLMs by understanding its distinction from other concepts.",
+      "id": "085c0311-0ebd-472e-a5fa-b83a8389b5d9"
+    },
+    {
+      "from": "Concept Activation Vectors",
+      "to": "Mechanistic Interpretability",
+      "title": "Understanding the internal mechanisms of machine learning models",
+      "id": "55a34e01-e721-4b28-908d-72a6e05fb57e"
+    },
+    {
+      "from": "Mechanistic Interpretability",
+      "to": "Influence Functions",
+      "title": "Using the influence of training data we can potentially better understand internal circuits of models.",
+      "id": "c4dcb213-3eef-422a-97a5-2e49324e79a5"
+    },
+    {
+      "from": "Ancient Greek Philosophy",
+      "to": "Relativistic Thinking Mode",
+      "title": "Some Ancient Greek philosophers, such as Protagoras, established the relativistic mode of thinking.",
+      "id": "00c27b03-5162-4893-b0e5-f84f0abddca5"
+    },
+    {
+      "from": "Neural Network Generalisation",
+      "to": "Mechanistic Interpretability",
+      "title": "Circuit analyses have explained grokking, which is the observed delayed generalisation of a machine learning models.",
+      "id": "361a1dcf-7fcb-477d-a2f9-2ff645e1f740"
     }
   ]
 }
