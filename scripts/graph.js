@@ -57,7 +57,8 @@ function updateGraph() {
         row.addEventListener('click', function() {
             if (this.classList.contains('selected'))
                 this.classList.remove('selected')
-            this.classList.add('selected');
+            else
+                this.classList.add('selected');
             if (network.getSelectedEdges().includes(edge.id))
                 network.unselectAll();
             else
