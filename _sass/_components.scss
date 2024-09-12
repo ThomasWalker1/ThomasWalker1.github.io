@@ -138,6 +138,9 @@ details > summary {
       border-top: 2px solid $color-body-text;
       border-bottom: 2px solid $color-body-text;
     }
+    tr:hover {
+      background-color: #afafaf;
+    } 
   }
 
 }

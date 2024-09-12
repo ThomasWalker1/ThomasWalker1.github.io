@@ -50,7 +50,7 @@ function updateGraph() {
     var tbody = table.createTBody()
     edges.forEach(function (edge) {
         var row = tbody.insertRow();
-        addCell(row, 'edge');
+        addCell(row, edge.from);
         addCell(row, edge.to);
         addCell(row, edge.title)
     
@@ -64,5 +64,3 @@ function updateGraph() {
 }
 
 setTimeout(updateGraph,500);
-
-console.log("Updated table");
