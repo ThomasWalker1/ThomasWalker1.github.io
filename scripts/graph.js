@@ -35,11 +35,14 @@ fetch('assets/graph_data.json')
 })
 .catch(error => console.error('Error loading JSON data:', error));
 
-
-
 var table = document.getElementById('edgeTable');
 var thead = table.createTHead();
 var headerRow = thead.insertRow();
+function addCell(tr, text) {
+    var td = tr.insertCell();
+    td.textContent = text;
+    return td;
+}
 addCell(headerRow, 'From Node');
 addCell(headerRow, 'To Node');
 addCell(headerRow, 'Description');
