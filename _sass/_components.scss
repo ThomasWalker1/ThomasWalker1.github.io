@@ -140,7 +140,10 @@ details > summary {
     }
     tr:hover {
       background-color: #afafaf;
-    } 
+    }
+    tr.selected {
+      background-color: rgb(141, 140, 140);
+    }
   }
 
 }
