@@ -53,8 +53,11 @@ function updateGraph() {
         addCell(row, edge.from);
         addCell(row, edge.to);
         addCell(row, edge.title)
-    
+        
         row.addEventListener('click', function() {
+            const tableRows = document.querySelectorAll("#edgesTable tbody tr");
+            tableRows.forEach(r => r.classList.remove('selected'));
+            this.classList.add('selected');
             if (network.getSelectedEdges().includes(edge.id))
                 network.unselectAll();
             else
