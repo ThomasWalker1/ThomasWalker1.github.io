@@ -34,3 +34,36 @@ fetch('assets/graph_data.json')
   edges.add(jsonData.edges);
 })
 .catch(error => console.error('Error loading JSON data:', error));
+
+function populateEdgeTable() {
+    var tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
+    edges.forEach(function(edge) {
+        var row = document.createElement('tr');
+        row.dataset.edgeId = edge.id;
+
+        var cell1 = document.createElement('td');
+        var cell2 = document.createElement('td');
+        var cell3 = document.createElement('td');
+
+        cell1.textContent = edge.id;
+        cell2.textContent = edge.from;
+        cell3.textContent = edge.to;
+
+        row.appendChild(cell1);
+        row.appendChild(cell2);
+        row.appendChild(cell3);
+
+        tbody.appendChild(row);
+
+        // Add hover event listener to highlight edges on hover
+        row.addEventListener('mouseenter', function() {
+        network.selectEdges([edge.id]);  // Highlight the edge
+        });
+        row.addEventListener('mouseleave', function() {
+        network.unselectAll();  // Remove the edge highlight
+        });
+    });
+}
+
+// Populate the table with edge data
+populateEdgeTable();
