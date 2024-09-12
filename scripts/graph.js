@@ -37,24 +37,17 @@ fetch('assets/graph_data.json')
 
 
 
-var tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
-edges.forEach(edge => {
-    const row = document.createElement("tr");
-
-    const fromCell = document.createElement("td");
-    fromCell.textContent = edge.from;
-
-    const toCell = document.createElement("td");
-    toCell.textContent = edge.to;
-
-    const descriptionCell = document.createElement("td");
-    descriptionCell.textContent = edge.title;
-
-    row.appendChild(fromCell);
-    row.appendChild(toCell);
-    row.appendChild(descriptionCell);
-
-    tbody.appendChild(row);
+var table = document.getElementById('edgeTable');
+var thead = table.createTHead();
+var headerRow = thead.insertRow();
+addCell(headerRow, 'From Node');
+addCell(headerRow, 'To Node');
+addCell(headerRow, 'Description');
+edges.forEach(function(edge) {
+    var row = table.insertRow();
+    addCell(row, edge.from);
+    addCell(row, edge.to);
+    addCell(row, edge.title)
 
     row.addEventListener('mouseenter', function() {
     network.selectEdges([edge.id]);
