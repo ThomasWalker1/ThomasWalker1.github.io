@@ -189,3 +189,30 @@ details > summary {
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
+
+#graph-container {
+  flex: 1;
+  min-width: 600px;
+  height: 500px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background-color: white;
+  position: relative;
+}
+
+#main-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 5px;
+}
+
+.panel {
+  flex: 1;
+  min-width: 300px;
+  background-color: #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

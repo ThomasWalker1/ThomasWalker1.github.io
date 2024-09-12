@@ -1,0 +1,182 @@
+{
+  "nodes": [
+    {
+      "id": "Tropical Geometry for Machine Learning",
+      "label": "Tropical Geometry for Machine Learning",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Spline Theory of Deep Neural Networks",
+      "label": "Spline Theory of Deep Neural Networks",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Singular Learning Theory",
+      "label": "Singular Learning Theory",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Adversarial Robustness",
+      "label": "Adversarial Robustness",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Neural Network Generalisation",
+      "label": "Neural Network Generalisation",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Formal Verification",
+      "label": "Formal Verification",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    },
+    {
+      "id": "Influence Functions",
+      "label": "Influence Functions",
+      "color": {
+        "background": "#455a7d",
+        "border": "#000000",
+        "highlight": {
+          "background": "#455a7d",
+          "border": "#000000"
+        }
+      },
+      "shape": "box",
+      "size": 30,
+      "font": {
+        "color": "#000000",
+        "size": 18,
+        "face": "Arial"
+      },
+      "borderWidth": 3
+    }
+  ],
+  "edges": [
+    {
+      "from": "Tropical Geometry for Machine Learning",
+      "to": "Spline Theory of Deep Neural Networks",
+      "title": "Foundational theories of deep learning that take a geometric perspective.",
+      "id": "f8aca0a4-69fe-4e1d-bb70-ed42509ce8bb"
+    },
+    {
+      "from": "Tropical Geometry for Machine Learning",
+      "to": "Singular Learning Theory",
+      "title": "Utilise notions for algebraic geometry to explain the properties of neural networks.",
+      "id": "df31f626-2038-4903-8d0d-ce870f8b1168"
+    },
+    {
+      "from": "Singular Learning Theory",
+      "to": "Neural Network Generalisation",
+      "title": "The local learning coefficient can be used as a complexity measure for neural networks that can help explain their capacity to generalise.",
+      "id": "b903fbda-d2a7-4ffd-a321-13231be4a64e"
+    },
+    {
+      "from": "Neural Network Generalisation",
+      "to": "Adversarial Robustness",
+      "title": "Intuitively, a neural network that is robust should generalise well.",
+      "id": "cb6d5f84-c1ed-43e6-92b2-f6855a0c60fc"
+    },
+    {
+      "from": "Adversarial Robustness",
+      "to": "Formal Verification",
+      "title": "Methods of formal verification can be used to certify levels of adversarial robustness for a neural network.",
+      "id": "e45bdbd2-b48a-4839-b3a9-c377f4a9bc60"
+    },
+    {
+      "from": "Influence Functions",
+      "to": "Formal Verification",
+      "title": "Combining formal verification and influence functions, we may be able to derive guarantees for the behaviour of models based on their training data.",
+      "id": "3fad45c6-ccc9-4880-b56c-41c35072e680"
+    }
+  ]
+}
