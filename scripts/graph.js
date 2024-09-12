@@ -35,33 +35,31 @@ fetch('assets/graph_data.json')
 })
 .catch(error => console.error('Error loading JSON data:', error));
 
-function populateEdgeTable() {
-    var tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
-    edges.forEach(function(edge) {
-        var row = document.createElement('tr');
-        row.dataset.edgeId = edge.id;
 
-        var cell1 = document.createElement('td');
-        var cell2 = document.createElement('td');
-        var cell3 = document.createElement('td');
 
-        cell1.textContent = edge.from;
-        cell2.textContent = edge.to;
-        cell3.textContent = edge.title;
+var tbody = document.getElementById('edgeTable').getElementsByTagName('tbody')[0];
+edges.forEach(function(edge) {
+    var row = document.createElement('tr');
+    row.dataset.edgeId = edge.id;
 
-        row.appendChild(cell1);
-        row.appendChild(cell2);
-        row.appendChild(cell3);
+    var cell1 = document.createElement('td');
+    var cell2 = document.createElement('td');
+    var cell3 = document.createElement('td');
 
-        tbody.appendChild(row);
+    cell1.textContent = edge.from;
+    cell2.textContent = edge.to;
+    cell3.textContent = edge.title;
 
-        row.addEventListener('mouseenter', function() {
-        network.selectEdges([edge.id]);
-        });
-        row.addEventListener('mouseleave', function() {
-        network.unselectAll();
-        });
+    row.appendChild(cell1);
+    row.appendChild(cell2);
+    row.appendChild(cell3);
+
+    tbody.appendChild(row);
+
+    row.addEventListener('mouseenter', function() {
+    network.selectEdges([edge.id]);
     });
-}
-
-populateEdgeTable();
+    row.addEventListener('mouseleave', function() {
+    network.unselectAll();
+    });
+});

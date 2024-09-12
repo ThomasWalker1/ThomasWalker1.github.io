@@ -49,18 +49,19 @@
           <label for="name">Your Name</label>
           <br>
           <input name="name">
+          <br>
           <label for="fromNode">From Node</label>
           <br>
-          <input type="text" id="fromNode">
+          <input type="text" id="fromNode" name="fromNode">
           <br>
           <label for="toNode">To Node</label>
           <br>
-          <input type="text" id="toNode">
+          <input type="text" id="toNode" name="toNode">
           <br>
           <label for="descriptionEdge">Edge Description</label>
           <br>
           <textarea rows="3" name="descriptionEdge"></textarea>
-          <input type="hidden" id="descriptionEdge">
+          <input type="text" id="descriptionEdge">
           <br>
           <button type="submit" id="submitEdgeBtn">Submit</button>
         </form>
@@ -73,8 +74,7 @@
             <th>Description</th>
           </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
       </table>
     </article>
     <script src="scripts/graph.js"></script>
