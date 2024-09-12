@@ -45,9 +45,9 @@ function populateEdgeTable() {
         var cell2 = document.createElement('td');
         var cell3 = document.createElement('td');
 
-        cell1.textContent = edge.id;
-        cell2.textContent = edge.from;
-        cell3.textContent = edge.to;
+        cell1.textContent = edge.from;
+        cell2.textContent = edge.to;
+        cell3.textContent = edge.title;
 
         row.appendChild(cell1);
         row.appendChild(cell2);
@@ -55,15 +55,13 @@ function populateEdgeTable() {
 
         tbody.appendChild(row);
 
-        // Add hover event listener to highlight edges on hover
         row.addEventListener('mouseenter', function() {
-        network.selectEdges([edge.id]);  // Highlight the edge
+        network.selectEdges([edge.id]);
         });
         row.addEventListener('mouseleave', function() {
-        network.unselectAll();  // Remove the edge highlight
+        network.unselectAll();
         });
     });
 }
 
-// Populate the table with edge data
 populateEdgeTable();
