@@ -40,39 +40,43 @@
           In my spare time I enjoy pondering about philosophy and the theory of mind. Moreover, I participate in sports including running, cycling and swimming.
         </p>
       </div>
+      <h3>Interests Network</h3>
+      <div id="main-container">
+        <div id="graph-container"></div>
+        <div class="panel">
+          <h3>Edge Suggestions</h3>
+          <form action="https://formspree.io/f/mwpejlpd" method="POST">
+          <label for="name">Your Name</label>
+          <br>
+          <input name="name">
+          <label for="fromNode">From Node</label>
+          <br>
+          <input type="text" id="fromNode">
+          <br>
+          <label for="toNode">To Node</label>
+          <br>
+          <input type="text" id="toNode">
+          <br>
+          <label for="descriptionEdge">Edge Description</label>
+          <br>
+          <textarea rows="3" name="descriptionEdge"></textarea>
+          <input type="hidden" id="descriptionEdge">
+          <br>
+          <button type="submit" id="submitEdgeBtn">Submit</button>
+        </form>
+      </div>
+      <table id="edgeTable">
+        <thead>
+          <tr>
+            <th>From Node</th>
+            <th>To Node</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </article>
-    <h3>Interests Network</h3>
-    <div id="main-container">
-      <div id="graph-container"></div>
-      <div class="panel">
-        <h3>Edge Suggestions</h3>
-        <form action="https://formspree.io/f/mwpejlpd" method="POST">
-        <label>Your name:<input name="name"></label>
-        <br>
-        <label for="fromNode">From node:</label>
-        <input type="text" id="fromNode">
-        <br>
-        <label for="toNode">To Node:</label>
-        <input type="text" id="toNode">
-        <br>
-        <label for="descriptionEdge">Edge Description:</label>
-        <textarea rows="3" name="descriptionEdge"></textarea>
-        <input type="hidden" id="descriptionEdge">
-        <br>
-        <button type="submit" id="submitEdgeBtn">Submit</button>
-      </form>
-    </div>
-    <table id="edgeTable">
-      <thead>
-        <tr>
-          <th>From Node</th>
-          <th>To Node</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
     <script src="scripts/graph.js"></script>
   </body>
   {% include footer.html %}
