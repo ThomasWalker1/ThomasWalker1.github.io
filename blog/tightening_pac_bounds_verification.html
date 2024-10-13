@@ -1,0 +1,48 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h2 class="h1 py-4 mt-3">Tightening the Verification of PAC Bounds using Formal Verification Results</h2>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+	<p>
+        In this paper, we wanted to formalise the following intuition. Suppose you have a neural network that you want to learn the following distribution.
+    </p>
+    <img src="/blog/assets/distributuon.png" alt="distribution">
+    <p>
+        Of course, we do not have access to this distribution, otherwise, why would we need to learn it? Instead, we have access to some training data sampled from this distribution.
+    </p>
+    <img src="/blog/assets/distribution_with_points.png" alt="distribution_with_points">
+    <p>
+        Typically, neural networks are over-parameterised so they can in theory learn to memorise the data. In this case, the neural network's representation is unlikely to generalise in areas further away from the training data.
+    </p>
+    <img src="/blog/assets/memorised_representation.png" alt="memorised_representation">
+    <p>
+        Probabilistic generalisation bounds give a probability of how large the error of the neural network's representation is against the underlying distribution. Therefore, they need to account for the possibility that the neural network has just memorised the training data, and thus they are fairly loose.
+    </p>
+    <img src="/blog/assets/bounds_memorised_case.png" alt="bounds_memorised_case">
+    <p>
+        In practice, it is observed that the representations that the neural networks learn generalise fairly well, despite having the capacity to memorise the training data. 
+    </p>
+    <img src="/blog/assets/generalised_representation.png" alt="generalised_representation">
+    <p>
+        However, until now we had no way of incorporating this observation into the derivation of probabilistic generalisation bounds. Our intuition was that finding a way to incorporate this into the derivation of probabilistic generalisation bounds would lead to substantially tighter generalisation bounds. Indeed, if the neural network representation is generalised to unseen data one would expect that it has captured some aspect of the underlying distribution of the training data.
+    </p>
+    <img src="/blog/assets/bounds_generalised_case" alt="bounds_generalised_case">
+    <p>
+        We were motivated to work on this problem since this could lead to substantially tighter generalisation bounds that could then be used to certify the performance of neural networks.
+    </p>
+    <p>
+        The approach we used to incorporate the observation that neural networks generalise well into the derivation of generalisation bounds was inspired by formal verification methods. Methods of formal verification test the robustness of neural networks. That is, they can be used to determine how sensitive the network performance is to changes in the input data. More specifically, for each training point, we can determine the maximum perturbation we can make to it whilst still getting the neural network to behave correctly. This means that within this region of perturbation around a training point, we can be sure that the neural network's representation of the data matches that of the underlying distribution.
+    </p>
+    <p>
+        With this formalisation of the generalisation observation, we successfully obtain substantially tighter generalisation bounds for neural networks. Thus we formally verify our intuition that robust neural networks have a larger generalisation capacity. 
+    </p>
+    <p>
+        We chose this approach since there is substantial work on formal verification methods. Hence, the theoretical consequences of our work could be realised in practice. However, it remains to be seen exactly how these improvements in the bounds will manifest in practice. Since our generalisation bounds are probabilistic, with this work we aim to initiate a shift in perspective in the formal verification community, from one of verifying spatially larger perturbations to one of verifying probabilistically larger perturbations.
+    </p>
+    </div>
+</article>
