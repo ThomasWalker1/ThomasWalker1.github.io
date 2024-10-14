@@ -276,26 +276,27 @@ details > summary {
 }
 
 .publication-title {
-  font-size: 1.5em;
+  font-size: 1em;
   font-weight: bold;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .authors {
-  font-size: 1em;
+  font-size: 0.75em;
   color: #555;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .links {
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .links a {
   text-decoration: none;
   color: #007BFF;
   font-weight: bold;
+  font-size: 0.75em;
   margin-right: 15px;
 }
 
@@ -306,25 +307,7 @@ details > summary {
 .publisher {
   font-size: 0.9em;
   color: #777;
-  margin-top: 10px;
+  margin-top: 4px;
   border-top: 1px solid #ddd;
-  padding-top: 10px;
-}
-
-@media (max-width: 600px) {
-  .publication-container {
-    padding: 15px;
-  }
-
-  .publication-title {
-    font-size: 1.3em;
-  }
-
-  .authors {
-    font-size: 0.9em;
-  }
-
-  .links a {
-    font-size: 0.9em;
-  }
+  padding-top: 4px;
 }
