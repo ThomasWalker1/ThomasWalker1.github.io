@@ -264,8 +264,6 @@ details > summary {
   text-align: center;
 }
 
-
-
 .publication-container {
   max-width: 800px;
   margin: 20px auto;
@@ -310,4 +308,21 @@ details > summary {
   margin-top: 4px;
   border-top: 1px solid #ddd;
   padding-top: 4px;
+}
+
+details {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+details[open] summary {
+  color: #007BFF; /* Change color when open */
 }
