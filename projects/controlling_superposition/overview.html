@@ -1,0 +1,99 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h1 class="h1 py-4 mt-3">Controlling Superposition</h1>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+    <h2>Introduction</h2>
+	<p>
+        In line with the first claim of Zoom In, we consider features, mediated as directions in their latent space, to be the fundamental of expression for neural networks. That is, directions in the latent spaces of neural networks are the units by which neural networks form their representations. I am not convinced by this vision, some speculations I have come from the <a href="https://www.lesswrong.com/posts/eDicGjD9yte6FLSie/interpreting-neural-networks-through-the-polytope-lens">Polytope Lens</a>, however, for the simplicity let us adopt this view.
+    </p>
+    <p>
+        Since neural networks store these representations in finite-dimensional vector spaces, it immediately becomes clear from this view that the number of *independent* features it can learn is bounded by the dimension of the vector space as independence in this context manifests as orthogonal directions. Orthogonality is necessary so that one feature can fire without interfering with the others. Consequently, if neural networks were utilising independent features then they wouldn't be performing as well as they currently are. Furthermore, we wouldn't be able to extract interpretable features from the neural network using dictionary learning with expansion factors larger than one. If this were the case, then mechanistic interpretability would be a relatively easier task, since one would just have to search for an $n$-dimensional basis of features from which to reconstruct the model's behaviour. Therefore, there must be more to the story, and indeed there is due to the fact that neural networks are not <em>fully</em> linear and the existence of Johnson-Lindenstrauss lemma.
+    </p>
+    <p>
+        To extract independent features all we need are linear operations. Therefore, since neural networks are essentially a sequence of linear operations separated by element-wise non-linearity, it suggests that it is perhaps not essential that neural networks store features independently. Indeed, the non-linearities mean that even if features are not completely orthogonal we can still retrieve relatively cleanly using the non-linearities. Although this leniency may seem insignificant, it is exponentially significant thanks to the Johnson-Lindenstrauss lemma; which says that by allowing some fixed small amount of overlap between the directions, we can store exponentially many of the features.
+    </p>
+    <p>
+        So even though now the features are not stored in completely orthogonal directions, the non-linearities mean that we can still extract them relatively cleanly from the model's representations. Moreover, the model can also store features judiciously to limit the impact of this interference. For instance, features that are anti-correlated should be represented in almost antipodal directions, whereas correlated features can be represented with more aligned directions.
+    </p>
+    <p>
+        Of course, this discussion is just speculating on how the neural network behaves, however, there is significant empirical evidence that this is a large part of the neural network story. This idea is summarised as the superposition hypothesis. Understanding the extent to which the superposition hypothesis is in play for certain models is a fascinating question since it has ramifications for how we reason about the behaviours of these models. Superposition is often used as an explanation for polysemantic neurons, which are neurons which are active on seemingly disjoint concepts. This increases the challenge of mechanistic interpretability which attempts to efficiently explain the behaviour of a neural network through analysing the behaviour of its internal components.
+    </p>
+    <p>
+        If there were a way to control the amount of superposition occurring in a neural network or understand to what extent a neural network is relying on superposition, then this would be beneficial for interpretability.
+    </p>
+    <p>
+        Now although superposition can explain part of the story as to why neural networks can seemingly utilise many more features than they have neurons, it is perhaps not the full story. It is noted that compositionality provides an alternative mechanism for neural networks to represent more features than they have dimensions, and it is <a href="https://transformer-circuits.pub/2023/superposition-composition/index.html">argued</a> that these two notions are at odds with one another.
+    </p>
+    <p>
+        This suggests that the superposition of neural networks exists on a spectrum. In some cases there may be a relatively small set of simple features that are highly expressive, meaning that compositionality can be effectively leveraged. On the other hand, features may be plentiful and sparse, in which case the model would benefit from storing features in superposition. Understanding where along this spectrum a neural network lies can be important from a performance and interpretability perspective. In this work, I try to investigate the superposition portion of the story by exploiting its foundation on the non-linearity. 
+    </p>
+    <h2>Toy Models</h2>
+    <p>
+        Let us start with the toy model set up of <a href="https://transformer-circuits.pub/2022/toy_model/index.html#motivation">Toy Models of Superposition</a>. We want to intervene on the non-linearity of these models and explore the subsequent effects on superposition. Thankfully, the ReLU provides an elegant way of doing this. By changing the slope of the negative component from $0$ to $1$, we can go from *fully* non-linearity to linear, with intermediate slopes providing a varying level of non-linearity. 
+    </p>
+    <p>
+        Doing this we observe that we gradually reduce the extent to which the model is superimposing features. With *full* non-linearity, each of the five features are represented in superposition, whereas for the linear model only two features are represented.
+    </p>
+    <img src="projects/controlling_superposition/images/1.png">
+    <p>
+        This supports our hypothesis that the non-linearity is crucial for controlling the extent to which neural networks can superimpose features.
+    </p>
+    <p>
+        In the second row of the figure we observe the effects this has on the partitioning of the latent space of the neural networks. We observe how the partitioning correspond to the direction of the features. Since, the partitions are inherently related to the non-linearities of the model, it is clear that the non-linearities play a role in the arrangement of the features. 
+    </p>
+    <h2>InceptionV1</h2>
+    <h3>Layer Intervention</h3>
+    <p>
+        We now extrapolate these ideas beyond the toy model and to InceptionV1. More specifically, we try to understand the extent to which this model superimposes features by intervening on each of the blocks of the model. For each block we modify the slope of the negative component of its ReLU activations, and then test the performance of the model on a subset of the Imagenet-1K dataset. The intention is that if a block heavily relies on superposition, then intervening on it in this way will more negatively impact its performance.
+    </p>
+    <img src="projects/controlling_superposition/accuracies.png">
+    <p>
+        Interestingly what we see is that the inception3a and inception4e blocks are the most effected by these interventions, whereas the inception5b block is least effected.
+    </p>
+    <ul>
+        <li>
+            The inception3a block has the fewest number of neurons, so it would make sense that it holds more features in superposition. Moreover, the block is in the early part of the model, which has been identified to capture more textual features. Since textual features are usually more sparse than compositional, it make sense that the model utilises superposition here. 
+        </li>
+        <li>
+            The inception4e block actually has a relatively large capacity, however, in other analyses it has been identified to have polysemantic neurons, suggesting that it is also reliant on superposition. 
+        </li>
+        <li>
+            The inception5b block is the last block in the model and has $1024$ neurons, which is more than the $1000$ classes of Imagenet-1K. Therefore, since features are the most developed at this stage we would expect that they largely correspond to the individual classes, and thus the model does not need superposition as it can afford to assign features to orthogonal directions. 
+        </li>
+    </ul>
+    <h3>Prediction Collapse</h3>
+    <p>
+        For a model that stores features in superposition, removing the non-linearities would limit the model's capacity to retrieve those features, and would introduce interference between them. In particular, what we observe is that the model's predictions tend to collapse onto a few classes. Potentially due to the fact that the interference at the intervened layer causes the activations of neurons to drop into negative territory such that at subsequent layers they are thresholded and no longer contribute to the network's performance. Understanding how the predictions of classes of images collapse under these interventions can perhaps shed light into how features are distributed across neurons.
+    </p>
+    <img src="projects/controlling_superposition/images/class_prediction_frequency.png">
+    <p>
+        In this figure we give each class a colour, and plot a rectangle of height equal to the frequency with which it appears as a prediction across as sample of Imagenet-1K of size $4096$. On the horizontal axis we have the slope of the intervention. The dashed black line gives the number of neurons in the layer, in this case we are looking at the inception4e block which has $832$ neurons, and the solid red line indicates the number of distinct class predictions made across the dataset. Clearly what we see is that the number of distinct predictions given by the model dramatically decreases, leaving only a few classes being regularly predicted. In this case they happened to be "buckle" which was predicted $1093$ times, "mask" which was predicted $326$ times, "chest" which was predicted $171$ times amongst others. Therefore, we can conclude that features corresponding to these class are prominent across the neurons of this block.
+    </p>
+    <p>
+        This idea that the non-linearity helps retrieve the features in non-trivial ways to produce their predictions is reinforced by observing the confidence with which the model makes its predictions at varying levels of intervention.
+    </p>
+    <p>
+        With no intervention the model expresses a wide-ranges of confidences due to the fact that some classes are very similar and so its cannot classify them certainty.
+    </p>
+    <img src="projects/controlling_superposition/images/confidences_00.png">
+    <p>
+        As we start to increase the slope of the negative component we see that the confidence with which the model makes its prediction gets gradually more skewed.
+    </p>
+    <img src="projects/controlling_superposition/images/confidences_00693.png">
+    <p>
+        The above figure is with a negative slope of $0.0693$. When we then consider a fully linear layer we observe that the predictions are very much skewed to being very confident.
+    </p>
+    <img src="projects/controlling_superposition/images/confidences_10.png">
+    <p>
+        This is reflective of the fact that the model has fewer linearities to extract the nuance in the features. These figures were obtained from our intervention n the inception5b block.
+    </p>
+    <h2>From Scratch</h2>
+    <h2>Conclusion</h2>
+    </div>
+</article>
