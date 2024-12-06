@@ -40,7 +40,7 @@ layout: default
     <p>
         Doing this we observe that we gradually reduce the extent to which the model is superimposing features. With *full* non-linearity, each of the five features are represented in superposition, whereas for the linear model only two features are represented.
     </p>
-    <img src="projects/controlling_superposition/images/1.png">
+    <img src="/projects/controlling_superposition/images/1.png">
     <p>
         This supports our hypothesis that the non-linearity is crucial for controlling the extent to which neural networks can superimpose features.
     </p>
@@ -52,7 +52,7 @@ layout: default
     <p>
         We now extrapolate these ideas beyond the toy model and to InceptionV1. More specifically, we try to understand the extent to which this model superimposes features by intervening on each of the blocks of the model. For each block we modify the slope of the negative component of its ReLU activations, and then test the performance of the model on a subset of the Imagenet-1K dataset. The intention is that if a block heavily relies on superposition, then intervening on it in this way will more negatively impact its performance.
     </p>
-    <img src="projects/controlling_superposition/accuracies.png">
+    <img src="/projects/controlling_superposition/accuracies.png">
     <p>
         Interestingly what we see is that the inception3a and inception4e blocks are the most effected by these interventions, whereas the inception5b block is least effected.
     </p>
@@ -71,7 +71,7 @@ layout: default
     <p>
         For a model that stores features in superposition, removing the non-linearities would limit the model's capacity to retrieve those features, and would introduce interference between them. In particular, what we observe is that the model's predictions tend to collapse onto a few classes. Potentially due to the fact that the interference at the intervened layer causes the activations of neurons to drop into negative territory such that at subsequent layers they are thresholded and no longer contribute to the network's performance. Understanding how the predictions of classes of images collapse under these interventions can perhaps shed light into how features are distributed across neurons.
     </p>
-    <img src="projects/controlling_superposition/images/class_prediction_frequency.png">
+    <img src="/projects/controlling_superposition/images/class_prediction_frequency.png">
     <p>
         In this figure we give each class a colour, and plot a rectangle of height equal to the frequency with which it appears as a prediction across as sample of Imagenet-1K of size $4096$. On the horizontal axis we have the slope of the intervention. The dashed black line gives the number of neurons in the layer, in this case we are looking at the inception4e block which has $832$ neurons, and the solid red line indicates the number of distinct class predictions made across the dataset. Clearly what we see is that the number of distinct predictions given by the model dramatically decreases, leaving only a few classes being regularly predicted. In this case they happened to be "buckle" which was predicted $1093$ times, "mask" which was predicted $326$ times, "chest" which was predicted $171$ times amongst others. Therefore, we can conclude that features corresponding to these class are prominent across the neurons of this block.
     </p>
@@ -81,15 +81,15 @@ layout: default
     <p>
         With no intervention the model expresses a wide-ranges of confidences due to the fact that some classes are very similar and so its cannot classify them certainty.
     </p>
-    <img src="projects/controlling_superposition/images/confidences_00.png">
+    <img src="/projects/controlling_superposition/images/confidences_00.png">
     <p>
         As we start to increase the slope of the negative component we see that the confidence with which the model makes its prediction gets gradually more skewed.
     </p>
-    <img src="projects/controlling_superposition/images/confidences_00693.png">
+    <img src="/projects/controlling_superposition/images/confidences_00693.png">
     <p>
         The above figure is with a negative slope of $0.0693$. When we then consider a fully linear layer we observe that the predictions are very much skewed to being very confident.
     </p>
-    <img src="projects/controlling_superposition/images/confidences_10.png">
+    <img src="/projects/controlling_superposition/images/confidences_10.png">
     <p>
         This is reflective of the fact that the model has fewer linearities to extract the nuance in the features. These figures were obtained from our intervention n the inception5b block.
     </p>
