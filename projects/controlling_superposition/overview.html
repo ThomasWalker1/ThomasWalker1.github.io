@@ -13,7 +13,7 @@ layout: default
         In line with the first claim of Zoom In, we consider features, mediated as directions in their latent space, to be the fundamental of expression for neural networks. That is, directions in the latent spaces of neural networks are the units by which neural networks form their representations. I am not convinced by this vision, some speculations I have come from the <a href="https://www.lesswrong.com/posts/eDicGjD9yte6FLSie/interpreting-neural-networks-through-the-polytope-lens">Polytope Lens</a>, however, for the simplicity let us adopt this view.
     </p>
     <p>
-        Since neural networks store these representations in finite-dimensional vector spaces, it immediately becomes clear from this view that the number of *independent* features it can learn is bounded by the dimension of the vector space as independence in this context manifests as orthogonal directions. Orthogonality is necessary so that one feature can fire without interfering with the others. Consequently, if neural networks were utilising independent features then they wouldn't be performing as well as they currently are. Furthermore, we wouldn't be able to extract interpretable features from the neural network using dictionary learning with expansion factors larger than one. If this were the case, then mechanistic interpretability would be a relatively easier task, since one would just have to search for an $n$-dimensional basis of features from which to reconstruct the model's behaviour. Therefore, there must be more to the story, and indeed there is due to the fact that neural networks are not <em>fully</em> linear and the existence of Johnson-Lindenstrauss lemma.
+        Since neural networks store these representations in finite-dimensional vector spaces, it immediately becomes clear from this view that the number of <em>independent</em> features it can learn is bounded by the dimension of the vector space as independence in this context manifests as orthogonal directions. Orthogonality is necessary so that one feature can fire without interfering with the others. Consequently, if neural networks were utilising independent features then they wouldn't be performing as well as they currently are. Furthermore, we wouldn't be able to extract interpretable features from the neural network using dictionary learning with expansion factors larger than one. If this were the case, then mechanistic interpretability would be a relatively easier task, since one would just have to search for an $n$-dimensional basis of features from which to reconstruct the model's behaviour. Therefore, there must be more to the story, and indeed there is due to the fact that neural networks are not <em>fully</em> linear and the existence of Johnson-Lindenstrauss lemma.
     </p>
     <p>
         To extract independent features all we need are linear operations. Therefore, since neural networks are essentially a sequence of linear operations separated by element-wise non-linearity, it suggests that it is perhaps not essential that neural networks store features independently. Indeed, the non-linearities mean that even if features are not completely orthogonal we can still retrieve relatively cleanly using the non-linearities. Although this leniency may seem insignificant, it is exponentially significant thanks to the Johnson-Lindenstrauss lemma; which says that by allowing some fixed small amount of overlap between the directions, we can store exponentially many of the features.
@@ -35,10 +35,10 @@ layout: default
     </p>
     <h2>Toy Models</h2>
     <p>
-        Let us start with the toy model set up of <a href="https://transformer-circuits.pub/2022/toy_model/index.html#motivation">Toy Models of Superposition</a>. We want to intervene on the non-linearity of these models and explore the subsequent effects on superposition. Thankfully, the ReLU provides an elegant way of doing this. By changing the slope of the negative component from $0$ to $1$, we can go from *fully* non-linearity to linear, with intermediate slopes providing a varying level of non-linearity. 
+        Let us start with the toy model set up of <a href="https://transformer-circuits.pub/2022/toy_model/index.html#motivation">Toy Models of Superposition</a>. We want to intervene on the non-linearity of these models and explore the subsequent effects on superposition. Thankfully, the ReLU provides an elegant way of doing this. By changing the slope of the negative component from $0$ to $1$, we can go from <em>fully</em> non-linearity to linear, with intermediate slopes providing a varying level of non-linearity. 
     </p>
     <p>
-        Doing this we observe that we gradually reduce the extent to which the model is superimposing features. With *full* non-linearity, each of the five features are represented in superposition, whereas for the linear model only two features are represented.
+        Doing this we observe that we gradually reduce the extent to which the model is superimposing features. With <em>full</em> non-linearity, each of the five features are represented in superposition, whereas for the linear model only two features are represented.
     </p>
     <img src="/projects/controlling_superposition/images/1.png">
     <p>
@@ -94,6 +94,51 @@ layout: default
         This is reflective of the fact that the model has fewer linearities to extract the nuance in the features. These figures were obtained from our intervention n the inception5b block.
     </p>
     <h2>From Scratch</h2>
+    <p>
+        In the previous section we considered a model trained with ReLU activations and then explored its dependency on it by intervening on the layers. Here we instead train models with different activation functions from scratch.
+    </p>
+    <h3>MNIST</h3>
+    <p>
+        We train a feed-forward neural network on the MNIST classification. We utilise an architecture of the form [784,16,10], which we train with activation functions whose slope for the negative component varies. Once we have this trained model we re-instantiate it with activation functions with different negative slopes and observe the consequences on performance. The slopes for the negative component which we consider are $\{0.0,0.05,0.15,0.25,0.4,0.6,0.75,0.9\}$. We obtain the following results.
+    </p>
+    <img src="/projects/controlling_superposition/images/accuracies_from_scratch.png">
+    <p>
+        In the figure, each line corresponds to the accuracy of the model that was trained with activation functions whose slope of the negative component is given by the slope identified at the black scatter point.
+    </p>
+    <p>
+        What we observe is that generally this task is not too reliant on superposition, since accuracy does not vary too much on the interventions. However, we do observe that training with some slope to the negative component improves the robustness of the model to these interventions, suggesting that it promotes less superposition in the model. This would suggest that to arrive at more interpretable models we should consider training with less <em>non-linear</em> activation functions.
+    </p>
+    <p>
+        If we were now to consider a neural network with architecture [784,8,10], we would expect their to be more superposition. Hence, we should observe that the effects of intervening on the activation functions is more significant.
+    </p>
+    <img src="/projects/controlling_superposition/images/accuracies_from_scratch_8.png">
+    <h3>Topological</h3>
+    <p>
+        The superposition hypothesis relies on the assumption that the latent representation of neural networks has some <em>linearity</em>. In this case, features can be represented as directions and the purpose of the non-linearity is to extract those features to perform predictions. In our previous examples we have been intervening on layers where it is reasonable to assume that the representations have some linearity. For example, in the MNIST example even though our network is dealing directly with the 784-dimensional image manifold, since it is very high-dimensional it is likely to exhibit some linear structure. In these cases, we intuited that the non-linearity allowed the neural network to store features in superposition, and thus we could control or identify the rate of superposition by intervening on the amount of non-linearity these function possessed. 
+    </p>
+    <p>
+        However, now we want to explore what happens to our framework when this linearity in the latent representations is not present. For that we consider the task of classifying a sphere within a large sphere with a hollow centre.
+    </p>
+    <img src="/projects/controlling_superposition/images/topological_problem.png">
+    <p>
+        We repeat the procedure as in the case of MNIST, and we obtain the following results when considering a feed-forward neural network of architecture [3,8,2].
+    </p>
+    <p>
+        Where before we saw that performance translated relatively well across slopes, here we observe that it does not translate as well. Suggesting that the non-linearity in this instance is performing more complex operations the do not transfer well to activation functions with different amounts of non-linearity.
+    </p>
+    <p>
+        If instead we first pass through the input data through a layer with a ReLU non-linearity, we improve the linearity of the representations and the interventions exhibit more predictable behaviour.
+    </p>
+    <img src="/projects/controlling_superposition/images/accuracies_topological_linear.png">
     <h2>Conclusion</h2>
+    <p>
+        Throughout we have investigated how the amount of <em>non-linearity</em> a neural network has effects it performance. In particular, we used this to study the notion of superposition, which is a hypothesis on neural network behaviour to explain why it can represent many more features than it has neurons. We found in toy-models that the amount of non-linearity effects the rate of superposition. We then extrapolated these ideas to explore the InceptionV1 models, and we observed how changing the non-linearity of a pre-trained model can cause its representations to collapse leading to a reduction in performance. We then focused on training models a priori with different amounts of non-linearity to observe how its performance would change when we intervened on it by changing its non-linearity. We found that by reducing the amount of non-linearity by a small amount we could improve the robustness of the model to subsequent reductions in non-linearity, whilst having a small impact on the overall performance of the model; suggesting this initial training promoted less superposition. 
+    </p>
+    <p>
+        Reducing the amount of superposition in models is desired to improve our ability to perform interpretability on the model. Our observation that we can potentially achieve this, whilst maintaining performance, by reducing the amount of initial non-linearity in the model may prove useful to developing more interpretable models. Moreover, our techniques can be used to establish the amount of superposition in a pre-trained model. This knowledge would be useful when implementing interpretability techniques.
+    </p>
+    <p>
+        In future work we would like to explore this idea further, by exploring these interventions in more scenarios, and performing interpretability analyses on these models.
+    </p>
     </div>
 </article>
