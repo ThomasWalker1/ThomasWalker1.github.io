@@ -93,6 +93,18 @@ layout: default
     <p>
         This is reflective of the fact that the model has fewer linearities to extract the nuance in the features. These figures were obtained from our intervention n the inception5b block.
     </p>
+    <h3>Neuron Intervention</h3>
+    <p>
+        We can take this analysis further by intervening on specific neurons of the network. From <a href="https://distill.pub/2020/circuits/zoom-in/">Zoom In: An Introduction to Circuits</a>, it was found that the 55th neuron from the inception4e block exhibited some polysemanticity; potentially because it is retrieving concepts from superposition. When intervening on this neuron specifically, we observe significant changes in the confidence with which the model makes its predictions.
+    </p>
+    <img src="/projects/controlling_superposition/images/class_confidences_4e55.png">
+    <p>
+        The above figure depicts the change in the average confidence given by the model to inputs labelled with the corresponding class as we intervene on the neuron; with the left plot showing the classes that experiences the largest drop in confidence and the right plot showing the classes that experiences the largest increase in confidence. Below is the same results for a random baseline, which is where we just perform the intervention on the first neuron of the inception3a block.
+    </p>
+    <img src="/projects/controlling_superposition/images/class_confidences_3a1.png">
+    <p>
+        Clearly, the changes in this instance are not as significant.
+    </p>
     <h2>From Scratch</h2>
     <p>
         In the previous section we considered a model trained with ReLU activations and then explored its dependency on it by intervening on the layers. Here we instead train models with different activation functions from scratch.
