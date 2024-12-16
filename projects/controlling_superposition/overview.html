@@ -109,7 +109,47 @@ layout: default
     <p>
         In the previous section we considered a model trained with ReLU activations and then explored its dependency on it by intervening on the layers. Here we instead train models with different activation functions from scratch.
     </p>
-    <h3>MNIST</h3>
+    <p>
+        We consider an autoencoder trained to reconstruct MNIST images, and a fully connected network to classify MNIST images as our testing grounds for ideas. In these settings, we can explore the necessity and rate of superposition by modifying various model parameters. 
+    </p>
+    <h3>Autoencoder</h3>
+    <p>
+        Here our model architecture consists of an encoder and decoder component, and we test the effect of interventions when we train the model with different levels of linearity at the intersection of these blocks. We measure performance by the mean squared reconstruction error.
+    </p>
+    <h4>The Effect of Latent Dimension</h4>
+    <p>
+        For a latent dimension $d$, the encoder architecture is $[784,256,128,d]$ and our decoder architecture is $[d,128,256,784]$. At the intersection of these blocks we apply an activation function that is linear for positive values and for negative values it has a slope in the range $\{0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0\}$. We consider latent dimensions $d\in\{8,16,32,64\}$ and train the models for 10 epochs on the MNIST train set on each of these different slopes for the activation function. After training we then intervene on the activation functions, by varying their slopes and observing the subsequent reconstruction loss.
+    </p>
+    <img src="/projects/controlling_superposition/images/fixed_latent_dim.png">
+    <p>
+        The rows of the figure correspond to architectures of varying latent dimension size. The left figures are depict the reconstruction loss as we intervene on the activation functions, the middle figures are the same plot just with the y-axis capped at 2, and the right figures depict the normalised reconstruction loss. The black marker points on each line identify the slope with which the instance we trained with, which also corresponds the colour of the lines. 
+    </p>
+    <p>
+        From this we make the following observations.
+    </p>
+    <ul>
+        <li>
+            We observe that the reconstruction error can vary significantly as we intervene on the activation functions, suggesting that the model is relying on the non-linearity and representing features in superposition. Since the larger models appear to have a relatively flatter curve around the black marker, we could conclude that the larger models are less reliant on the non-linearity and hence are not utilising superposition as much.
+        </li>
+        <li>
+            Each instance of the model, apart from the fully linear ones, are able to achieve relatively low reconstruction losses. In particular, the reconstruction losses appear to be fairly constant across every slope. Indicating that models can adapt their representations based on the amount of non-linearity they posses. Suggesting that superposition may be a sufficient but not necessary for model performance. 
+        </li>
+        <li>
+            As the model gets larger, the reconstruction loss increase experienced as non-linearity is introduced gets smaller. Indicating that larger models are perhaps less reliant on the non-linearities for their performance, and can better distribute their representations, because the introduction of non-linearity does not cancel out interference the model is reliant on to form its constructions.
+        </li>
+        <li>
+            Regardless of model size, the fully-linear models achieve the same reconstruction loss, and this doesn't change much as non-linearity is introduced into the model. This demonstrates that the models are performing superposition to a certain extent, otherwise the linear models would perform just as well. The fact that this performance is constant across the model sizes indicates that the encoder block is only able to extract a few linear features to represent in the latent space. We would then expect that increasing the size of the encoder block may be able to yield a lower reconstruction error in this linear setting, we'll explore this in the next section.
+        </li>
+        <li>
+            Starting with some non-linearity and then going fully linear is worse than starting out fully linear. In particular, for any slope the loss achieved at the fully linear intervention is roughly the same. Whereas, the more linear the starting model, the worse the loss will be when introducing non-linearity. This is perhaps explained by the fact that in the more linear regimes, the model is more reliant on utilising the interference to inform its reconstructions and so as non-linearities threshold this interference, when non-linearity is introduced the performance suffers. The fact that this effect is less magnified for larger models, as observed in one of our previous points, is because in a larger space the model can represent the features with less interference.
+        </li>
+    </ul>
+    <p>
+        From these observations we conclude that the non-linearity significantly affects the type of representation learned by the model.
+    </p>
+    <h4>The Effect of Encoder Size</h4>
+    <h3>Fully Connected</h3>
+    <h4>MNIST</h4>
     <p>
         We train a feed-forward neural network on the MNIST classification. We utilise an architecture of the form [784,16,10], which we train with activation functions whose slope for the negative component varies. Once we have this trained model we re-instantiate it with activation functions with different negative slopes and observe the consequences on performance. The slopes for the negative component which we consider are $\{0.0,0.05,0.15,0.25,0.4,0.6,0.75,0.9\}$. We obtain the following results.
     </p>
@@ -118,15 +158,18 @@ layout: default
         In the figure, each line corresponds to the accuracy of the model that was trained with activation functions whose slope of the negative component is given by the slope identified at the black scatter point.
     </p>
     <p>
-        What we observe is that generally this task is not too reliant on superposition, since accuracy does not vary too much on the interventions. However, we do observe that training with some slope to the negative component improves the robustness of the model to these interventions, suggesting that it promotes less superposition in the model. This would suggest that to arrive at more interpretable models we should consider training with less <em>non-linear</em> activation functions.
+        What we observe is that generally this task is not too reliant on superposition, since accuracy does not vary too much on the interventions. In comparison to the reconstruction setting, where the loss varied significantly as we intervened on the activation functions. Suggesting that for this task the model is representing features compositionally rather than in superposition.
+    </p>
+    <p>
+        However, we do observe that training with some slope to the negative component improves the robustness of the model to these interventions, suggesting that it promotes less superposition in the model. This would suggest that to arrive at more interpretable models we should consider training with less *non-linear* activation functions.
     </p>
     <p>
         If we were now to consider a neural network with architecture [784,8,10], we would expect their to be more superposition. Hence, we should observe that the effects of intervening on the activation functions is more significant.
     </p>
     <img src="/projects/controlling_superposition/images/accuracies_from_scratch_8.png">
-    <h3>Topological</h3>
+    <h4>Topological Task</h4>
     <p>
-        The superposition hypothesis relies on the assumption that the latent representation of neural networks has some <em>linearity</em>. In this case, features can be represented as directions and the purpose of the non-linearity is to extract those features to perform predictions. In our previous examples we have been intervening on layers where it is reasonable to assume that the representations have some linearity. For example, in the MNIST example even though our network is dealing directly with the 784-dimensional image manifold, since it is very high-dimensional it is likely to exhibit some linear structure. In these cases, we intuited that the non-linearity allowed the neural network to store features in superposition, and thus we could control or identify the rate of superposition by intervening on the amount of non-linearity these function possessed. 
+        The superposition hypothesis relies on the assumption that the latent representation of neural networks has some *linearity*. In this case, features can be represented as directions and the purpose of the non-linearity is to extract those features to perform predictions. In our previous examples we have been intervening on layers where it is reasonable to assume that the representations have some linearity. For example, in the MNIST example even though our network is dealing directly with the 784-dimensional image manifold, since it is very high-dimensional it is likely to exhibit some linear structure. In these cases, we intuited that the non-linearity allowed the neural network to store features in superposition, and thus we could control or identify the rate of superposition by intervening on the amount of non-linearity these function possessed.  
     </p>
     <p>
         However, now we want to explore what happens to our framework when this linearity in the latent representations is not present. For that we consider the task of classifying a sphere within a large sphere with a hollow centre.
@@ -135,7 +178,6 @@ layout: default
     <p>
         We repeat the procedure as in the case of MNIST, and we obtain the following results when considering a feed-forward neural network of architecture [3,8,2].
     </p>
-    <img src="/projects/controlling_superposition/images/accuracies_topological_8.png">
     <p>
         Where before we saw that performance translated relatively well across slopes, here we observe that it does not translate as well. Suggesting that the non-linearity in this instance is performing more complex operations the do not transfer well to activation functions with different amounts of non-linearity.
     </p>
@@ -145,10 +187,10 @@ layout: default
     <img src="/projects/controlling_superposition/images/accuracies_topological_linear.png">
     <h2>Conclusion</h2>
     <p>
-        Throughout we have investigated how the amount of <em>non-linearity</em> a neural network has effects it performance. In particular, we used this to study the notion of superposition, which is a hypothesis on neural network behaviour to explain why it can represent many more features than it has neurons. We found in toy-models that the amount of non-linearity effects the rate of superposition. We then extrapolated these ideas to explore the InceptionV1 models, and we observed how changing the non-linearity of a pre-trained model can cause its representations to collapse leading to a reduction in performance. We then focused on training models a priori with different amounts of non-linearity to observe how its performance would change when we intervened on it by changing its non-linearity. We found that by reducing the amount of non-linearity by a small amount we could improve the robustness of the model to subsequent reductions in non-linearity, whilst having a small impact on the overall performance of the model; suggesting this initial training promoted less superposition. 
+        Throughout we have investigated how the amount of *non-linearity* a neural network has effects it performance. In particular, we used this to study the notion of superposition, which is a hypothesis on neural network behaviour to explain why it can represent many more features than it has neurons. We found in toy-models that the amount of non-linearity effects the rate of superposition. We then extrapolated these ideas to explore the InceptionV1 models, and we observed how changing the non-linearity of a pre-trained model can cause its representations to collapse leading to a reduction in performance. We then focused on training models a priori with different amounts of non-linearity to observe how its performance would change when we intervened on it by changing its non-linearity. For that autoencoder models for reconstruction potentially rely more on superposition, whereas, fully connected models for classification perhaps rely more on compositionality. Overall, we found that the activation function used significantly influenced the type of representation the model learned.
     </p>
     <p>
-        Reducing the amount of superposition in models is desired to improve our ability to perform interpretability on the model. Our observation that we can potentially achieve this, whilst maintaining performance, by reducing the amount of initial non-linearity in the model may prove useful to developing more interpretable models. Moreover, our techniques can be used to establish the amount of superposition in a pre-trained model. This knowledge would be useful when implementing interpretability techniques.
+        Reducing the amount of superposition in models is desired to improve our ability to perform interpretability on the model. Our observation that we can potentially achieve this, whilst maintaining performance, by reducing the amount of initial non-linearity in the model may prove useful to developing more interpretable models. Moreover, our techniques can be used to establish the amount of superposition in a pre-trained model. This knowledge would be useful when implementing interpretability techniques. 
     </p>
     <p>
         In future work we would like to explore this idea further, by exploring these interventions in more scenarios, and performing interpretability analyses on these models.
