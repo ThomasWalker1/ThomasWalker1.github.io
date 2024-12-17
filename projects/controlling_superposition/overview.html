@@ -118,7 +118,7 @@ layout: default
     </p>
     <h4>The Effect of Latent Dimension</h4>
     <p>
-        For a latent dimension $d$, the encoder architecture is $[784,256,128,d]$ and our decoder architecture is $[d,128,256,784]$. At the intersection of these blocks we apply an activation function that is linear for positive values and for negative values it has a slope in the range $\{0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0\}$. We consider latent dimensions $d\in\{8,16,32,64\}$ and train the models for 10 epochs on the MNIST train set on each of these different slopes for the activation function. After training we then intervene on the activation functions, by varying their slopes and observing the subsequent reconstruction loss.
+        For a latent dimension $d$, the encoder architecture is $[784,128,64,d]$ and our decoder architecture is $[d,64,128,784]$. At the intersection of these blocks we apply an activation function that is linear for positive values and for negative values it has a slope in the range $\{0.0,0.1,0.4,0.6,0.9,1.0\}$. We consider latent dimensions $d\in\{8,16,32,64\}$ and train the models for 10 epochs on the MNIST train set on each of these different slopes for the activation function. After training we then intervene on the activation functions, by varying their slopes and observing the subsequent reconstruction loss.
     </p>
     <img src="/projects/controlling_superposition/images/fixed_latent_dim.png">
     <p>
@@ -132,22 +132,26 @@ layout: default
             We observe that the reconstruction error can vary significantly as we intervene on the activation functions, suggesting that the model is relying on the non-linearity and representing features in superposition. Since the larger models appear to have a relatively flatter curve around the black marker, we could conclude that the larger models are less reliant on the non-linearity and hence are not utilising superposition as much.
         </li>
         <li>
-            Each instance of the model, apart from the fully linear ones, are able to achieve relatively low reconstruction losses. In particular, the reconstruction losses appear to be fairly constant across every slope. Indicating that models can adapt their representations based on the amount of non-linearity they posses. Suggesting that superposition may be a sufficient but not necessary for model performance. 
+            Each instance of the model, are able to achieve relatively low reconstruction losses. In particular, the reconstruction losses appear to be fairly constant across every slope. Indicating that models can adapt their representations based on the amount of non-linearity they posses. Suggesting that superposition may be a sufficient but not necessary for model performance. Furthermore, the right most figures indicate that the more linear models are robust to subsequent interventions. 
         </li>
         <li>
-            As the model gets larger, the reconstruction loss increase experienced as non-linearity is introduced gets smaller. Indicating that larger models are perhaps less reliant on the non-linearities for their performance, and can better distribute their representations, because the introduction of non-linearity does not cancel out interference the model is reliant on to form its constructions.
+            As the model gets larger, the reconstruction loss introduced upon intervention gets smaller. Indicating that larger models are perhaps less reliant on the non-linearities for their performance, and can better distribute their representations, because the introduction of non-linearity does not cancel out interference the model is reliant on to form its constructions.
         </li>
         <li>
-            Regardless of model size, the fully-linear models achieve the same reconstruction loss, and this doesn't change much as non-linearity is introduced into the model. This demonstrates that the models are performing superposition to a certain extent, otherwise the linear models would perform just as well. The fact that this performance is constant across the model sizes indicates that the encoder block is only able to extract a few linear features to represent in the latent space. We would then expect that increasing the size of the encoder block may be able to yield a lower reconstruction error in this linear setting, we'll explore this in the next section.
-        </li>
-        <li>
-            Starting with some non-linearity and then going fully linear is worse than starting out fully linear. In particular, for any slope the loss achieved at the fully linear intervention is roughly the same. Whereas, the more linear the starting model, the worse the loss will be when introducing non-linearity. This is perhaps explained by the fact that in the more linear regimes, the model is more reliant on utilising the interference to inform its reconstructions and so as non-linearities threshold this interference, when non-linearity is introduced the performance suffers. The fact that this effect is less magnified for larger models, as observed in one of our previous points, is because in a larger space the model can represent the features with less interference.
+            The performance of the fully-linear models is relatively consistent across model sizes. Perhaps indicating that the encoder block is only able to extract a few linear features to represent in the latent space. If there were the case, we would expect that increasing the size of the encoder block may be able to yield a lower reconstruction error in the linear setting, we'll explore this in the next section.
         </li>
     </ul>
     <p>
         From these observations we conclude that the non-linearity significantly affects the type of representation learned by the model.
     </p>
     <h4>The Effect of Encoder Size</h4>
+    <p>
+        Here, we fix the latent dimension of the autoencoder to $d=32$ and varying the layer sizes of the encoder block with $e=\{e_1,e_2\}\in\mathbb{N}^2$, so that the encoder block has architecture $\left[784,e_1,e_2,32\right]$. Training this model proceeds as before, however, we only consider the fully non-linear and fully linear regimes. We then test the reconstruction losses of these models using the same activation function that they were trained on.
+    </p>
+    <img src="/projects/controlling_superposition/images/nonlinear_linear_comparison.png">
+    <p>
+        From the above figure we observe that as we increase the size of the encoder block the loss of the linear models decreases, as expected since now the encoder block is able to supply the latent space with linear features to represent. We observe that increase the encoder size beyond a certain size doesn't yield better performance, on the contrary, performance starts to degrade. For these larger encoder sizes, it may be the case that they are too powerful, and providing the latent space too many linear features to represent. In this set up, the latent space can only store a maximum of $32$ features not in superposition.
+    </p>
     <h3>Fully Connected</h3>
     <h4>MNIST</h4>
     <p>
