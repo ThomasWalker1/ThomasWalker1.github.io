@@ -113,7 +113,45 @@ layout: default
         We consider an autoencoder trained to reconstruct MNIST images, and a fully connected network to classify MNIST images as our testing grounds for ideas. In these settings, we can explore the necessity and rate of superposition by modifying various model parameters. 
     </p>
     <h3>Autoencoder</h3>
-
+    <p>
+        Here our model architecture consists of an encoder and decoder component, and we test the effect of interventions when we train the model with different levels of linearity at the intersection of these blocks. We measure performance by the mean squared reconstruction error.
+    </p>
+    <h4>The Effect of Latent Dimension</h4>
+    <p>
+        For a latent dimension $d$, the encoder architecture is $[784,128,64,d]$ and our decoder architecture is $[d,64,128,784]$. At the intersection of these blocks we apply an activation function that is linear for positive values and for negative values it has a slope in the range $\{0.0,0.1,0.4,0.6,0.9,1.0\}$. We consider latent dimensions $d\in\{8,16,32,64\}$ and train the models for 10 epochs on the MNIST train set on each of these different slopes for the activation function. After training we then intervene on the activation functions, by varying their slopes and observing the subsequent reconstruction loss.
+    </p>
+    <img src="/projects/controlling_superposition/images/fixed_latent_dim.png">
+    <p>
+        The rows of the figure correspond to architectures of varying latent dimension size. The left figures are depict the reconstruction loss as we intervene on the activation functions, the middle figures are the same plot just with the y-axis capped at 2, and the right figures depict the normalised reconstruction loss. The black marker points on each line identify the slope with which the instance we trained with, which also corresponds the colour of the lines. 
+    </p>
+    <p>
+        From this we make the following observations.
+    </p>
+    <ul>
+        <li>
+            We observe that the reconstruction error can vary significantly as we intervene on the activation functions, suggesting that the model is relying on the non-linearity and representing features in superposition. Since the larger models appear to have a relatively flatter curve around the black marker, we could conclude that the larger models are less reliant on the non-linearity and hence are not utilising superposition as much.
+        </li>
+        <li>
+            Each instance of the model, are able to achieve relatively low reconstruction losses. In particular, the reconstruction losses appear to be fairly constant across every slope. Indicating that models can adapt their representations based on the amount of non-linearity they posses. Suggesting that superposition may be a sufficient but not necessary for model performance. Furthermore, the right most figures indicate that the more linear models are robust to subsequent interventions. 
+        </li>
+        <li>
+            As the model gets larger, the reconstruction loss introduced upon intervention gets smaller. Indicating that larger models are perhaps less reliant on the non-linearities for their performance, and can better distribute their representations, because the introduction of non-linearity does not cancel out interference the model is reliant on to form its constructions.
+        </li>
+        <li>
+            The performance of the fully-linear models is relatively consistent across model sizes. Perhaps indicating that the encoder block is only able to extract a few linear features to represent in the latent space. If there were the case, we would expect that increasing the size of the encoder block may be able to yield a lower reconstruction error in the linear setting, we'll explore this in the next section.
+        </li>
+    </ul>
+    <p>
+        From these observations we conclude that the non-linearity significantly affects the type of representation learned by the model.
+    </p>
+    <h4>The Effect of Encoder Size</h4>
+    <p>
+        Here, we fix the latent dimension of the autoencoder to $d=32$ and varying the layer sizes of the encoder block with $e=\{e_1,e_2\}\in\mathbb{N}^2$, so that the encoder block has architecture [784,e_1,e_2,32]. Training this model proceeds as before, however, we only consider the fully non-linear and fully linear regimes. We then test the reconstruction losses of these models using the same activation function that they were trained on.
+    </p>
+    <img src="/projects/controlling_superposition/images/nonlinear_linear_comparison.png">
+    <p>
+        From the above figure we observe that as we increase the size of the encoder block the loss of the linear models decreases, as expected since now the encoder block is able to supply the latent space with linear features to represent. We observe that increase the encoder size beyond a certain size doesn't yield better performance, on the contrary, performance starts to degrade. For these larger encoder sizes, it may be the case that they are too powerful, and providing the latent space too many linear features to represent. In this set up, the latent space can only store a maximum of $32$ features not in superposition.
+    </p>
     <h3>Fully Connected</h3>
     <h4>MNIST</h4>
     <p>
