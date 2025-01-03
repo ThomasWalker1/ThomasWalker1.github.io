@@ -1,14 +1,14 @@
 Podcast Listening Summary:
-Total Time Spent Listening: 35067.75 minutes
+Total Time Spent Listening: 36364.14 minutes
 Most Listened Podcast: #438 – Elon Musk: Neuralink and the Future of Humanity by Lex Fridman Podcast (393.55 minutes)
 Longest Podcast: #438 – Elon Musk: Neuralink and the Future of Humanity by Lex Fridman Podcast (393.55 minutes)
-Most Listened Host: Lex Fridman Podcast (6791.29 minutes)
+Most Listened Host: Lex Fridman Podcast (7126.18 minutes)
 
 Host Listening Breakdown:
-Lex Fridman Podcast: 6791.29 minutes
-Machine Learning Street Talk (MLST): 6055.98 minutes
-The Jordan B. Peterson Podcast: 5226.94 minutes
-Dwarkesh Podcast: 2523.20 minutes
+Lex Fridman Podcast: 7126.18 minutes
+Machine Learning Street Talk (MLST): 6197.72 minutes
+The Jordan B. Peterson Podcast: 5398.02 minutes
+Dwarkesh Podcast: 2659.54 minutes
 Huberman Lab: 2021.26 minutes
 Dan Carlin's Hardcore History: 1822.28 minutes
 The Rest Is Politics: 1576.60 minutes
@@ -18,15 +18,15 @@ Empire: 959.98 minutes
 The Rest Is History: 805.32 minutes
 The Infinite Monkey Cage: 598.51 minutes
 The Joe Rogan Experience: 532.75 minutes
+"The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis: 504.84 minutes
+TRIGGERnometry: 502.16 minutes
+Google DeepMind: The Podcast: 453.97 minutes
 AXRP - the AI X-risk Research Podcast: 410.14 minutes
-Google DeepMind: The Podcast: 368.63 minutes
 All-In with Chamath, Jason, Sacks & Friedberg: 368.43 minutes
-TRIGGERnometry: 367.01 minutes
 Jason Fox Wild Tales Podcast – The Book of Man: 330.52 minutes
 The Joy of x: 276.37 minutes
 The 3b1b podcast: 203.68 minutes
 Stuff You Should Know: 154.92 minutes
-"The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis: 151.74 minutes
 Modern Wisdom: 124.73 minutes
 80,000 Hours Podcast: 110.05 minutes
 DataFramed: 106.93 minutes
@@ -35,7 +35,6 @@ The James Smith Podcast: 89.97 minutes
 Real Dictators: 78.72 minutes
 Breaking Math Podcast: 71.00 minutes
 SAS: Who Dares Wins - Back to Base: 67.56 minutes
-"The Cognitive Revolution": 61.27 minutes
 Relaxing White Noise: 60.22 minutes
 RSam Podcast: 59.82 minutes
 The Rest Is Money: 58.53 minutes

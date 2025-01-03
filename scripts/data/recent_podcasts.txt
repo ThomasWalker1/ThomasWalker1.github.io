@@ -1,26 +1,26 @@
 Recent Podcasts:
+Date: 2024-12-31, Host: The Jordan B. Peterson Podcast, Episode: 496. Beyond Dawkins | Jonathan Pageau
+Date: 2024-12-29, Host: Dwarkesh Podcast, Episode: Adam Brown - How Future Civilizations Could Change The Laws of Physics
+Date: 2024-12-29, Host: Google DeepMind: The Podcast, Episode: The Balancing Act: AI & Regulation with Nicklas Lundblad
+Date: 2024-12-28, Host: Lex Fridman Podcast, Episode: #455 - Adam Frank: Alien Civilizations and the Search fro Extraterrestial Life
+Date: 2024-12-24, Host: TRIGGERnometry, Episode: The Rise of the Right is the Left's Fault
+Date: 2024-12-23, Host: "The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis, Episode: Building Government's Largest Civilian AI Team with DHS AI Corps' Director, Michael Boyce
+Date: 2024-12-22, Host: Google DeepMind: The Podcast, Episode: The Ethics of AI Assistants with Iason Gabriel
+Date: 2024-12-19, Host: TRIGGERnometry, Episode: The Best Syria Breakdown You'll Ever Hear - Thomas Small
+Date: 2024-12-18, Host: The Jordan B. Peterson Podcast, Episode: 501. Reality and the Philosophical Framing of the Truth | Dr. Stephen Hicks
+Date: 2024-12-17, Host: "The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis, Episode: The Evolution of AI Agents: Lessons from 2024, with MultiOn CEO Div Garg
+Date: 2024-12-16, Host: Machine Learning Street Talk (MLST), Episode: Neel Nanda - Mechanistic Interpretability (Sparse Autoencoders)
+Date: 2024-12-13, Host: Lex Fridman Podcast, Episode: #454 - Saagar Enjeti: Trump, MAGA, DOGE, Obama, FDR, JFK, History & Politics
+Date: 2024-12-08, Host: "The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis, Episode: Automating Scientific Discovery, with Andrew White, Head of Science at Future House
 Date: 2024-12-07, Host: Machine Learning Street Talk (MLST), Episode: Jonas Hübotter (ETH) - Test Time Inference
 Date: 2024-12-06, Host: "The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis, Episode: Is an AI Arms Race Inevitable? with Robert Wright of Nonzero Newsletter & Podcast
 Date: 2024-12-05, Host: TRIGGERnometry, Episode: Why We Lost - Brianna Wu
 Date: 2024-12-03, Host: Machine Learning Street Talk (MLST), Episode: The Elegant Math Behind Machine Learning - Anil Ananthaswamy
 Date: 2024-11-29, Host: The Joe Rogan Experience, Episode: #2234 - Marc Andreessen
-Date: 2024-11-27, Host: "The Cognitive Revolution", Episode: Robotics Research Update, with Keerthana Gopalakrishnan and Ted Xiao of Google Deepmind
+Date: 2024-11-27, Host: "The Cognitive Revolution" | AI Builders, Researchers, and Live Player Analysis, Episode: Robotics Research Update, with Keerthana Gopalakrishnan and Ted Xiao of Google Deepmind
 Date: 2024-11-27, Host: AXRP - the AI X-risk Research Podcast, Episode: 38.2 - Jesse Hoogland on Singular Learning Theory
 Date: 2024-11-26, Host: TRIGGERnometry, Episode: The Dems Need a Civil War - Cenk Uygur
 Date: 2024-11-25, Host: Broken By Concept: League of Legends Podcast, Episode: Ludwig: The New Player Experience (Case Study) | Broken by Concept 225 League of Legends Podcast
 Date: 2024-11-23, Host: Machine Learning Street Talk (MLST), Episode: Nora Belrose - AI Development, Safety, and Meaning 
 Date: 2024-11-20, Host: Lex Fridman Podcast, Episode: #453 – Javier Milei: President of Argentina - Freedom, Economics, and Corruption
 Date: 2024-11-19, Host: Dwarkesh Podcast, Episode: Gwern Branwen - How an Anonymous Researcher Predicted AI's Trajectory
-Date: 2024-11-16, Host: Machine Learning Street Talk (MLST), Episode: Eliezer Yudkowsky and Stephen Wolfram on AI X-risk
-Date: 2024-11-16, Host: Machine Learning Street Talk (MLST), Episode: Why Your GPUs are underutilised for AI - CentML CEO Explains
-Date: 2024-11-13, Host: Lex Fridman Podcast, Episode: #452 – Dario Amodei: Anthropic CEO on Claude, AGI & the Future of AI & Humanity
-Date: 2024-11-09, Host: The Joe Rogan Experience, Episode: #2223 - Elon Musk
-Date: 2024-11-07, Host: Machine Learning Street Talk (MLST), Episode: Joscha Bach - Why Your Thoughts Aren't Yours.
-Date: 2024-11-06, Host: The Jordan B. Peterson Podcast, Episode: 483. Woodstock for the Adventurous and Responsible | Bret Weinstein & Heather Heying
-Date: 2024-11-04, Host: The Joe Rogan Experience, Episode: #2220 - Francis Foster & Konstantin Kisin
-Date: 2024-11-04, Host: Lex Fridman Podcast, Episode: #451 – Rick Spence: CIA, KGB, Illuminati, Secret Societies, Cults & Conspiracies
-Date: 2024-11-01, Host: The Joe Rogan Experience, Episode: #2221 - JD Vance
-Date: 2024-10-31, Host: Machine Learning Street Talk (MLST), Episode: Dr. Sanjeev Namjoshi - Active Inference
-Date: 2024-10-31, Host: Scraping Bits, Episode: #114 - Bastian Grossenbacher-Rieck: Topological Machine Learning + Topological Data Analysis Professor
-Date: 2024-10-30, Host: Machine Learning Street Talk (MLST), Episode: Speechmatics CTO - Next-Generation Speech Recognition
-Date: 2024-10-30, Host: COMPLEXITY, Episode: Nature of Intelligence, Ep. 1: What is Intelligence
