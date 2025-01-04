@@ -47,12 +47,170 @@ layout: default
     <p>
         In the second row of the figure we observe the effects this has on the partitioning of the latent space of the neural networks. We observe how the partitioning correspond to the direction of the features. Since, the partitions are inherently related to the non-linearities of the model, it is clear that the non-linearities play a role in the arrangement of the features. 
     </p>
+
+    <h3>Extended</h3>
+    <p>
+        Here we take the toy model's further and explore its performance in relation to its linearity, the distribution on feature importance and the size of its latent dimension. More specifically, we train the model on five features comprising two semantical concepts, say shape and colour. Namely, we have three shape features, say red, green and blue, and two colour features, say circle and square; so that firing the first shape feature and second colour feature corresponds to a red square. We train the model to reconstruct these various combinations of features, where the propensity of each feature is related to some probability; in our case we'll have the first feature being the most important and the last feature being the least important to some degree for each concept. More specifically, feature <em>i</em> of <em>n</em> for a concept has importance $$p_i=\frac{\exp(-\alpha\gamma i)}{\sum_{j=1}^n\exp(-\alpha\gamma)}$$where $\alpha$$ is a concept level parameter and $\gamma\in[0,1]$ is a skewness parameter, such that for $\gamma=0$ the distribution over the features is uniform and for $\gamma=1$ it is skewed toward the first feature.
+    </p>
+    <p>
+        In training the model only ever sees one-hot vectors combining features from the concepts; whereas in testing we will provide the model with one-hot vectors isolating a feature from one of the concepts.
+    </p>
+    <p>
+        Using the intuition from our previous experiments, we test the following aspects of the trained model on these isolated feature queries.
+    </p>
+    <ul>
+      <li>Reconstruction ability. The mean squared error of the input and output.</li>
+      <li>The training loss of the model.</li>
+      <li>The minimum and maximum interference between the latent activations of the model on each feature query.</li>
+      <li>The interference between the unnormalized and normalized features of the model.</li>
+      <li>The magnitude of the features.</li>
+    </ul>
+    <p>
+        We conduct four sets of experiments.
+    </p>
+    <ol>
+      <li>We vary the skewness of the features and linearity of the model when it has two latent dimensions.</li>
+      <li>We vary the skewness of the features and the linearity of the model when it has three latent dimensions.</li>
+      <li>We vary the dimension of the latent space and linearity of the model when the skewness parameter is set to $0$.</li>
+      <li>We vary the dimension of the latent space and linearity of the model when the skewness parameter is set to $0.25$.</li>
+    </ol>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Experiment One</th>
+          <th>Experiment Two</th>
+          <th>Conclusion</th>
+          <th>Supporting Figure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Reconstruction Error</td>
+          <td>Lowest for uniform feature importance and non-linear activation functions.</td>
+          <td>Relatively lower, and more evenly distributed across skewness levels. Clear distinction between the linear and non-linear cases</td>
+          <td>The higher errors for higher skewness is reflective of the fact that the model puts less emphasis on the lower importance features.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/output_discrepancies_exp2.png" alt="Experiment One" width="200"></td>
+        </tr>
+        <tr>
+          <td>Training Loss</td>
+          <td>Highest when the distribution is uniform and lowest when the distribution is skewed. Fairly consistent across all constant linearity levels.</td>
+          <td>Fairly consistent across all configurations.</td>
+          <td>Demonstrates that the model can adapt to different activation functions. Moreover, constraints seem to dissipate when we increase the dimensionality of the latent space.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/losses_exp1.png" alt="Experiment One" width="200"></td>
+        </tr>
+        <tr>
+          <td>Latent Interference (Minimum)</td>
+          <td>Clear separation from the non-linear regime, and increasing as linearity is introduced.</td>
+          <td>Same pattern, just slightly lower values.</td>
+          <td>The non-linear regimes allows the models to have these negative interferences without affecting performance. As the dimension increases the model can store the features with less interference.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/latent_min_interferences_exp1.png" alt="Experiment One" width="200"></td>
+        </tr>
+        <tr>
+          <td>Latent Interference (Maximum)</td>
+          <td>Consistent across all settings.</td>
+          <td>Consistent across all settings.</td>
+          <td></td>
+          <td><img src="/projects/controlling_superposition/images/experiments/latent_max_interferences_exp2.png" alt="Experiment Two" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Interference (Unnormalized)</td>
+          <td>Consistently low and decreases as linearity increases.</td>
+          <td>Match the values of the normalized feature interference.</td>
+          <td>Feature can collapse when there is insufficient space to accommodate them. Linearity affects the extent to which features can be represented.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/intra_feature_unnormalised_exp1.png" alt="Experiment One" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Interference (Normalized)</td>
+          <td>Consistently high.</td>
+          <td>There is a clear separation between the uniform and skewed distributions. Interference is lower for uniform distributions as the features are likely to co-occur and thus must be separated to limit interference.</td>
+          <td>The model actively distributes features according to the importance of the features, and not necessarily impacted by the linearity of the model.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/intra_feature_normalised_exp2.png" alt="Experiment Two" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Magnitude</td>
+          <td>Insignificant features tend to collapse.</td>
+          <td>Insignificant features do not collapse.</td>
+          <td>When the model has space, it will continue to represent even insignificant features.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/feature_magnitude_exp2.png" alt="Experiment Two" width="200"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Experiment Three</th>
+          <th>Experiment Four</th>
+          <th>Conclusion</th>
+          <th>Supporting Figure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Reconstruction Error</td>
+          <td>Highest for the low-dimensional models and highly linear models.</td>
+          <td>Same pattern but more abrupt.</td>
+          <td>Due to the skewness the model is focusing its attention more on certain features meaning the errors change more dramatically.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/output_discrepancies_exp3.png" alt="Experiment Three" width="200"></td>
+        </tr>
+        <tr>
+          <td>Training Loss</td>
+          <td>Constant across linearities. However, there is a clear distinction between the two-dimensional models and the other models.</td>
+          <td>Relatively lower values but pattern is the same.</td>
+          <td>There is something significant about two-dimensions that means it is severely limited in representing five features compared to higher-dimensional models.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/losses_exp3.png" alt="Experiment Three" width="200"></td>
+        </tr>
+        <tr>
+          <td>Latent Interference (Minimum)</td>
+          <td>Highest for low-dimensional and non-linear models.</td>
+          <td>Same pattern.</td>
+          <td>Reflective of how the non-linearity allows the model to represent features with greater negative interference. Higher-dimensional models do not require this as they have more space to store features.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/latent_min_interferences_exp4.png" alt="Experiment Four" width="200"></td>
+        </tr>
+        <tr>
+          <td>Latent Interference (Maximum)</td>
+          <td>Consistent across all settings.</td>
+          <td>Consistent across all settings.</td>
+          <td></td>
+          <td><img src="/projects/controlling_superposition/images/experiments/latent_max_interferences_exp4.png" alt="Experiment Four" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Interference (Unnormalized)</td>
+          <td>Remaining fairly constant across settings, with three-dimensional models seeing a strangely low amount of interference.</td>
+          <td>Remaining fairly constant across settings, with three-dimensional models seeing a strangely low amount of interference.</td>
+          <td></td>
+          <td><img src="/projects/controlling_superposition/images/experiments/intra_feature_unnormalised_exp3.png" alt="Experiment Three" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Interference (Normalized)</td>
+          <td>High for two-dimensional models and then dramatically drops.</td>
+          <td>High for two-dimensional models and then dramatically drops.</td>
+          <td>Reflective of how the model is severely limited in the two-dimensional regimes, and the models are always trying to separate out the features.</td>
+          <td><img src="/projects/controlling_superposition/images/experiments/intra_feature_normalised_exp3.png" alt="Experiment Three" width="200"></td>
+        </tr>
+        <tr>
+          <td>Feature Magnitude</td>
+          <td>Relatively mild feature collapse, with any signs of feature collapse disappearing as latent dimensions increases.</td>
+          <td>Pattern is more pronounced.</td>
+          <td></td>
+          <td><img src="/projects/controlling_superposition/images/experiments/feature_magnitudes_exp4.png" alt="Experiment Four" width="200"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+
+
+
+
     <h2>InceptionV1</h2>
     <h3>Layer Intervention</h3>
     <p>
         We now extrapolate these ideas beyond the toy model and to InceptionV1. More specifically, we try to understand the extent to which this model superimposes features by intervening on each of the blocks of the model. For each block we modify the slope of the negative component of its ReLU activations, and then test the performance of the model on a subset of the Imagenet-1K dataset. The intention is that if a block heavily relies on superposition, then intervening on it in this way will more negatively impact its performance.
     </p>
-    <img src="/projects/controlling_superposition/accuracies.png">
+    <img src="/projects/controlling_superposition/images/accuracies.png">
     <p>
         Interestingly what we see is that the inception3a and inception4e blocks are the most effected by these interventions, whereas the inception5b block is least effected.
     </p>
