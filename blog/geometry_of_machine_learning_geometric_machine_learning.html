@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h2 class="h1 py-4 mt-3">The Geometry of Machine Learning versus Geometric Machine Learning</h2>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+    <p>
+        <a href="https://arxiv.org/abs/2104.13478">Geometric deep learning</a> is a vibrant and rapidly growing field, with applications ranging from <a href="https://github.com/lmqfly/Geometry-Deep-Learning-for-Drug-Discovery">molecular discovery</a> to <a href="https://deepmind.google/discover/blog/tacticai-ai-assistant-for-football-tactics/">developing tactics for football managers.</a> It focuses on developing machine learning models that handle geometric input data, such as graphs, meshes, and grids. These structures possess inherent symmetries that can be exploited as geometric priors to enhance the performance of machine learning models. These symmetries enable elegant mathematical principles to be incorporated into network architectures, improving model effectiveness. This approach has led to numerous impactful applications. While these models have proven incredibly useful and have so far surpassed the expectations of the bitter lesson, their long-term dominance remains uncertain.
+    </p>
+    <p>
+        While geometric deep learning uses the geometry of the input data to inform machine learning models, the geometry of deep learning studies the geometry of the model itself. This subtle distinction opens up an entirely different field of research. The geometry of deep learning emerged from the observation that neural networks using piecewise linear activation functions partition their input space into convex polytopes, where the entire neural network computation becomes an affine transformation on each polytope. This remarkable property has led to advances in understanding a neural network’s <a href="https://arxiv.org/abs/1402.1869">expressivity</a>, <a href="https://arxiv.org/abs/2009.09525">analytically characterization its properties</a>, and spearheading the development of <a href="https://arxiv.org/abs/2402.15555">empirical tools to interpret its behaviour.</a>
+    </p>
+    <p>
+        A powerful characterisation of the geometry of deep learning comes from <a href="https://arxiv.org/abs/1805.06576">spline theory</a>, with another notable framework using <a href="">tropical geometry.</a> By developing these characterisation it is feasible that we can reason about the properties of neural network without any prior understanding of the input data they are trained on or any intervention on its architecture (provided it uses piecewise affine operators); it simply requires the application of known computations to the trained artefact. Therefore, its utility in explaining the behaviours of machine learning models is not as dependent on the bitter lesson as is geometric deep learning. The exact characterisation of the geometry of a machine learning model does requires solving linear-program which are expensive and generally an NP-complete problem; however, approximate relaxations, such as <a href="https://arxiv.org/abs/2402.15555">local complexity</a>, have still been shown to be a suitable substitute. 
+    </p>
+    <p>
+        The focus on the geometry of deep learning is still an emerging field, with its extension to current state of the art models still nascent. However, I am bullish on its utility for explaining much of the behaviour and properties of machine learning models. I am hopeful that it can provide answers from question in interpretability to optimization.
+    </p>
+    <p>
+        If anyone is interested in learning more about my ideas, or interested in collaborating on a project in the geometry of deep learning, please reach out!
+    </p>
+    </div>
+</article>
