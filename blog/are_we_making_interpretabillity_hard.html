@@ -1,0 +1,24 @@
+---
+layout: default
+---
+<article class="container mx-auto px-2 mt2 mb4">
+	<header>
+		<h2 class="h1 py-4 mt-3">Are we Making Interpretability Hard for Ourselves?</h2>
+	  </header>
+    <div class="sm-width-full border-top-thin">
+    </div>
+    <div class="prose mb-4 py-4">
+    <p>
+        After reading <a href="https://arxiv.org/abs/2501.16496">Open Problems in Mechanistic Interpretability</a>, it is clear that one of the main focuses of mechanistic interpretability, and probably interpretability in general, is to understand the functional role of the neural network components. That is, we are trying to contextualise what operation a component is doing so that we can explain its behaviour, manipulate downstream behaviour, or come up with statements about the properties of the network. For example, <a href="https://transformer-circuits.pub/2021/framework/index.html">work</a> has previously identified so-called induction heads in transformer models, which have the functional role of attending to previously observed tokens and continuing the observed pattern. However, as we scale up these models and train them on more general tasks, coming up with such clean and relevant descriptions becomes intractable or even impossible. It may be that no such explanation exists for the functional role of a given component of these models.
+    </p>
+    <p>
+        Instead of trying to contend with the curse of dimensionality, researchers have opted to arrive at approximate descriptions by analysing the behavioural properties of these components, with the hope that one can infer the functional role from the behavioural observations. As an analogy, suppose one has an unwieldy function 𝑓(𝑥)﻿ , a one-dimensional function whose derivative is the origin you’d like to compute. However, even calculating its derivative analytically and evaluating it at the origin is daunting. Instead, you sample smaller points around the origin and compute their scaled difference to approximate the derivative. The function's underlying shape will determine how good of an approximation this is. However, it is still likely to indicate the curvature of the function at the origin. In my mind, this is similar to the state of play of most interpretability work. We have some unwieldy neural network, and we are probing it, perturbing it or simplifying it to elicit behaviours that hopefully yield some insight into its functional role.
+    </p>
+    <p>
+        But is it necessary to make this dash to obtain behavioural observations? After all, we have an exact formulation of the function of a neural network given by its weights. We know it is a high-dimensional function, but shouldn’t we at least try to inspect the function directly? Although it is trained on complex datasets, these networks often appear to have a remarkable generalisation property, so wouldn’t this suggest that the actual function may not be as complex as we expect (after we account for the noise that arises due to their non-symbolic nature)?
+    </p>
+    <p>
+        Of course, there are already research avenues that put the function at the focus of the investigation, namely spline theory and tropical geometry. However, it seems that the field (mechanistic interpretability) that has one of its aims to explain the functional role of a neural network largely ignores it…
+    </p>
+    </div>
+</article>
