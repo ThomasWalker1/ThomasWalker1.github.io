@@ -99,6 +99,9 @@
                 <div style="text-align: center; width: 100%;">
                     <img src="assets/centroid_memorisation_generalisation.jpg" style="width: 100%; height: auto; margin-bottom: 10px;">
                 </div>
+                <p>
+                    <b>Fig:</b> For deep networks to grok, their Jacobians should align such that the sum of their rows is cosine-similar to the point at which they were computed; we dub this condition centroid aligned. This has consequences on the functional geometry of deep networks through the Spline Theory of Deep Learning. Here we train a ReLU network on the MNIST dataset using Jacobian regularisation. We take three training data points, <b>left</b>, and observe the linear regions (using <a href="https://imtiazhumayun.github.io/splinecam/">SplineCam</a>) of the deep network along with the centroids of the three data points when it has memorized the training data, <b>centre</b>, and when it has generalised, <b>right</b>. We colour the linear regions according to the norm of the linear operator acting upon them.
+                </p>
             </div>
         </div>
 
@@ -106,27 +109,27 @@
             <div class="col-md-8 col-md-offset-2">
                 <h3>Alignment</h3>
                 <p class="text-justify">
-                    <u><strong>Definition:</strong></u> A deep network is <b>Jacobian aligned</b> at point if its rows are scalar multiples of that point.
+                    <u><strong>Definition:</strong></u> A deep network is <b><em>Jacobian-aligned</em></b> at point if its rows are scalar multiples of that point.
                 </p>
                 <p style="padding: 0 20px;">
-                    <b>Optimal deep networks</b> with respect to the loss function on a constrained set are Jacobian aligned on the training data.
+                    Jacobian aligned deep networks <b>optimize the training objective</b> on a constrained set.
                 </p>
-                <p>
+                <p style="padding: 0 20px;">
                     Jacobian aligned deep networks are <b>optimally robust</b> on local regions of the input space.
                 </p>
                 <p>
-                    <u><strong>Definition:</strong></u> A centroid at a point is equal to the sum of the rows of the Jacobian.
+                    <u><strong>Definition:</strong></u> A <b><em>centroid</em></b> at a point is equal to the sum of the rows of the Jacobian.
+                </p>
+                <p style="padding: 0 20px;">
+                    Centroids <b>parametrise the functional geometry</b> of deep networks.
                 </p>
                 <p>
-                    Centroids parametrise the <b>functional geometry</b> of deep networks.
+                    <u><strong>Proposition:</strong></u> Jacobian alignment implies <b><em>centroid alignment.</em></b>
                 </p>
-                <p>
-                    <u><strong>Proposition:</strong></u> Jacobian alignment implies <b>centroid alignment.</b>
+                <p style="padding: 0 20px;">
+                    Centroid alignment <b>identifies the feature learning</b> of deep networks.
                 </p>
-                <p>
-                    Centroid alignment captures the <b>feature learning</b> of deep networks.
-                </p>
-                <p>
+                <p style="padding: 0 20px;">
                     Centroid alignment <b>efficiently</b> captures the training dynamics of deep networks.
                 </p>
             </div>
@@ -135,31 +138,31 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>Centroid Alignment Identifies Feature Learning</h3>
-                <p class="text-justify">
-
-                </p>
                 <div style="text-align: center; width: 100%;">
                     <img src="assets/centroid_alignment_feature_learning.jpg" style="width: 100%; height: auto; margin-bottom: 10px;">
                 </div>
-                <h3>Centroid Alignment Identifies Robustness</h3>
                 <p class="text-justify">
-
+                    <b>Fig:</b> Specifically, a changing inner-product between a centroid and the point it was computed at represents the feature learning regime of deep network training, as indicated by the neural tangent kernel; when translated into a changing inner-product we see the generalisation of a deep networks learned representations. Here we train a two-layer scalar-output ReLU network to distinguish between the zero and one class of the MNIST dataset. For a point in the training set we monitor the inner-product and cosine similarity to its corresponding centroid, which is computed efficiently through a Jacobian vector product. By also monitoring the neural tangent kernel, we support our theoretical conclusion that a changing inner-product corresponds to the feature learning regime of training. Furthermore, we note that the factor inhibiting centroid alignment, which is an artefact of an optimal deep network, is the norm of the centroid.
                 </p>
+                <h3>Centroid Alignment Identifies Robustness</h3>
                 <div style="text-align: center; width: 100%;">
                     <img src="assets/centroid_alignment_robustness.png" style="width: 100%; height: auto; margin-bottom: 10px;">
                 </div>
+                <p class="text-justify">
+                    <b>Fig:</b> Since Jacobian alignment is a necessary condition for deep network robustness under a low-rank Jacobian assumption, it follows that centroid alignment is a artifact of a robustness deep network. Here we demonstrate that a higher centroid alignment corresponds to a more robust deep network. More specifically, we consider the XOR grokking set up of Xu et al. (2025) and monitor the centroid alignment and robustness of the deep network through training. In the <b>top</b> row we use weight-decay, whereas in the <b>bottom</b> row we also use Jacobian regularisation. We see that under Jacobian regularisation, the norm of the centroid is maintained at a relatively lower value allowing it to become aligned which correlates with the accelerate onset of robustness.
+                </p>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>Jacobian Regularisation Induces Alignment and Thus Accelerates Grokking</h3>
-                <p class="text-justify">
-
-                </p>
                 <video autoplay="" muted="" loop="" playsinline="" playbackrate="2" width="100%" style="max-height: 400px;padding-right: 5px;width: 100%;">
                     <source src="assets/centroid_alignment.mp4" type="video/mp4">
                 </video>
+                <p class="text-justify">
+                    <b>Fig:</b> Using Jacobian regularisation -- which is refers to appending the average Frobenius norm of the Jacobian (or an approximation of it) on the training set to the loss function -- significantly accelerates the rate of grokking. In our paper we perform a study which determines this speed up factor can be up to 7 times faster. Jacobian regularisation as a strategy for speeding up grokking comes from our theory, and our previous experiments which demonstrate the the centroid norm is the limiting factor to inducing centroid alignment. We assume the MNIST grokking set up of Liu et al.(2022) in the <b>top</b> row, and we additionally utilise Jacobian regularisation in the <b>bottom</b> row. Clearly, grokking occurs earlier in the model trained with Jacobian regularisation. To the <b>right</b> of each accuracy plot we visualise the centroid of a point from the training set. We observe that during the grokking phase the centroid develops a structure which under Jacobian regularisation is more resemblant of the training point, this is centroid alignment.
+                </p>
             </div>
         </div>
 
