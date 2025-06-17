@@ -91,10 +91,10 @@
             </div>
         </div>
         <div class="row">
-            <div style="text-align: center; width: 100%;">
-                <img src="assets/centroid_alignment_grokking_summary.png" style="width: 100%; height: auto; margin-bottom: 10px;">
-            </div>
             <div class="col-md-8 col-md-offset-2">
+                <div style="text-align: center; width: 100%;">
+                    <img src="assets/centroid_alignment_grokking_summary.png" style="width: 100%; height: auto; margin-bottom: 10px;">
+                </div>
                 <h2>Abstract</h2>
                 <p class="text-justify">
                     A key challenge for the machine learning community is to understand and accelerate the training dynamics of deep networks that lead to delayed generalisation and emergent robustness to input perturbations, also known as grokking. Prior work has associated phenomena like delayed generalisation with the transition of a deep network from a linear to a feature learning regime, and emergent robustness with changes to the network's functional geometry, in particular the arrangement of the so-called linear regions in deep networks employing continuous piecewise affine nonlinearities. Here, we explain how grokking is realised in the Jacobian of a deep network and demonstrate that aligning a network's Jacobians with the training data (in the sense of cosine similarity) ensures grokking under a low-rank Jacobian assumption. Our results provide a strong theoretical motivation for the use of Jacobian regularisation in optimizing deep networks -- a method we introduce as GrokAlign -- which we show empirically to induce grokking much sooner than more conventional regularizers like weight decay. Moreover, we introduce centroid alignment as a tractable and interpretable simplification of Jacobian alignment that effectively identifies and tracks the stages of deep network training dynamics.
@@ -153,7 +153,6 @@
                     </div>
                 </div>
             </div>
-        </div>
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
